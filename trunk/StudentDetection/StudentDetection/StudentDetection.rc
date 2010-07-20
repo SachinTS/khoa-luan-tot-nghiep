@@ -1,0 +1,384 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#ifndef APSTUDIO_INVOKED
+#include "targetver.h"
+#endif
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#ifndef APSTUDIO_INVOKED\r\n"
+    "#include ""targetver.h""\r\n"
+    "#endif\r\n"
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "LANGUAGE 9, 1\r\n"
+    "#pragma code_page(1252)\r\n"
+    "#include ""res\\StudentDetection.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""     // Standard components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\StudentDetection.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 170, 62
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About StudentDetection"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,14,14,21,20
+    LTEXT           "StudentDetection, Version 1.0",IDC_STATIC,42,14,114,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) 2010",IDC_STATIC,42,26,114,8
+    DEFPUSHBUTTON   "OK",IDOK,113,41,50,14,WS_GROUP
+END
+
+IDD_STUDENTDETECTION_DIALOG DIALOGEX 0, 0, 520, 355
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "StudentDetection"
+MENU IDR_MAINMENU
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "View",IDC_STATIC,209,27,298,39
+    CONTROL         "",IDC_SHOW_VIDEO,"SysAnimate32",WS_BORDER | WS_TABSTOP,210,104,297,214
+    CONTROL         "",IDC_TAB_PARAM,"SysTabControl32",0x0,15,18,183,302
+    CONTROL         "View Hair Window",IDC_CHECK_VIEW_HAIR,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,223,45,73,10
+    CONTROL         "View SVM result Window",IDC_CHECK_VIEW_SVM,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,308,45,93,10
+    CONTROL         "View Shape Matching",IDC_CHECK_VIEW_SHAPE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,414,45,83,10
+    PUSHBUTTON      "Play",IDC_BTN_PLAY,295,326,50,14
+    PUSHBUTTON      "Stop",IDC_BTN_STOP,379,326,50,14
+    LTEXT           "The number of student:",IDC_STATIC,226,81,77,8
+    LTEXT           "Static",IDC_STATIC,309,82,19,8
+END
+
+IDD_DLG_HEAD_PARAMS DIALOGEX 0, 0, 192, 276
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "Min:",IDC_STATIC,33,27,14,8
+    EDITTEXT        IDC_EDIT_MIN_HEAD_WIDTH,105,25,53,14,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "Max:",IDC_STATIC,33,48,17,8
+    EDITTEXT        IDC_EDIT_MAX_HEAD_WIDTH,105,45,53,14,ES_AUTOHSCROLL | ES_NUMBER
+    GROUPBOX        "Width Head",IDC_STATIC,17,11,157,54
+    LTEXT           "Min:",IDC_STATIC,33,89,14,8
+    EDITTEXT        IDC_EDIT_MIN_HEAD_AREA,106,87,53,14,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "Max:",IDC_STATIC,33,113,17,8
+    EDITTEXT        IDC_MAX_HEAD_AREA,106,110,53,14,ES_AUTOHSCROLL | ES_NUMBER
+    GROUPBOX        "Head Area",IDC_STATIC,17,70,158,108
+    LTEXT           "Max area at top:",IDC_STATIC,33,135,55,8
+    EDITTEXT        IDC_EDIT_MAX_HEAD_AREA_AT_TOP,106,133,53,14,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "Min area at bottom:",IDC_STATIC,33,159,64,8
+    EDITTEXT        IDC_EDIT_MIN_HEAD_AREA_BOTTOM,106,156,53,14,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "Width/Height:",IDC_STATIC,33,201,46,8
+    EDITTEXT        IDC_EDIT_RELATIVE_WIDTH_HEIGHT,106,198,53,14,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "Height/Width:",IDC_STATIC,33,221,46,8
+    EDITTEXT        IDC_EDIT_RELATIVE_HEIGHT_WIDTH,106,218,53,14,ES_AUTOHSCROLL | ES_NUMBER
+    GROUPBOX        "Relative",IDC_STATIC,17,184,158,57
+    PUSHBUTTON      "Apply",IDC_BTN_APPLY,74,248,50,14
+END
+
+IDD_DLG_TRAIN_DATA DIALOGEX 0, 0, 360, 359
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Train Data"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,244,338,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,303,338,50,14
+    CONTROL         "",IDC_TAB_TRAIN_DATA,"SysTabControl32",0x0,18,21,324,305
+END
+
+IDD_DLG_TRAIN_SVM DIALOGEX 0, 0, 316, 271
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "Data Folder:",IDC_STATIC,24,38,41,8
+    EDITTEXT        IDC_EDIT_FOLDER_SVM,71,35,168,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "Browse",IDC_BTN_BWS_FOLD_SVM,243,35,50,14
+    LTEXT           "Output:",IDC_STATIC,25,91,26,8
+    EDITTEXT        IDC_EDIT_OUT_SVM,71,88,168,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "Browse",IDC_BTN_BWS_OUT_SVM,243,88,50,14
+    LTEXT           "Start Index:",IDC_STATIC,25,65,40,8
+    EDITTEXT        IDC_EDIT_START_INDEX_SVM,71,61,85,14,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "End Index:",IDC_STATIC,162,66,36,8
+    EDITTEXT        IDC_EDIT_END_INDEX_SVM,207,61,86,14,ES_AUTOHSCROLL | ES_NUMBER
+    PUSHBUTTON      "Train Data",IDC_BTN_TRAIN_SVM,251,239,50,16
+    LTEXT           "Width:",IDC_STATIC,36,151,22,8
+    EDITTEXT        IDC_EDIT_HEIGHT_CELL,66,170,30,14,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "Height:",IDC_STATIC,36,173,24,8
+    GROUPBOX        "Cell",IDC_STATIC,22,136,124,56
+    LTEXT           "Width:",IDC_STATIC,178,152,22,8
+    LTEXT           "Height:",IDC_STATIC,178,174,24,8
+    GROUPBOX        "Block",IDC_STATIC,164,136,124,56
+    LTEXT           "Pixels",IDC_STATIC,112,151,19,8
+    LTEXT           "Pixels",IDC_STATIC,112,173,19,8
+    LTEXT           "Cells",IDC_STATIC,254,152,16,8
+    LTEXT           "Cells",IDC_STATIC,254,174,16,8
+    LTEXT           "Step overlap:",IDC_STATIC,26,205,44,8
+    CONTROL         "",IDC_SPIN1,"msctls_updown32",UDS_ARROWKEYS,96,170,10,14
+    EDITTEXT        IDC_EDIT_WIDTH_CELL,66,148,30,14,ES_AUTOHSCROLL | ES_NUMBER
+    CONTROL         "",IDC_SPIN2,"msctls_updown32",UDS_ARROWKEYS,96,148,10,14
+    EDITTEXT        IDC_EDIT_HEIGHT_BLOCK,208,171,30,14,ES_AUTOHSCROLL | ES_NUMBER
+    CONTROL         "",IDC_SPIN3,"msctls_updown32",UDS_ARROWKEYS,238,171,11,14
+    EDITTEXT        IDC_EDIT_WIDTH_BLOCK,208,149,30,14,ES_AUTOHSCROLL | ES_NUMBER
+    CONTROL         "",IDC_SPIN6,"msctls_updown32",UDS_ARROWKEYS,238,149,11,14
+    EDITTEXT        IDC_EDIT_STEPOVERLAP,78,204,46,14,ES_AUTOHSCROLL | ES_NUMBER
+    CONTROL         "",IDC_SPIN7,"msctls_updown32",UDS_ARROWKEYS,124,204,11,14
+    GROUPBOX        "HOG",IDC_STATIC,14,124,287,105
+    GROUPBOX        "Data",IDC_STATIC,15,19,285,95
+END
+
+IDD_DLG_TRAIN_GAUSS DIALOGEX 0, 0, 316, 140
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "Data Folder:",IDC_STATIC,21,26,41,8
+    EDITTEXT        IDC_EDIT_FOLDER_GAUSS,68,23,168,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "Browse",IDC_BTN_BWS_FOLD_GAUSS,240,23,50,14
+    LTEXT           "Output:",IDC_STATIC,22,50,26,8
+    EDITTEXT        IDC_EDIT_OUT_GAUSS,68,47,168,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "Browse",IDC_BTN_BWS_OUT_GAUSS,240,47,50,14
+    LTEXT           "Start Index:",IDC_STATIC,22,78,40,8
+    EDITTEXT        IDC_EDIT_START_INDEX_GAUSS,68,74,168,14,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "End Index:",IDC_STATIC,23,102,36,8
+    EDITTEXT        IDC_EDIT_END_INDEX_GAUSS,68,97,168,14,ES_AUTOHSCROLL | ES_NUMBER
+    PUSHBUTTON      "Train Data",IDC_BTN_TRAIN_GAUSS,240,74,50,38
+END
+
+IDD_DLG_INPUT DIALOGEX 0, 0, 406, 121
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,283,100,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,349,100,50,14
+    EDITTEXT        IDC_EDIT_VIDEO_PATH,93,32,209,14,ES_AUTOHSCROLL
+    LTEXT           "Video:",IDC_STATIC,35,35,21,8
+    PUSHBUTTON      "Browse",IDC_BTN_BROWSE_VIDEO,305,31,50,14
+    EDITTEXT        IDC_EDIT_MASK_PATH,93,60,209,14,ES_AUTOHSCROLL
+    LTEXT           "Mask:",IDC_STATIC,35,63,20,8
+    PUSHBUTTON      "Browse",IDC_BTN_BROWSE_MASK,305,60,50,14
+    GROUPBOX        "Input",IDC_STATIC,17,18,370,65
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904e4"
+        BEGIN
+            VALUE "CompanyName", "TODO: <Company name>"
+            VALUE "FileDescription", "TODO: <File description>"
+            VALUE "FileVersion", "1.0.0.1"
+            VALUE "InternalName", "StudentDetection.exe"
+            VALUE "LegalCopyright", "TODO: (c) <Company name>.  All rights reserved."
+            VALUE "OriginalFilename", "StudentDetection.exe"
+            VALUE "ProductName", "TODO: <Product name>"
+            VALUE "ProductVersion", "1.0.0.1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 163
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 55
+    END
+
+    IDD_STUDENTDETECTION_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 513
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 348
+    END
+
+    IDD_DLG_HEAD_PARAMS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 185
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 269
+    END
+
+    IDD_DLG_TRAIN_DATA, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 353
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 352
+    END
+
+    IDD_DLG_TRAIN_SVM, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 309
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 264
+    END
+
+    IDD_DLG_TRAIN_GAUSS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 309
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 133
+    END
+
+    IDD_DLG_INPUT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 399
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 114
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDR_TOOLBAR1            BITMAP                  "res\\toolbar1.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAINMENU MENU 
+BEGIN
+    POPUP "Main"
+    BEGIN
+        MENUITEM "Video ...",                   ID_MAIN_VIDEO
+        MENUITEM "Train Data",                  ID_MAIN_TRAINDATA
+        MENUITEM "About",                       ID_MAIN_ABOUT
+        MENUITEM "Exit",                        ID_MAIN_EXIT
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_ABOUTBOX            "&About StudentDetection..."
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE 9, 1
+#pragma code_page(1252)
+#include "res\StudentDetection.rc2"  // non-Microsoft Visual C++ edited resources
+#include "afxres.rc"     // Standard components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
