@@ -191,6 +191,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\BCMenu.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\BtnST.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\GaussFilterColor.cpp"
 				>
 			</File>
@@ -302,6 +310,14 @@
 			>
 			<File
 				RelativePath=".\AboutDlg.h"
+				>
+			</File>
+			<File
+				RelativePath=".\BCMenu.h"
+				>
+			</File>
+			<File
+				RelativePath=".\BtnST.h"
 				>
 			</File>
 			<File
@@ -418,6 +434,34 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
+			<File
+				RelativePath=".\res\Camera.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\res\play.bmp"
+				>
+			</File>
+			<File
+				RelativePath="C:\Documents and Settings\bin\Desktop\play.bmp"
+				>
+			</File>
+			<File
+				RelativePath="C:\Documents and Settings\bin\Desktop\stop.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\res\stop.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\res\student.bmp"
+				>
+			</File>
+			<File
+				RelativePath="C:\Documents and Settings\bin\Desktop\student.bmp"
+				>
+			</File>
 			<File
 				RelativePath=".\res\StudentDetection.ico"
 				>

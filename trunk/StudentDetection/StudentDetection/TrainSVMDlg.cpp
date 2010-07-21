@@ -41,7 +41,6 @@ void TrainSVMDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT_PREFIX_NEG, m_editPrefixNeg);
 	DDX_Control(pDX, IDC_EDIT_SUBFIX_NEG, m_editSubfixNeg);
 	DDX_Control(pDX, IDC_EDIT_PROGRESS, m_editProgress);
-	DDX_Control(pDX, IDC_PROGRESS1, m_progress);
 }
 
 
@@ -55,20 +54,7 @@ END_MESSAGE_MAP()
 
 void TrainSVMDlg::OnBnClickedBtnTrainSvm()
 {
-	// TODO: Add your control notification handler code here	
-	//m_progress.EnableWindow();
-
-	
-
-	int a=0;
-	for(int i=0;i<10000000000000000;i++)
-	{
-		m_progress.SetStep(i%100);
-		a++;
-	}
-	//m_progress.EnableWindow(0);
-	return;
-
+	// TODO: Add your control notification handler code here		
 	HoGProcessor hog;
 	Utils utils;
 	CString tmp;

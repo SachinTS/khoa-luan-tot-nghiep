@@ -14,6 +14,7 @@
 #include "Utils.h"
 #include "WindowParams.h"
 #include "ShapeParamsDlg.h"
+#include "BtnST.h"
 
 #define WM_USER_THREAD_FINISHED (WM_USER+0x101)
 #define WM_USER_THREAD_UPDATE_PROGRESS (WM_USER+0x102)
@@ -51,8 +52,8 @@ public:
 	afx_msg void OnMainAbout();
 	afx_msg void OnBnClickedBtnPlay();
 	afx_msg void OnBnClickedBtnStop();
-	CButton m_btnPlay;
-	CButton m_btnStop;
+	CButtonST m_btnPlay;
+	CButtonST m_btnStop;
 	CButton m_checkViewHair;
 	CButton m_checkViewSVM;
 	CButton m_checkViewShape;

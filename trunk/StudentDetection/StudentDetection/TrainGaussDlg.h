@@ -1,4 +1,5 @@
 #pragma once
+#include "afxwin.h"
 
 
 // TrainGaussDlg dialog
@@ -18,4 +19,15 @@ protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 
 	DECLARE_MESSAGE_MAP()
+public:
+	CEdit m_editPrefixGauss;
+	CEdit m_editStartIndxGauss;
+	CEdit m_editPosfixGauss;
+	CEdit m_editEndIndxGauss;
+	CEdit m_editOutPath;
+	CButton m_btnBrowseOutPath;
+	CButton m_btnTrainGauss;
+	afx_msg void OnBnClickedBtnBwsOutGauss();
+	afx_msg void OnBnClickedBtnTrainGauss();
+	CEdit m_editProgress;
 };

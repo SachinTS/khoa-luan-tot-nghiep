@@ -39,6 +39,5 @@ public:
 	CEdit m_editSubfixPos;
 	CEdit m_editPrefixNeg;
 	CEdit m_editSubfixNeg;
-	CEdit m_editProgress;
-	CProgressCtrl m_progress;
+	CEdit m_editProgress;	
 };

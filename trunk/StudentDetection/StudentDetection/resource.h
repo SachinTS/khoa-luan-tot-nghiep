@@ -16,6 +16,12 @@
 #define IDR_MAINMENU                    140
 #define IDD_DLG_INPUT                   141
 #define IDD_DLG_SHAPE_PARAMS            142
+#define IDB_BMP_STOP                    148
+#define IDB_BMP_PLAY                    149
+#define IDB_BITMAP2                     151
+#define IDB_BMP_STUDENT                 151
+#define IDB_BITMAP3                     152
+#define IDB_BMP_CAMERA                  152
 #define IDC_EDIT1                       1006
 #define IDC_EDIT_THRESHOLD              1006
 #define IDC_EDIT_MAX_AREA_AT_TOP        1006
@@ -74,7 +80,9 @@
 #define IDC_EDIT_OUT_GAUSS              1032
 #define IDC_EDIT_RELATIVE_HEIGHT_WIDTH  1032
 #define IDC_EDIT_FOLDER_GAUSS           1033
+#define IDC_EDIT_PREFIX_GAUSS           1033
 #define IDC_BTN_BWS_FOLD_GAUSS          1034
+#define IDC_EDIT_POSFIX_GAUSS           1034
 #define IDC_BTN_BWS_OUT_GAUSS           1035
 #define IDC_EDIT_FOLDER_SVM             1036
 #define IDC_EDIT_OUT_SVM                1037
@@ -90,7 +98,7 @@
 #define IDC_SLIDER_THRESHOLD            1048
 #define IDC_SLIDER3                     1049
 #define IDC_SLIDER_LENGTH               1049
-#define IDC_PROGRESS1                   1049
+#define IDC_PICBOX                      1050
 #define ID_INPUT_VIDEO                  32771
 #define ID_MAIN_EXIT                    32772
 #define ID_MAIN_VIDEO                   32773
@@ -101,9 +109,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        143
+#define _APS_NEXT_RESOURCE_VALUE        153
 #define _APS_NEXT_COMMAND_VALUE         32776
-#define _APS_NEXT_CONTROL_VALUE         1050
+#define _APS_NEXT_CONTROL_VALUE         1051
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

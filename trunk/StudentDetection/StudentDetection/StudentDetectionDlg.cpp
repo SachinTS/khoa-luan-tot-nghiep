@@ -159,6 +159,11 @@ BOOL CStudentDetectionDlg::OnInitDialog()
 
 	//m_tabHeadParams.Init();
 	//m_tabHeadParams.SetParam(m_windowParam);
+	m_btnPlay.SetBitmaps(IDB_BMP_PLAY, RGB(255, 255, 255));
+	m_btnPlay.SetFlat();
+
+	m_btnStop.SetBitmaps(IDB_BMP_STOP, RGB(255, 255, 255));
+	m_btnStop.SetFlat();
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
