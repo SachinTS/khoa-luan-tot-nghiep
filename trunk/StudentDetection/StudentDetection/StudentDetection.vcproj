@@ -219,6 +219,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\snake.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\snakewindow.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
@@ -276,6 +284,10 @@
 			</File>
 			<File
 				RelativePath=".\Utils.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\vector_space.cpp"
 				>
 			</File>
 			<File
@@ -345,6 +357,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\snake.h"
+				>
+			</File>
+			<File
+				RelativePath=".\snakewindow.h"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.h"
 				>
 			</File>
@@ -382,6 +402,10 @@
 			</File>
 			<File
 				RelativePath=".\Utils.h"
+				>
+			</File>
+			<File
+				RelativePath=".\vector_space.h"
 				>
 			</File>
 			<File
@@ -460,6 +484,10 @@
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath=".\config.xml"
+			>
+		</File>
 		<File
 			RelativePath=".\ReadMe.txt"
 			>
