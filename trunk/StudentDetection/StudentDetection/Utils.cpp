@@ -25,6 +25,20 @@ char* Utils::ConvertToChar(const CString &s)
     return res; 
 } 
 
+int Utils::ConvertToInt(const CString &s){
+	int size = s.GetLength(); 
+    char *res= new char[size+1]; 
+    memset(res,0,size+1); 
+    wcstombs(res, s, size+1); 
+	return atoi(res);
+}
+
+CString Utils::ConvertToCString(int number)
+{
+	CString t;
+	t.Format(_T("%d"), number);
+	return t;
+}
 vector<CvRect> Utils::ConnectOverlapRects(vector<CvRect> inVector){
 	if(inVector.size()>0){
 		vector<CvRect> result;

@@ -18,8 +18,11 @@
 #define IDD_DLG_SHAPE_PARAMS            142
 #define IDC_EDIT1                       1006
 #define IDC_EDIT_THRESHOLD              1006
+#define IDC_EDIT_MAX_AREA_AT_TOP        1006
+#define IDC_EDIT_PROGRESS               1006
 #define IDC_EDIT2                       1007
 #define IDC_EDIT_LENGTH                 1007
+#define IDC_EDIT_MIN_AREA_AT_BOTTOM     1007
 #define IDC_BUTTON2                     1008
 #define IDC_BTN_BROWSE_VIDEO            1008
 #define IDC_EDIT_START_INDEX_SVM        1008
@@ -27,13 +30,16 @@
 #define IDC_EDIT_END_INDEX_SVM          1009
 #define IDC_RADIO2                      1010
 #define IDC_EDIT_HEIGHT_CELL            1010
+#define IDC_EDIT_MAX_HEAD_AREA          1010
 #define IDC_RADIO3                      1011
 #define IDC_EDIT_WIDTH_CELL             1011
 #define IDC_BUTTON3                     1012
 #define IDC_BTN_TRAIN_SVM               1012
+#define IDC_EDIT_MAX_WIDTH_HEAD         1012
 #define IDC_BUTTON4                     1013
 #define IDC_BTN_BROWSE_MASK             1013
 #define IDC_EDIT_HEIGHT_BLOCK           1013
+#define IDC_EDIT_MIN_WIDTH_HEAD         1013
 #define IDC_ANIMATE2                    1014
 #define IDC_EDIT_WIDTH_BLOCK            1014
 #define IDC_SHOW_VIDEO                  1014
@@ -41,10 +47,15 @@
 #define IDC_TAB_TRAIN_DATA              1015
 #define IDC_EDIT_STEPOVERLAP            1015
 #define IDC_SLIDER2                     1016
+#define IDC_EDIT_START_INDEX_SVM_NEG    1016
+#define IDC_EDIT_END_INDEX_SVM_NEG      1017
+#define IDC_EDIT_PREFIX_POS             1018
+#define IDC_EDIT_SUBFIX_POS             1019
 #define IDC_SPIN1                       1020
 #define IDC_SPIN2                       1021
 #define IDC_SPIN3                       1022
 #define IDC_BTN_BWS_FOLD_SVM            1023
+#define IDC_EDIT_PREFIX_NEG             1023
 #define IDC_TAB_PARAM                   1024
 #define IDC_BTN_BWS_OUT_SVM             1024
 #define IDC_SPIN6                       1025
@@ -52,6 +63,7 @@
 #define IDC_SPIN7                       1026
 #define IDC_EDIT_MAX_HEAD_WIDTH         1026
 #define IDC_EDIT_MIN_HEAD_AREA          1027
+#define IDC_EDIT_SUBFIX_NEG             1027
 #define IDC_MAX_HEAD_AREA               1028
 #define IDC_EDIT_START_INDEX_GAUSS      1029
 #define IDC_EDIT_MAX_HEAD_AREA_AT_TOP   1029
@@ -78,6 +90,7 @@
 #define IDC_SLIDER_THRESHOLD            1048
 #define IDC_SLIDER3                     1049
 #define IDC_SLIDER_LENGTH               1049
+#define IDC_PROGRESS1                   1049
 #define ID_INPUT_VIDEO                  32771
 #define ID_MAIN_EXIT                    32772
 #define ID_MAIN_VIDEO                   32773
@@ -90,7 +103,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        143
 #define _APS_NEXT_COMMAND_VALUE         32776
-#define _APS_NEXT_CONTROL_VALUE         1049
+#define _APS_NEXT_CONTROL_VALUE         1050
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

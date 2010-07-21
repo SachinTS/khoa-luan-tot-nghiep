@@ -158,6 +158,7 @@ BOOL CStudentDetectionDlg::OnInitDialog()
 	m_windowParam.m_isViewSVMDetection = 1;
 
 	//m_tabHeadParams.Init();
+	//m_tabHeadParams.SetParam(m_windowParam);
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }

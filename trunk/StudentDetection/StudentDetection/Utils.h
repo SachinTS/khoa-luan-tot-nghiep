@@ -12,7 +12,9 @@ public:
 	bool CheckRectHead(CvRect rectHead, int iMaxHeight, Head_Params headParams);
 	vector<CvRect> ConnectOverlapRects(vector<CvRect> inVector);
 	void OutputResult(IplImage* img, vector<CvRect> vRect, CvScalar color);
-	char* Utils::ConvertToChar(const CString &s);
+	char* ConvertToChar(const CString &s);
+	CString ConvertToCString(int number);
+	int ConvertToInt(const CString &s);
 	Utils(void);
 	~Utils(void);
 };
