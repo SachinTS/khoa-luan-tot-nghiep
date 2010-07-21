@@ -13,6 +13,7 @@
 #include "GaussFilterColor.h"
 #include "Utils.h"
 #include "WindowParams.h"
+#include "ShapeParamsDlg.h"
 
 #define WM_USER_THREAD_FINISHED (WM_USER+0x101)
 #define WM_USER_THREAD_UPDATE_PROGRESS (WM_USER+0x102)
@@ -66,4 +67,6 @@ public:
 	CWinThread *video_thread;
 	CAnimateCtrl m_video;
 	afx_msg void OnBnClickedButton1();
+
+	CShapeParamsDlg m_tabShapeParams;
 };

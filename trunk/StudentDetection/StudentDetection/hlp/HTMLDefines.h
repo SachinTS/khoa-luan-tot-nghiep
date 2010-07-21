@@ -22,6 +22,7 @@
 #define HIDD_DLG_TRAIN_SVM                      0x2008A
 #define HIDD_DLG_TRAIN_GAUSS                    0x2008B
 #define HIDD_DLG_INPUT                          0x2008D
+#define HIDD_DLG_SHAPE_PARAMS                   0x2008E
  
 // Frame Controls (IDW_*) 
 // This is a part of the Microsoft Foundation Classes C++ library.

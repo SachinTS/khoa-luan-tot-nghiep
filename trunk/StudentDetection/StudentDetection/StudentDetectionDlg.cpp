@@ -119,6 +119,11 @@ BOOL CStudentDetectionDlg::OnInitDialog()
 	m_tabHeadParams.ShowWindow( SW_SHOWNA ); // MG: Sets the initial dialog
 
 
+	m_tabParams.GetItemRect( 0, &Rect );
+	m_tabShapeParams.Create( IDD_DLG_SHAPE_PARAMS, &m_tabParams );
+	m_tabShapeParams.SetWindowPos( 0, Rect.left + 2, Rect.bottom + 2, 0, 0, SWP_NOSIZE|SWP_NOZORDER );
+		
+	m_tabShapeParams.ShowWindow( SW_HIDE ); // MG: Sets the initial dialog
 	// Add "About..." menu item to system menu.
 
 	// IDM_ABOUTBOX must be in the system command range.
@@ -212,13 +217,13 @@ void CStudentDetectionDlg::OnTcnSelchangeTabParam(NMHDR *pNMHDR, LRESULT *pResul
 	
 	if( m_tabParams.GetCurSel()==0)
 	{
-//		m_tabHogParams.ShowWindow( SW_HIDE );
-		m_tabHeadParams.ShowWindow( SW_SHOWNA );	
+		m_tabHeadParams.ShowWindow( SW_SHOWNA );
+		m_tabShapeParams.ShowWindow( SW_HIDE );
 	}
 	else if( m_tabParams.GetCurSel()==1)
 	{
 		m_tabHeadParams.ShowWindow( SW_HIDE );
-//		m_tabHogParams.ShowWindow( SW_SHOWNA );				
+		m_tabShapeParams.ShowWindow( SW_SHOWNA );
 	}
 	
 	*pResult = 0;

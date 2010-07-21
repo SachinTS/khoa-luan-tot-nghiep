@@ -15,8 +15,11 @@
 #define IDD_DLG_TRAIN_GAUSS             139
 #define IDR_MAINMENU                    140
 #define IDD_DLG_INPUT                   141
+#define IDD_DLG_SHAPE_PARAMS            142
 #define IDC_EDIT1                       1006
+#define IDC_EDIT_THRESHOLD              1006
 #define IDC_EDIT2                       1007
+#define IDC_EDIT_LENGTH                 1007
 #define IDC_BUTTON2                     1008
 #define IDC_BTN_BROWSE_VIDEO            1008
 #define IDC_EDIT_START_INDEX_SVM        1008
@@ -72,6 +75,9 @@
 #define IDC_BTN_STOP                    1046
 #define IDC_BTN_APPLY                   1046
 #define IDC_BUTTON1                     1047
+#define IDC_SLIDER_THRESHOLD            1048
+#define IDC_SLIDER3                     1049
+#define IDC_SLIDER_LENGTH               1049
 #define ID_INPUT_VIDEO                  32771
 #define ID_MAIN_EXIT                    32772
 #define ID_MAIN_VIDEO                   32773
@@ -82,9 +88,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        142
+#define _APS_NEXT_RESOURCE_VALUE        143
 #define _APS_NEXT_COMMAND_VALUE         32776
-#define _APS_NEXT_CONTROL_VALUE         1048
+#define _APS_NEXT_CONTROL_VALUE         1049
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

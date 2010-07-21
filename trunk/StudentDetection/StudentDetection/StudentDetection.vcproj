@@ -215,6 +215,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\ShapeParamsDlg.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
@@ -335,6 +339,10 @@
 						Outputs="hlp\HTMLDefines.h"
 					/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\ShapeParamsDlg.h"
+				>
 			</File>
 			<File
 				RelativePath=".\stdafx.h"
