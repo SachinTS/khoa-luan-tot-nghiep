@@ -75,7 +75,7 @@ public:
 	CAnimateCtrl m_video;
 	
 	CShapeParamsDlg m_tabShapeParams;
-	CButton m_btnApplyParams;
+	CButtonST m_btnApplyParams;
 	afx_msg void OnBnClickedBtnApplyParams();
 	CStatic m_static_student_count;
 };

@@ -22,6 +22,9 @@
 #define IDB_BMP_CAMERA                  152
 #define IDB_BMP_BACKGROUND              153
 #define IDB_BMP_BACKGROUND1             154
+#define IDB_BMP_CANCEL                  155
+#define IDB_BITMAP3                     156
+#define IDB_BMP_OK                      156
 #define IDC_EDIT1                       1006
 #define IDC_EDIT_THRESHOLD              1006
 #define IDC_EDIT_MAX_AREA_AT_TOP        1006
@@ -102,7 +105,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        155
+#define _APS_NEXT_RESOURCE_VALUE        157
 #define _APS_NEXT_COMMAND_VALUE         32776
 #define _APS_NEXT_CONTROL_VALUE         1054
 #define _APS_NEXT_SYMED_VALUE           101

@@ -45,6 +45,8 @@ BOOL TrainDataDlg::OnInitDialog()
 
 	m_tabTrainSVM.ShowWindow( SW_SHOWNA ); // MG: Sets the initial dialog
 
+	m_btnOK.SetBitmaps(IDB_BMP_OK, RGB(255,0,0));
+	m_btnCancel.SetBitmaps(IDB_BMP_CANCEL, RGB(255,0,0));
 	return true;
 }
 
@@ -52,12 +54,15 @@ void TrainDataDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_TAB_TRAIN_DATA, m_tabTrainData);
+	DDX_Control(pDX, IDOK, m_btnOK);
+	DDX_Control(pDX, IDCANCEL, m_btnCancel);
 }
 
 
 BEGIN_MESSAGE_MAP(TrainDataDlg, CDialog)
 	ON_NOTIFY(TCN_SELCHANGE, IDC_TAB_TRAIN_DATA, &TrainDataDlg::OnTcnSelchangeTabTrainData)
 	ON_WM_ERASEBKGND()
+	ON_BN_CLICKED(IDOK, &TrainDataDlg::OnBnClickedOk)
 END_MESSAGE_MAP()
 
 
@@ -102,4 +107,10 @@ bool TrainDataDlg::SBitdraw(CDC *pDC, UINT nIDResource)
 	int xo=0, yo=0;
 	pDC->BitBlt(xo, yo, rect.Width(),rect.Height(), &dc, 0, 0, SRCCOPY);
 	return true;
+}
+
+void TrainDataDlg::OnBnClickedOk()
+{
+	// TODO: Add your control notification handler code here
+	OnOK();
 }

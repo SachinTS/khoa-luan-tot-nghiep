@@ -2,7 +2,8 @@
 #include "afxcmn.h"
 #include "TrainGaussDlg.h"
 #include "TrainSVMDlg.h"
-
+#include "afxwin.h"
+#include "BtnST.h"
 // TrainDataDlg dialog
 
 class TrainDataDlg : public CDialog
@@ -29,4 +30,7 @@ public:
 	TrainGaussDlg m_tabTrainGauss;
 	TrainSVMDlg m_tabTrainSVM;
 	afx_msg void OnTcnSelchangeTabTrainData(NMHDR *pNMHDR, LRESULT *pResult);
+	CButtonST m_btnOK;
+	CButtonST m_btnCancel;
+	afx_msg void OnBnClickedOk();
 };

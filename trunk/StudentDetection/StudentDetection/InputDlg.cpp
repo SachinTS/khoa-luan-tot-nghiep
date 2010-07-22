@@ -28,6 +28,8 @@ void InputDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BTN_BROWSE_MASK, m_btnBrowseMask);
 	DDX_Control(pDX, IDC_EDIT_VIDEO_PATH, m_editVideoPath);
 	DDX_Control(pDX, IDC_EDIT_MASK_PATH, m_editMaskPath);	
+	DDX_Control(pDX, IDOK, m_btnOK);
+	DDX_Control(pDX, IDCANCEL, m_btnCancel);
 }
 
 
@@ -119,4 +121,14 @@ void InputDlg::OnBnClickedOk()
 	m_editMaskPath.GetWindowText(m_maskPath);
 	
 	OnOK();
+}
+
+BOOL InputDlg::OnInitDialog()
+{
+	CDialog::OnInitDialog();
+
+	m_btnOK.SetBitmaps(IDB_BMP_OK, RGB(255,0,0));
+	m_btnCancel.SetBitmaps(IDB_BMP_CANCEL, RGB(255,0,0));
+
+	return TRUE;
 }

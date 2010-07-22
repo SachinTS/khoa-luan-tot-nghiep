@@ -8,7 +8,8 @@
 #include "AboutDlg.h"
 #include "InputDlg.h"
 #include "ImageProcessor.h"
-
+#include "afxwin.h"
+#include "BtnST.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -30,6 +31,10 @@ public:
 // Implementation
 protected:
 	DECLARE_MESSAGE_MAP()
+public:
+	CButtonST m_btnOK;
+	afx_msg void OnBnClickedOk();
+	BOOL OnInitDialog();
 };
 
 CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
@@ -37,12 +42,23 @@ CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
 
 }
 
+BOOL CAboutDlg::OnInitDialog()
+{
+	CDialog::OnInitDialog();
+
+	m_btnOK.SetBitmaps(IDB_BMP_OK, RGB(255,0,0));
+	m_btnOK.SetFlat();
+	return TRUE;
+}
+
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
+	DDX_Control(pDX, IDOK, m_btnOK);
 }
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialog)
+	ON_BN_CLICKED(IDOK, &CAboutDlg::OnBnClickedOk)
 END_MESSAGE_MAP()
 
 
@@ -168,6 +184,9 @@ BOOL CStudentDetectionDlg::OnInitDialog()
 	m_btnPlay.SetFlat();
 	m_btnStop.SetBitmaps(IDB_BMP_STOP, RGB(255, 255, 255));
 	m_btnStop.SetFlat();
+
+	m_btnApplyParams.SetBitmaps(IDB_BMP_OK, RGB(255, 0, 0));
+	m_btnApplyParams.SetFlat();
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -569,4 +588,9 @@ HBRUSH CStudentDetectionDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 	}
 
     return hbr;
+}
+void CAboutDlg::OnBnClickedOk()
+{
+	// TODO: Add your control notification handler code here
+	OnOK();
 }

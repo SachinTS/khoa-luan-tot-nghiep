@@ -443,6 +443,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\res\btnCancel.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\res\btnOk.bmp"
+				>
+			</File>
+			<File
 				RelativePath=".\res\Camera.bmp"
 				>
 			</File>
@@ -451,19 +459,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\res\play.bmp"
-				>
-			</File>
-			<File
 				RelativePath="C:\Documents and Settings\bin\Desktop\play.bmp"
 				>
 			</File>
 			<File
-				RelativePath="C:\Documents and Settings\bin\Desktop\stop.bmp"
+				RelativePath=".\res\play.bmp"
 				>
 			</File>
 			<File
 				RelativePath=".\res\stop.bmp"
+				>
+			</File>
+			<File
+				RelativePath="C:\Documents and Settings\bin\Desktop\stop.bmp"
 				>
 			</File>
 			<File

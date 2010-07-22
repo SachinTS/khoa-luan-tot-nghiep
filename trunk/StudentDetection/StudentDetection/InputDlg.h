@@ -1,5 +1,6 @@
 #pragma once
 #include "afxwin.h"
+#include "BtnST.h"
 
 // InputDlg dialog
 
@@ -33,7 +34,11 @@ public:
 	afx_msg void OnBnClickedBtnBrowseMask();	
 	afx_msg void OnBnClickedOk();
 
+	BOOL OnInitDialog();
+
 	CString m_maskPath;
 	CString m_videoPath;
 	
+	CButtonST m_btnOK;
+	CButtonST m_btnCancel;
 };
