@@ -1,0 +1,8 @@
+<Shape>
+	<threshold>0.15</threshold>
+	<delta>4</delta>
+	<length>5</length>
+	<Big>big.txt</Big>
+	<Medium>medium.txt</Medium>
+	<Small>small.txt</Small>
+</Shape>

@@ -15,6 +15,8 @@ public:
 	float delta;
 
 public:
+	SnakeWindow(const char *sData);
+	SnakeWindow(const char *sData, float threshold, float delta, int l);
 	SnakeWindow(FILE *data);
 	Snake *GetSnake(IplImage *image, IplImage *edge, const CvPoint& location);
 	Snake *GetSnake(IplImage *image, IplImage *edge, const CvPoint& location, const CvRect& bounding_rect);

@@ -1,6 +1,44 @@
 #include "StdAfx.h"
 #include "snakewindow.h"
 
+SnakeWindow::SnakeWindow(const char *sData) {
+	FILE *data = fopen(sData, "r");
+
+	int n, m;
+	fscanf(data, "%d %d\n", &n, &m);
+
+	this->n = n;
+	space = new VectorSpace[n];
+	for (int i = 0; i < n; i++) {
+		Snake *s = new Snake(data, m);
+		space[i].origin_snake = s;
+		space[i].GenerateSnake();
+		fscanf(data, "\n");
+	}
+	this->l = 5;
+	this->threshold = 0.15f;
+	this->delta = 4;
+}
+
+SnakeWindow::SnakeWindow(const char *sData, float threshold, float delta, int l) {
+	FILE *data = fopen(sData, "r");
+
+	int n, m;
+	fscanf(data, "%d %d\n", &n, &m);
+
+	this->n = n;
+	space = new VectorSpace[n];
+	for (int i = 0; i < n; i++) {
+		Snake *s = new Snake(data, m);
+		space[i].origin_snake = s;
+		space[i].GenerateSnake();
+		fscanf(data, "\n");
+	}
+	this->l = l;
+	this->threshold = threshold;
+	this->delta = delta;
+}
+
 
 SnakeWindow::SnakeWindow(FILE *data) {
 	int n, m;
