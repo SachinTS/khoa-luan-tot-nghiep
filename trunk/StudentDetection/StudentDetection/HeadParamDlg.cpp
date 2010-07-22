@@ -56,9 +56,34 @@ void HeadParamDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 
-BEGIN_MESSAGE_MAP(HeadParamDlg, CDialog)	
+BEGIN_MESSAGE_MAP(HeadParamDlg, CDialog)
+	ON_WM_ERASEBKGND()
 END_MESSAGE_MAP()
 
 
 // HeadParamDlg message handlers
+BOOL HeadParamDlg::OnEraseBkgnd(CDC* pDC)
+{
+	// TODO: Add your message handler code here and/or call default
+	CDialog::OnEraseBkgnd(pDC);
+	SBitdraw(pDC,IDB_BMP_BACKGROUND1);
+	return true;
+	
+}
+bool HeadParamDlg::SBitdraw(CDC *pDC, UINT nIDResource)
+{
+	CBitmap* m_bitmap;
+	m_bitmap=new CBitmap();
+	m_bitmap->LoadBitmap(nIDResource);
+	if(!m_bitmap->m_hObject)
+		return true;
+	CRect rect;
+	GetClientRect(&rect);
+	CDC dc;
+	dc.CreateCompatibleDC(pDC);	
+	dc.SelectObject(m_bitmap);
 
+	int xo=0, yo=0;
+	pDC->BitBlt(xo, yo, rect.Width(),rect.Height(), &dc, 0, 0, SRCCOPY);
+	return true;
+}

@@ -21,6 +21,9 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:		
+	BOOL OnEraseBkgnd(CDC* pDC);
+	bool SBitdraw(CDC *pDC, UINT nIDResource);
+
 	CEdit m_editStartIndex;
 	CEdit m_editEndIndex;
 	CEdit m_editOutPath;

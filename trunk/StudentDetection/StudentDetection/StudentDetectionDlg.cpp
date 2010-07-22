@@ -91,6 +91,7 @@ BEGIN_MESSAGE_MAP(CStudentDetectionDlg, CDialog)
 	ON_MESSAGE(WM_USER_THREAD_UPDATE_PROGRESS, OnThreadUpdateProgress)
 	ON_MESSAGE(WM_USER_THREAD_UPDATE_INFO, OnThreadUpdateInfo)	
 	ON_BN_CLICKED(IDC_BTN_APPLY_PARAMS, &CStudentDetectionDlg::OnBnClickedBtnApplyParams)
+	ON_WM_ERASEBKGND()
 END_MESSAGE_MAP()
 
 
@@ -479,4 +480,30 @@ void CStudentDetectionDlg::OnBnClickedBtnApplyParams()
 
 	m_tabHeadParams->m_editRelativeWidthHeight.GetWindowTextW(tmp);
 	m_windowParam.m_DetectionParams.m_Head_Params.m_iRelative_Width_Height  = utils.ConvertToInt(tmp);
+}
+
+BOOL CStudentDetectionDlg::OnEraseBkgnd(CDC* pDC)
+{
+	// TODO: Add your message handler code here and/or call default
+	CDialog::OnEraseBkgnd(pDC);
+	SBitdraw(pDC,IDB_BMP_BACKGROUND);
+	return true;
+	
+}
+bool CStudentDetectionDlg::SBitdraw(CDC *pDC, UINT nIDResource)
+{
+	CBitmap* m_bitmap;
+	m_bitmap=new CBitmap();
+	m_bitmap->LoadBitmap(nIDResource);
+	if(!m_bitmap->m_hObject)
+		return true;
+	CRect rect;
+	GetClientRect(&rect);
+	CDC dc;
+	dc.CreateCompatibleDC(pDC);	
+	dc.SelectObject(m_bitmap);
+
+	int xo=0, yo=0;
+	pDC->BitBlt(xo, yo, rect.Width(),rect.Height(), &dc, 0, 0, SRCCOPY);
+	return true;
 }

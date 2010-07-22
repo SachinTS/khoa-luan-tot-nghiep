@@ -10,6 +10,8 @@ class AboutDlg : public CDialog
 public:
 	AboutDlg(CWnd* pParent = NULL);   // standard constructor
 	virtual ~AboutDlg();
+	BOOL OnEraseBkgnd(CDC* pDC);
+	bool SBitdraw(CDC *pDC, UINT nIDResource);
 
 // Dialog Data
 	enum { IDD = IDD_ABOUTBOX };

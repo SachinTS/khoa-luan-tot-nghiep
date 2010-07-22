@@ -20,6 +20,9 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
+	bool SBitdraw(CDC *pDC, UINT nIDResource);
+	BOOL OnEraseBkgnd(CDC* pDC);
+
 	CEdit m_editPrefixGauss;
 	CEdit m_editStartIndxGauss;
 	CEdit m_editPosfixGauss;

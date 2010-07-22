@@ -43,7 +43,10 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
-public:				
+public:			
+	BOOL OnEraseBkgnd(CDC* pDC);
+	bool SBitdraw(CDC *pDC, UINT nIDResource);
+
 	CTabCtrl m_tabParams;
 	HeadParamDlg *m_tabHeadParams;
 	afx_msg void OnTcnSelchangeTabParam(NMHDR *pNMHDR, LRESULT *pResult);
@@ -65,7 +68,7 @@ public:
 	afx_msg LRESULT OnThreadFinished(WPARAM wParam,LPARAM lParam);
 	afx_msg LRESULT OnThreadUpdateProgress(WPARAM wParam,LPARAM lParam);
 	afx_msg LRESULT OnThreadUpdateInfo(WPARAM wParam,LPARAM lParam);
-
+	
 	WindowParams m_windowParam;
 	CWinThread *video_thread;
 	CAnimateCtrl m_video;

@@ -70,7 +70,7 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDR_MAINFRAME           ICON                    "res\\StudentDetection.ico"
+IDR_MAINFRAME           ICON                    "res\\MyIcon.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -97,12 +97,12 @@ FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     CONTROL         "",IDC_SHOW_VIDEO,"SysAnimate32",WS_BORDER | WS_TABSTOP,210,89,297,229
     CONTROL         "",IDC_TAB_PARAM,"SysTabControl32",0x0,15,18,183,302,WS_EX_TRANSPARENT
-    CONTROL         "View Hair Window",IDC_CHECK_VIEW_HAIR,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,245,36,73,10
-    CONTROL         "View SVM result Window",IDC_CHECK_VIEW_SVM,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,323,36,93,10
-    CONTROL         "View Shape Matching",IDC_CHECK_VIEW_SHAPE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,420,36,83,10
-    PUSHBUTTON      "",IDC_BTN_PLAY,339,327,25,20
+    CONTROL         "View Hair Window",IDC_CHECK_VIEW_HAIR,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,245,36,73,10,WS_EX_TRANSPARENT
+    CONTROL         "View SVM result Window",IDC_CHECK_VIEW_SVM,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,323,36,93,10,WS_EX_TRANSPARENT
+    CONTROL         "View Shape Matching",IDC_CHECK_VIEW_SHAPE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,420,36,83,10,WS_EX_TRANSPARENT
+    PUSHBUTTON      "",IDC_BTN_PLAY,342,326,22,20
     PUSHBUTTON      "",IDC_BTN_STOP,368,326,23,20
-    LTEXT           "",IDC_STATIC_STUDENT_COUNT,367,66,8,8
+    LTEXT           "0",IDC_STATIC_STUDENT_COUNT,367,66,8,8
     CONTROL         151,IDC_PICBOX,"Static",SS_BITMAP | SS_CENTERIMAGE,342,60,20,20,WS_EX_TRANSPARENT
     CONTROL         152,IDC_STATIC,"Static",SS_BITMAP | SS_CENTERIMAGE,212,31,21,20,WS_EX_TRANSPARENT
     PUSHBUTTON      "Apply",IDC_BTN_APPLY_PARAMS,81,326,50,14
@@ -214,16 +214,16 @@ END
 
 IDD_DLG_INPUT DIALOGEX 0, 0, 406, 121
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "Dialog"
+CAPTION "Input Video"
 FONT 8, "MS Shell Dlg", 400, 0, 0x1
 BEGIN
     DEFPUSHBUTTON   "OK",IDOK,283,100,50,14
     PUSHBUTTON      "Cancel",IDCANCEL,349,100,50,14
     EDITTEXT        IDC_EDIT_VIDEO_PATH,93,32,209,14,ES_AUTOHSCROLL
-    LTEXT           "Video:",IDC_STATIC,35,35,21,8
+    LTEXT           "Video:",IDC_STATIC,35,35,21,8,0,WS_EX_TRANSPARENT
     PUSHBUTTON      "Browse",IDC_BTN_BROWSE_VIDEO,305,31,50,14
     EDITTEXT        IDC_EDIT_MASK_PATH,93,60,209,14,ES_AUTOHSCROLL
-    LTEXT           "Mask:",IDC_STATIC,35,63,20,8
+    LTEXT           "Mask:",IDC_STATIC,35,63,20,8,0,WS_EX_TRANSPARENT
     PUSHBUTTON      "Browse",IDC_BTN_BROWSE_MASK,305,60,50,14
     GROUPBOX        "Input",IDC_STATIC,17,18,370,65
 END
@@ -366,6 +366,8 @@ IDB_BMP_STOP            BITMAP                  "res\\stop.bmp"
 IDB_BMP_PLAY            BITMAP                  "res\\play.bmp"
 IDB_BMP_STUDENT         BITMAP                  "res\\student.bmp"
 IDB_BMP_CAMERA          BITMAP                  "res\\Camera.bmp"
+IDB_BMP_BACKGROUND      BITMAP                  "res\\background.bmp"
+IDB_BMP_BACKGROUND1     BITMAP                  "res\\background1.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

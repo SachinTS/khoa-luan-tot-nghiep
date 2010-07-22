@@ -38,6 +38,7 @@ void TrainGaussDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(TrainGaussDlg, CDialog)
 	ON_BN_CLICKED(IDC_BTN_BWS_OUT_GAUSS, &TrainGaussDlg::OnBnClickedBtnBwsOutGauss)
 	ON_BN_CLICKED(IDC_BTN_TRAIN_GAUSS, &TrainGaussDlg::OnBnClickedBtnTrainGauss)
+	ON_WM_ERASEBKGND()
 END_MESSAGE_MAP()
 
 
@@ -77,4 +78,30 @@ void TrainGaussDlg::OnBnClickedBtnTrainGauss()
 	m_editProgress.SetWindowTextW(_T("Train Gaussian completed"));
 
 	MessageBox(_T("Train Gaussian completed"), _T("Information"));	
+}
+
+BOOL TrainGaussDlg::OnEraseBkgnd(CDC* pDC)
+{
+	// TODO: Add your message handler code here and/or call default
+	CDialog::OnEraseBkgnd(pDC);
+	SBitdraw(pDC,IDB_BMP_BACKGROUND1);
+	return true;
+	
+}
+bool TrainGaussDlg::SBitdraw(CDC *pDC, UINT nIDResource)
+{
+	CBitmap* m_bitmap;
+	m_bitmap=new CBitmap();
+	m_bitmap->LoadBitmap(nIDResource);
+	if(!m_bitmap->m_hObject)
+		return true;
+	CRect rect;
+	GetClientRect(&rect);
+	CDC dc;
+	dc.CreateCompatibleDC(pDC);	
+	dc.SelectObject(m_bitmap);
+
+	int xo=0, yo=0;
+	pDC->BitBlt(xo, yo, rect.Width(),rect.Height(), &dc, 0, 0, SRCCOPY);
+	return true;
 }

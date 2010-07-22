@@ -20,6 +20,8 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
+	BOOL OnEraseBkgnd(CDC* pDC);
+	bool SBitdraw(CDC *pDC, UINT nIDResource);
 	Head_Params m_params;
 	CEdit m_editMinWidthHead;
 	CEdit m_editMaxWidthHead;

@@ -22,6 +22,9 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
+	bool SBitdraw(CDC *pDC, UINT nIDResource);
+	BOOL OnEraseBkgnd(CDC* pDC);
+
 	CTabCtrl m_tabTrainData;
 	TrainGaussDlg m_tabTrainGauss;
 	TrainSVMDlg m_tabTrainSVM;

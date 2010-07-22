@@ -57,6 +57,7 @@ void TrainDataDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(TrainDataDlg, CDialog)
 	ON_NOTIFY(TCN_SELCHANGE, IDC_TAB_TRAIN_DATA, &TrainDataDlg::OnTcnSelchangeTabTrainData)
+	ON_WM_ERASEBKGND()
 END_MESSAGE_MAP()
 
 
@@ -76,4 +77,29 @@ void TrainDataDlg::OnTcnSelchangeTabTrainData(NMHDR *pNMHDR, LRESULT *pResult)
 		m_tabTrainGauss.ShowWindow( SW_SHOWNA );				
 	}
 	*pResult = 0;
+}
+BOOL TrainDataDlg::OnEraseBkgnd(CDC* pDC)
+{
+	// TODO: Add your message handler code here and/or call default
+	CDialog::OnEraseBkgnd(pDC);
+	SBitdraw(pDC,IDB_BMP_BACKGROUND);	
+	return true;
+	
+}
+bool TrainDataDlg::SBitdraw(CDC *pDC, UINT nIDResource)
+{
+	CBitmap* m_bitmap;
+	m_bitmap=new CBitmap();
+	m_bitmap->LoadBitmap(nIDResource);
+	if(!m_bitmap->m_hObject)
+		return true;
+	CRect rect;
+	GetClientRect(&rect);
+	CDC dc;
+	dc.CreateCompatibleDC(pDC);	
+	dc.SelectObject(m_bitmap);
+
+	int xo=0, yo=0;
+	pDC->BitBlt(xo, yo, rect.Width(),rect.Height(), &dc, 0, 0, SRCCOPY);
+	return true;
 }

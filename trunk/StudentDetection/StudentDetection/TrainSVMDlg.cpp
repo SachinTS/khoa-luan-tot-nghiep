@@ -47,6 +47,7 @@ void TrainSVMDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(TrainSVMDlg, CDialog)
 	ON_BN_CLICKED(IDC_BTN_TRAIN_SVM, &TrainSVMDlg::OnBnClickedBtnTrainSvm)
 	ON_BN_CLICKED(IDC_BTN_BWS_OUT_SVM, &TrainSVMDlg::OnBnClickedBtnBwsOutSvm)	
+	ON_WM_ERASEBKGND()
 END_MESSAGE_MAP()
 
 
@@ -116,4 +117,30 @@ void TrainSVMDlg::OnBnClickedBtnBwsOutSvm()
 		m_editOutPath.SetWindowText(m_fdlg.GetPathName());		
 		UpdateData(false);
 	}
+}
+
+BOOL TrainSVMDlg::OnEraseBkgnd(CDC* pDC)
+{
+	// TODO: Add your message handler code here and/or call default
+	CDialog::OnEraseBkgnd(pDC);
+	SBitdraw(pDC,IDB_BMP_BACKGROUND1);
+	return true;
+	
+}
+bool TrainSVMDlg::SBitdraw(CDC *pDC, UINT nIDResource)
+{
+	CBitmap* m_bitmap;
+	m_bitmap=new CBitmap();
+	m_bitmap->LoadBitmap(nIDResource);
+	if(!m_bitmap->m_hObject)
+		return true;
+	CRect rect;
+	GetClientRect(&rect);
+	CDC dc;
+	dc.CreateCompatibleDC(pDC);	
+	dc.SelectObject(m_bitmap);
+
+	int xo=0, yo=0;
+	pDC->BitBlt(xo, yo, rect.Width(),rect.Height(), &dc, 0, 0, SRCCOPY);
+	return true;
 }

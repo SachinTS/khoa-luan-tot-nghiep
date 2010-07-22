@@ -435,6 +435,14 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
+				RelativePath=".\res\background.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\res\background1.bmp"
+				>
+			</File>
+			<File
 				RelativePath=".\res\Camera.bmp"
 				>
 			</File>
@@ -447,11 +455,11 @@
 				>
 			</File>
 			<File
-				RelativePath="C:\Documents and Settings\bin\Desktop\stop.bmp"
+				RelativePath=".\res\stop.bmp"
 				>
 			</File>
 			<File
-				RelativePath=".\res\stop.bmp"
+				RelativePath="C:\Documents and Settings\bin\Desktop\stop.bmp"
 				>
 			</File>
 			<File
