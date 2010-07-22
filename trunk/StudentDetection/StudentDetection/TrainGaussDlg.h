@@ -22,7 +22,7 @@ protected:
 public:
 	bool SBitdraw(CDC *pDC, UINT nIDResource);
 	BOOL OnEraseBkgnd(CDC* pDC);
-
+	HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 	CEdit m_editPrefixGauss;
 	CEdit m_editStartIndxGauss;
 	CEdit m_editPosfixGauss;

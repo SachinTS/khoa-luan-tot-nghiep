@@ -21,6 +21,7 @@ protected:
 public:
 	BOOL OnEraseBkgnd(CDC* pDC);
 	bool SBitdraw(CDC *pDC, UINT nIDResource);
+	HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 
 	CButton m_btnBrowseVideo;
 	CButton m_btnBrowseMask;

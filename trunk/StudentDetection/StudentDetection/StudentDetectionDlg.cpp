@@ -92,10 +92,12 @@ BEGIN_MESSAGE_MAP(CStudentDetectionDlg, CDialog)
 	ON_MESSAGE(WM_USER_THREAD_UPDATE_INFO, OnThreadUpdateInfo)	
 	ON_BN_CLICKED(IDC_BTN_APPLY_PARAMS, &CStudentDetectionDlg::OnBnClickedBtnApplyParams)
 	ON_WM_ERASEBKGND()
+	ON_WM_CTLCOLOR()
 END_MESSAGE_MAP()
 
 
 // CStudentDetectionDlg message handlers
+
 
 BOOL CStudentDetectionDlg::OnInitDialog()
 {
@@ -447,6 +449,7 @@ LRESULT CStudentDetectionDlg::OnThreadUpdateInfo(WPARAM wParam,LPARAM lParam)
 	Utils utils;
 	int count = (int)wParam;
 	m_static_student_count.SetWindowTextW(utils.ConvertToCString(count));
+	//m_static_student_count.Invalidate();
 	return 0;
 }
 
@@ -456,7 +459,7 @@ void CStudentDetectionDlg::OnBnClickedBtnApplyParams()
 	//apply head params
 	CString tmp;
 	Utils utils;
-
+	
 	m_tabHeadParams->m_editMaxHeadArea.GetWindowTextW(tmp);
 	m_windowParam.m_DetectionParams.m_Head_Params.m_iMaxHeadArea = utils.ConvertToInt(tmp);
 
@@ -481,14 +484,36 @@ void CStudentDetectionDlg::OnBnClickedBtnApplyParams()
 	m_tabHeadParams->m_editRelativeWidthHeight.GetWindowTextW(tmp);
 	m_windowParam.m_DetectionParams.m_Head_Params.m_iRelative_Width_Height  = utils.ConvertToInt(tmp);
 }
-
+/*
 BOOL CStudentDetectionDlg::OnEraseBkgnd(CDC* pDC)
 {
 	// TODO: Add your message handler code here and/or call default
 	CDialog::OnEraseBkgnd(pDC);
 	SBitdraw(pDC,IDB_BMP_BACKGROUND);
-	return true;
-	
+	return true;	
+}
+*/
+BOOL CStudentDetectionDlg::OnEraseBkgnd(CDC* pDC) 
+{
+	CBitmap m_bitmap;
+	BOOL rVal = FALSE;
+
+	if( m_bitmap.LoadBitmap( IDB_BMP_BACKGROUND ) )
+	{
+		CRect rect;
+		GetClientRect( &rect );
+
+		CDC dc;
+		dc.CreateCompatibleDC( pDC );
+		CBitmap* pOldBitmap = dc.SelectObject( &m_bitmap );
+
+		pDC->BitBlt( 0, 0, rect.Width(), rect.Height(), &dc, 0, 0, SRCCOPY);
+
+		dc.SelectObject(pOldBitmap);
+		rVal = TRUE;
+	}
+
+	return rVal;
 }
 bool CStudentDetectionDlg::SBitdraw(CDC *pDC, UINT nIDResource)
 {
@@ -506,4 +531,42 @@ bool CStudentDetectionDlg::SBitdraw(CDC *pDC, UINT nIDResource)
 	int xo=0, yo=0;
 	pDC->BitBlt(xo, yo, rect.Width(),rect.Height(), &dc, 0, 0, SRCCOPY);
 	return true;
+}
+HBRUSH CStudentDetectionDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor) 
+{
+	/*
+	HBRUSH hbr;
+	if( nCtlColor == CTLCOLOR_STATIC )
+	{
+		pDC->SetBkMode(TRANSPARENT);		
+		hbr = (HBRUSH)GetStockObject( NULL_BRUSH );
+	}
+	else
+	{
+		hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);		
+	}	
+	return hbr;	
+	*/
+
+	HBRUSH hbr = CWnd::OnCtlColor(pDC, pWnd, nCtlColor);
+
+    DWORD dwStyle = pWnd->GetStyle();
+    if ( dwStyle & (BS_AUTORADIOBUTTON | BS_RADIOBUTTON | BS_AUTOCHECKBOX |BS_CHECKBOX) )
+	{
+        hbr = (HBRUSH) GetStockObject (WHITE_BRUSH);
+    }
+	else
+	{
+		if( nCtlColor == CTLCOLOR_STATIC )
+		{
+			pDC->SetBkMode(TRANSPARENT);			
+			hbr = (HBRUSH)GetStockObject( NULL_BRUSH );
+		}
+		else
+		{
+			hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
+		}
+	}
+
+    return hbr;
 }

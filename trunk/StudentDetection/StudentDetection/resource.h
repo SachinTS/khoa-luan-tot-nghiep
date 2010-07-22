@@ -18,11 +18,9 @@
 #define IDD_DLG_SHAPE_PARAMS            142
 #define IDB_BMP_STOP                    148
 #define IDB_BMP_PLAY                    149
-#define IDB_BITMAP2                     151
 #define IDB_BMP_STUDENT                 151
 #define IDB_BMP_CAMERA                  152
 #define IDB_BMP_BACKGROUND              153
-#define IDB_BITMAP3                     154
 #define IDB_BMP_BACKGROUND1             154
 #define IDC_EDIT1                       1006
 #define IDC_EDIT_THRESHOLD              1006
@@ -34,12 +32,9 @@
 #define IDC_BUTTON2                     1008
 #define IDC_BTN_BROWSE_VIDEO            1008
 #define IDC_EDIT_START_INDEX_SVM        1008
-#define IDC_RADIO1                      1009
 #define IDC_EDIT_END_INDEX_SVM          1009
-#define IDC_RADIO2                      1010
 #define IDC_EDIT_HEIGHT_CELL            1010
 #define IDC_EDIT_MAX_HEAD_AREA          1010
-#define IDC_RADIO3                      1011
 #define IDC_EDIT_WIDTH_CELL             1011
 #define IDC_BUTTON3                     1012
 #define IDC_BTN_TRAIN_SVM               1012
@@ -59,16 +54,11 @@
 #define IDC_EDIT_END_INDEX_SVM_NEG      1017
 #define IDC_EDIT_PREFIX_POS             1018
 #define IDC_EDIT_SUBFIX_POS             1019
-#define IDC_SPIN1                       1020
-#define IDC_SPIN2                       1021
-#define IDC_SPIN3                       1022
 #define IDC_BTN_BWS_FOLD_SVM            1023
 #define IDC_EDIT_PREFIX_NEG             1023
 #define IDC_TAB_PARAM                   1024
 #define IDC_BTN_BWS_OUT_SVM             1024
-#define IDC_SPIN6                       1025
 #define IDC_EDIT_MIN_HEAD_WIDTH         1025
-#define IDC_SPIN7                       1026
 #define IDC_EDIT_MAX_HEAD_WIDTH         1026
 #define IDC_EDIT_MIN_HEAD_AREA          1027
 #define IDC_EDIT_SUBFIX_NEG             1027
@@ -96,7 +86,6 @@
 #define IDC_BTN_PLAY                    1045
 #define IDC_BTN_STOP                    1046
 #define IDC_BTN_APPLY                   1046
-#define IDC_BUTTON1                     1047
 #define IDC_BTN_APPLY_PARAMS            1047
 #define IDC_SLIDER_THRESHOLD            1048
 #define IDC_SLIDER3                     1049
@@ -115,7 +104,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        155
 #define _APS_NEXT_COMMAND_VALUE         32776
-#define _APS_NEXT_CONTROL_VALUE         1052
+#define _APS_NEXT_CONTROL_VALUE         1054
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

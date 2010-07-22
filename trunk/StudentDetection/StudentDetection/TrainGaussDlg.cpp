@@ -39,11 +39,31 @@ BEGIN_MESSAGE_MAP(TrainGaussDlg, CDialog)
 	ON_BN_CLICKED(IDC_BTN_BWS_OUT_GAUSS, &TrainGaussDlg::OnBnClickedBtnBwsOutGauss)
 	ON_BN_CLICKED(IDC_BTN_TRAIN_GAUSS, &TrainGaussDlg::OnBnClickedBtnTrainGauss)
 	ON_WM_ERASEBKGND()
+	ON_WM_CTLCOLOR()
 END_MESSAGE_MAP()
 
 
 // TrainGaussDlg message handlers
+HBRUSH TrainGaussDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor) 
+{
 
+	HBRUSH hbr;
+
+	if( nCtlColor == CTLCOLOR_STATIC )
+	{
+		pDC->SetBkMode(TRANSPARENT);
+		//pDC->SetTextColor(RGB(255, 0, 0));
+		hbr = (HBRUSH)GetStockObject( NULL_BRUSH );
+	}
+
+	else
+	{
+		hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
+	}
+	
+	return hbr;
+	
+}
 void TrainGaussDlg::OnBnClickedBtnBwsOutGauss()
 {
 	// TODO: Add your control notification handler code here

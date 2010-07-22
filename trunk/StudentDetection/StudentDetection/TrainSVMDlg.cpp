@@ -48,11 +48,31 @@ BEGIN_MESSAGE_MAP(TrainSVMDlg, CDialog)
 	ON_BN_CLICKED(IDC_BTN_TRAIN_SVM, &TrainSVMDlg::OnBnClickedBtnTrainSvm)
 	ON_BN_CLICKED(IDC_BTN_BWS_OUT_SVM, &TrainSVMDlg::OnBnClickedBtnBwsOutSvm)	
 	ON_WM_ERASEBKGND()
+	ON_WM_CTLCOLOR()
 END_MESSAGE_MAP()
 
 
 // TrainSVMDlg message handlers
+HBRUSH TrainSVMDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor) 
+{
 
+	HBRUSH hbr;
+
+	if( nCtlColor == CTLCOLOR_STATIC )
+	{
+		pDC->SetBkMode(TRANSPARENT);
+		//pDC->SetTextColor(RGB(255, 0, 0));
+		hbr = (HBRUSH)GetStockObject( NULL_BRUSH );
+	}
+
+	else
+	{
+		hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
+	}
+	
+	return hbr;
+	
+}
 void TrainSVMDlg::OnBnClickedBtnTrainSvm()
 {
 	// TODO: Add your control notification handler code here		

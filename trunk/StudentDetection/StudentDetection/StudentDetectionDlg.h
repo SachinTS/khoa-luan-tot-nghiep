@@ -46,6 +46,7 @@ protected:
 public:			
 	BOOL OnEraseBkgnd(CDC* pDC);
 	bool SBitdraw(CDC *pDC, UINT nIDResource);
+	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 
 	CTabCtrl m_tabParams;
 	HeadParamDlg *m_tabHeadParams;

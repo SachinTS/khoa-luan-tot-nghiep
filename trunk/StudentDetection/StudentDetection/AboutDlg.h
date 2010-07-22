@@ -12,6 +12,7 @@ public:
 	virtual ~AboutDlg();
 	BOOL OnEraseBkgnd(CDC* pDC);
 	bool SBitdraw(CDC *pDC, UINT nIDResource);
+	HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 
 // Dialog Data
 	enum { IDD = IDD_ABOUTBOX };

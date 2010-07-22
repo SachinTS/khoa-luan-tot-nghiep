@@ -447,6 +447,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\res\MyIcon.ico"
+				>
+			</File>
+			<File
 				RelativePath=".\res\play.bmp"
 				>
 			</File>
@@ -455,19 +459,19 @@
 				>
 			</File>
 			<File
-				RelativePath=".\res\stop.bmp"
-				>
-			</File>
-			<File
 				RelativePath="C:\Documents and Settings\bin\Desktop\stop.bmp"
 				>
 			</File>
 			<File
-				RelativePath=".\res\student.bmp"
+				RelativePath=".\res\stop.bmp"
 				>
 			</File>
 			<File
 				RelativePath="C:\Documents and Settings\bin\Desktop\student.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\res\student.bmp"
 				>
 			</File>
 			<File

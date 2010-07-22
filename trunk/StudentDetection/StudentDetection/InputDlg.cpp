@@ -36,10 +36,31 @@ BEGIN_MESSAGE_MAP(InputDlg, CDialog)
 	ON_BN_CLICKED(IDC_BTN_BROWSE_MASK, &InputDlg::OnBnClickedBtnBrowseMask)
 	ON_BN_CLICKED(IDOK, &InputDlg::OnBnClickedOk)
 	ON_WM_ERASEBKGND()
+	ON_WM_CTLCOLOR()
 END_MESSAGE_MAP()
 
 
 // InputDlg message handlers
+HBRUSH InputDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor) 
+{
+
+	HBRUSH hbr;
+
+	if( nCtlColor == CTLCOLOR_STATIC )
+	{
+		pDC->SetBkMode(TRANSPARENT);
+		//pDC->SetTextColor(RGB(255, 0, 0));
+		hbr = (HBRUSH)GetStockObject( NULL_BRUSH );
+	}
+
+	else
+	{
+		hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
+	}
+	
+	return hbr;
+	
+}
 BOOL InputDlg::OnEraseBkgnd(CDC* pDC)
 {
 	// TODO: Add your message handler code here and/or call default
