@@ -20,7 +20,6 @@
 #define IDB_BMP_PLAY                    149
 #define IDB_BITMAP2                     151
 #define IDB_BMP_STUDENT                 151
-#define IDB_BITMAP3                     152
 #define IDB_BMP_CAMERA                  152
 #define IDC_EDIT1                       1006
 #define IDC_EDIT_THRESHOLD              1006
@@ -95,10 +94,12 @@
 #define IDC_BTN_STOP                    1046
 #define IDC_BTN_APPLY                   1046
 #define IDC_BUTTON1                     1047
+#define IDC_BTN_APPLY_PARAMS            1047
 #define IDC_SLIDER_THRESHOLD            1048
 #define IDC_SLIDER3                     1049
 #define IDC_SLIDER_LENGTH               1049
 #define IDC_PICBOX                      1050
+#define IDC_STATIC_STUDENT_COUNT        1051
 #define ID_INPUT_VIDEO                  32771
 #define ID_MAIN_EXIT                    32772
 #define ID_MAIN_VIDEO                   32773
@@ -111,7 +112,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        153
 #define _APS_NEXT_COMMAND_VALUE         32776
-#define _APS_NEXT_CONTROL_VALUE         1051
+#define _APS_NEXT_CONTROL_VALUE         1052
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

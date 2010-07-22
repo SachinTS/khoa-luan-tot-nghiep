@@ -1,19 +1,14 @@
 #pragma once
 #include "afxwin.h"
 #include "WindowParams.h"
-
 // HeadParamDlg dialog
-
 class HeadParamDlg : public CDialog
 {
 	DECLARE_DYNAMIC(HeadParamDlg)
 
 public:
-	HeadParamDlg(CWnd* pParent = NULL);   // standard constructor
-	HeadParamDlg(WindowParams params, CWnd* pParent = NULL);   // standard constructor
-	virtual ~HeadParamDlg();
-	void SetParam(WindowParams param);
-	void Init();
+	HeadParamDlg(CWnd* pParent = NULL);   // standard constructor	
+	virtual ~HeadParamDlg();	
 	BOOL OnInitDialog();
 
 // Dialog Data
@@ -24,8 +19,6 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
-	CButton m_btnApply;
-	afx_msg void OnBnClickedBtnApply();
 	WindowParams m_params;
 	CEdit m_editMinWidthHead;
 	CEdit m_editMaxWidthHead;

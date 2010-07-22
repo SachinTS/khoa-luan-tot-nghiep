@@ -10,12 +10,6 @@
 
 IMPLEMENT_DYNAMIC(HeadParamDlg, CDialog)
 
-HeadParamDlg::HeadParamDlg(WindowParams params, CWnd* pParent /*=NULL*/)
-	: CDialog(HeadParamDlg::IDD, pParent)
-{
-	
-}
-
 HeadParamDlg::HeadParamDlg(CWnd* pParent )
 	: CDialog(HeadParamDlg::IDD, pParent)
 {
@@ -26,13 +20,11 @@ HeadParamDlg::~HeadParamDlg()
 {
 }
 
-void HeadParamDlg::SetParam(WindowParams param)
+BOOL HeadParamDlg::OnInitDialog()
 {
-	m_params = param;
-}
+	CDialog::OnInitDialog();
 
-void HeadParamDlg::Init()
-{	
+	m_params.LoadParamsFromXML("config.xml");
 	Utils utils;
 	m_editMaxHeadArea.SetWindowTextW(utils.ConvertToCString(m_params.m_DetectionParams.m_Head_Params.m_iMaxHeadArea));
 	m_editMaxHeadAreaAtTop.SetWindowTextW(utils.ConvertToCString(m_params.m_DetectionParams.m_Head_Params.m_iMaxHeadAreaTop));
@@ -42,13 +34,6 @@ void HeadParamDlg::Init()
 	m_editMinWidthHead.SetWindowTextW(utils.ConvertToCString(m_params.m_DetectionParams.m_Head_Params.m_iMinWidth));
 	m_editRelativeHeightWidth.SetWindowTextW(utils.ConvertToCString(m_params.m_DetectionParams.m_Head_Params.m_iRelative_Height_Width));
 	m_editRelativeWidthHeight.SetWindowTextW(utils.ConvertToCString(m_params.m_DetectionParams.m_Head_Params.m_iRelative_Width_Height));
-}
-
-BOOL HeadParamDlg::OnInitDialog()
-{
-	//OnInitDialog();
-
-
 
 	return TRUE;
 }
@@ -56,8 +41,7 @@ BOOL HeadParamDlg::OnInitDialog()
 
 void HeadParamDlg::DoDataExchange(CDataExchange* pDX)
 {
-	CDialog::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_BTN_APPLY, m_btnApply);
+	CDialog::DoDataExchange(pDX);	
 	DDX_Control(pDX, IDC_EDIT_MIN_WIDTH_HEAD, m_editMinWidthHead);
 	DDX_Control(pDX, IDC_EDIT_MAX_WIDTH_HEAD, m_editMaxWidthHead);
 	DDX_Control(pDX, IDC_EDIT_MIN_HEAD_AREA, m_editMinHeadArea);
@@ -69,15 +53,9 @@ void HeadParamDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 
-BEGIN_MESSAGE_MAP(HeadParamDlg, CDialog)
-	ON_BN_CLICKED(IDC_BTN_APPLY, &HeadParamDlg::OnBnClickedBtnApply)
+BEGIN_MESSAGE_MAP(HeadParamDlg, CDialog)	
 END_MESSAGE_MAP()
 
 
 // HeadParamDlg message handlers
 
-void HeadParamDlg::OnBnClickedBtnApply()
-{
-	// TODO: Add your control notification handler code here
-	Init();
-}

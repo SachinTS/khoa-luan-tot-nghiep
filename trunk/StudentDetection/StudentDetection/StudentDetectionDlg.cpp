@@ -68,6 +68,8 @@ void CStudentDetectionDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_CHECK_VIEW_SVM, m_checkViewSVM);
 	DDX_Control(pDX, IDC_CHECK_VIEW_SHAPE, m_checkViewShape);
 	DDX_Control(pDX, IDC_SHOW_VIDEO, m_video);
+	DDX_Control(pDX, IDC_BTN_APPLY_PARAMS, m_btnApplyParams);
+	DDX_Control(pDX, IDC_STATIC_STUDENT_COUNT, m_static_student_count);
 }
 
 BEGIN_MESSAGE_MAP(CStudentDetectionDlg, CDialog)
@@ -87,7 +89,8 @@ BEGIN_MESSAGE_MAP(CStudentDetectionDlg, CDialog)
 	ON_BN_CLICKED(IDC_CHECK_VIEW_SHAPE, &CStudentDetectionDlg::OnBnClickedCheckViewShape)
 	ON_MESSAGE(WM_USER_THREAD_FINISHED, OnThreadFinished)
 	ON_MESSAGE(WM_USER_THREAD_UPDATE_PROGRESS, OnThreadUpdateProgress)
-	ON_BN_CLICKED(IDC_BUTTON1, &CStudentDetectionDlg::OnBnClickedButton1)
+	ON_MESSAGE(WM_USER_THREAD_UPDATE_INFO, OnThreadUpdateInfo)	
+	ON_BN_CLICKED(IDC_BTN_APPLY_PARAMS, &CStudentDetectionDlg::OnBnClickedBtnApplyParams)
 END_MESSAGE_MAP()
 
 
@@ -115,9 +118,10 @@ BOOL CStudentDetectionDlg::OnInitDialog()
 	m_tabParams.GetItemRect( 0, &Rect );
 	m_tabHeadParams.Create( IDD_DLG_HEAD_PARAMS, &m_tabParams );
 	m_tabHeadParams.SetWindowPos( 0, Rect.left + 2, Rect.bottom + 2, 0, 0, SWP_NOSIZE|SWP_NOZORDER );
-		
-	m_tabHeadParams.ShowWindow( SW_SHOWNA ); // MG: Sets the initial dialog
+	//m_tabHeadParams.OnInitDialog();
+	//m_tabHeadParams.SetParam(m_windowParam);
 
+	m_tabHeadParams.ShowWindow( SW_SHOWNA ); // MG: Sets the initial dialog
 
 	m_tabParams.GetItemRect( 0, &Rect );
 	m_tabShapeParams.Create( IDD_DLG_SHAPE_PARAMS, &m_tabParams );
@@ -148,20 +152,17 @@ BOOL CStudentDetectionDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
 	// TODO: Add extra initialization here
+	//init checkboxes
 	m_checkViewHair.SetCheck(1);
 	m_windowParam.m_isViewHairDetection = 1;
-
 	m_checkViewShape.SetCheck(1);
 	m_windowParam.m_isViewShapeDetection = 1;
-
 	m_checkViewSVM.SetCheck(1);
 	m_windowParam.m_isViewSVMDetection = 1;
 
-	//m_tabHeadParams.Init();
-	//m_tabHeadParams.SetParam(m_windowParam);
+	//init image for buttons
 	m_btnPlay.SetBitmaps(IDB_BMP_PLAY, RGB(255, 255, 255));
 	m_btnPlay.SetFlat();
-
 	m_btnStop.SetBitmaps(IDB_BMP_STOP, RGB(255, 255, 255));
 	m_btnStop.SetFlat();
 
@@ -354,7 +355,7 @@ UINT playVideoThread(LPVOID lParam)
 		count++;
 
 		PostMessage(param->m_hWnd,WM_USER_THREAD_UPDATE_PROGRESS,(WPARAM)result,0);
-	
+		PostMessage(param->m_hWnd,WM_USER_THREAD_UPDATE_INFO,(WPARAM)vectorRect.size(),0);
 		cvReleaseImage(&subtract);
 					
 		if(cvWaitKey(fps) == 27)
@@ -440,8 +441,43 @@ LRESULT CStudentDetectionDlg::OnThreadUpdateProgress(WPARAM wParam,LPARAM lParam
 	return 0;
 }
 
-void CStudentDetectionDlg::OnBnClickedButton1()
+LRESULT CStudentDetectionDlg::OnThreadUpdateInfo(WPARAM wParam,LPARAM lParam)
+{
+	Utils utils;
+	int count = (int)wParam;
+	m_static_student_count.SetWindowTextW(utils.ConvertToCString(count));
+	return 0;
+}
+
+void CStudentDetectionDlg::OnBnClickedBtnApplyParams()
 {
 	// TODO: Add your control notification handler code here
-	m_tabHeadParams.Init();
+	//apply head params
+	CString tmp;
+	Utils utils;
+
+	m_tabHeadParams.m_editMaxHeadArea.GetWindowTextW(tmp);
+	m_windowParam.m_DetectionParams.m_Head_Params.m_iMaxHeadArea = utils.ConvertToInt(tmp);
+
+	m_tabHeadParams.m_editMaxHeadAreaAtTop.GetWindowTextW(tmp);
+	m_windowParam.m_DetectionParams.m_Head_Params.m_iMaxHeadAreaTop = utils.ConvertToInt(tmp);
+		
+	m_tabHeadParams.m_editMaxWidthHead.GetWindowTextW(tmp);
+	m_windowParam.m_DetectionParams.m_Head_Params.m_iMaxWidth  = utils.ConvertToInt(tmp);
+
+	m_tabHeadParams.m_editMinAreaAtBottom.GetWindowTextW(tmp);
+	m_windowParam.m_DetectionParams.m_Head_Params.m_iMinHeadAreaBottom = utils.ConvertToInt(tmp);
+
+	m_tabHeadParams.m_editMinHeadArea.GetWindowTextW(tmp);
+	m_windowParam.m_DetectionParams.m_Head_Params.m_iMinHeadArea = utils.ConvertToInt(tmp);
+
+	m_tabHeadParams.m_editMinWidthHead.GetWindowTextW(tmp);
+	m_windowParam.m_DetectionParams.m_Head_Params.m_iMinWidth  = utils.ConvertToInt(tmp);
+
+	m_tabHeadParams.m_editRelativeHeightWidth.GetWindowTextW(tmp);
+	m_windowParam.m_DetectionParams.m_Head_Params.m_iRelative_Height_Width  = utils.ConvertToInt(tmp);
+
+	m_tabHeadParams.m_editRelativeWidthHeight.GetWindowTextW(tmp);
+	m_windowParam.m_DetectionParams.m_Head_Params.m_iRelative_Width_Height  = utils.ConvertToInt(tmp);
+
 }

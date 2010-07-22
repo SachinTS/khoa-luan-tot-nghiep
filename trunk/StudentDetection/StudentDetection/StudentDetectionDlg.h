@@ -18,6 +18,7 @@
 
 #define WM_USER_THREAD_FINISHED (WM_USER+0x101)
 #define WM_USER_THREAD_UPDATE_PROGRESS (WM_USER+0x102)
+#define WM_USER_THREAD_UPDATE_INFO (WM_USER+0x103)
 
 // CStudentDetectionDlg dialog
 class CStudentDetectionDlg : public CDialog
@@ -63,11 +64,14 @@ public:
 	
 	afx_msg LRESULT OnThreadFinished(WPARAM wParam,LPARAM lParam);
 	afx_msg LRESULT OnThreadUpdateProgress(WPARAM wParam,LPARAM lParam);
+	afx_msg LRESULT OnThreadUpdateInfo(WPARAM wParam,LPARAM lParam);
 
 	WindowParams m_windowParam;	
 	CWinThread *video_thread;
 	CAnimateCtrl m_video;
-	afx_msg void OnBnClickedButton1();
-
+	
 	CShapeParamsDlg m_tabShapeParams;
+	CButton m_btnApplyParams;
+	afx_msg void OnBnClickedBtnApplyParams();
+	CStatic m_static_student_count;
 };
