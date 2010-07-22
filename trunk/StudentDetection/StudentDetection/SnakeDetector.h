@@ -8,7 +8,9 @@
 class SnakeDetector
 {
 public:
-	SnakeWindow *big, *medium, *small;
+	SnakeWindow *bigw;
+	SnakeWindow *mediumw;
+	SnakeWindow *smallw;
 	float threshold;
 	int l;					// length, number of vector_space
 	float delta;

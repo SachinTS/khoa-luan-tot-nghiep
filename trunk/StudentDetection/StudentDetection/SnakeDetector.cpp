@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "SnakeDetector.h"
 
 SnakeDetector::SnakeDetector(void)
@@ -30,31 +31,31 @@ SnakeDetector::SnakeDetector(const char *config) {
 		pElem = hRoot.FirstChild( "length" ).Element();
 		this->l = atoi(pElem->GetText());
 		pElem = hRoot.FirstChild( "Big" ).Element();
-		big = new SnakeWindow(pElem->GetText(), threshold, delta, l);
+		bigw = new SnakeWindow(pElem->GetText(), threshold, delta, l);
 		pElem = hRoot.FirstChild( "Medium" ).Element();
-		medium = new SnakeWindow(pElem->GetText(), threshold, delta, l);
+		mediumw = new SnakeWindow(pElem->GetText(), threshold, delta, l);
 		pElem = hRoot.FirstChild( "Small" ).Element();
-		small = new SnakeWindow(pElem->GetText(), threshold, delta, l);
+		smallw = new SnakeWindow(pElem->GetText(), threshold, delta, l);
 	}
 }
 
 SnakeDetector::~SnakeDetector(void)
 {
-	if (big != 0)
-		delete big;
-	if (medium != 0)
-		delete medium;
-	if (small != 0)
-		delete small;
+	if (bigw != NULL)
+		delete bigw;
+	if (mediumw != NULL)
+		delete mediumw;
+	if (smallw != NULL)
+		delete smallw;
 }
 
 Snake *SnakeDetector::GetSnake(IplImage *gray, int distance, CvPoint location, CvRect rect) {
 	switch (distance) {
 		case 1:
-			return big->GetSnake(gray, location, rect);
+			return bigw->GetSnake(gray, location, rect);
 		case 2:
-			return medium->GetSnake(gray, location, rect);
+			return mediumw->GetSnake(gray, location, rect);
 		case 3:
-			return small->GetSnake(gray, location, rect);
+			return smallw->GetSnake(gray, location, rect);
 	}
 }
