@@ -47,3 +47,14 @@ SnakeDetector::~SnakeDetector(void)
 	if (small != 0)
 		delete small;
 }
+
+Snake *SnakeDetector::GetSnake(IplImage *gray, int distance, CvPoint location, CvRect rect) {
+	switch (distance) {
+		case 1:
+			return big->GetSnake(gray, location, rect);
+		case 2:
+			return medium->GetSnake(gray, location, rect);
+		case 3:
+			return small->GetSnake(gray, location, rect);
+	}
+}

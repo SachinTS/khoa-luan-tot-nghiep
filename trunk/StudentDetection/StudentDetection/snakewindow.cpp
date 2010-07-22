@@ -106,3 +106,25 @@ Snake *SnakeWindow::GetSnake(IplImage *image, IplImage *edge, const CvPoint& loc
 
 	return fit_snake;
 }
+
+Snake *SnakeWindow::GetSnake(IplImage *edge, const CvPoint& location, const CvRect& bounding_rect) {
+	vector<Snake*>::iterator it;
+	double p, max = -1;
+	Snake *fit_snake = NULL;
+
+
+	for (int i = 0; i < this->n; i++) {
+		for (it = space[i].snakes.begin();
+				it != space[i].snakes.end();
+				it++) {
+			p = (*it)->Likelihood(edge, l, delta, location, bounding_rect);
+			if (p > max && p > threshold) {
+				max = p;
+				fit_snake = (*it);
+			}
+		}
+	}
+
+
+	return fit_snake;
+}

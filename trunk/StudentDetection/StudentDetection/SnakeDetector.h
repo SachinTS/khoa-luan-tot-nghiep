@@ -1,5 +1,7 @@
 #pragma once
 #include "snakewindow.h"
+#include "cv.h"
+//#include "snake.h"
 #include "tinyxml.h"
 #include "tinystr.h"
 
@@ -14,5 +16,6 @@ public:
 public:
 	SnakeDetector(void);
 	SnakeDetector(const char *config);
+	Snake *GetSnake(IplImage *gray, int distance, CvPoint location, CvRect rect);
 	~SnakeDetector(void);
 };

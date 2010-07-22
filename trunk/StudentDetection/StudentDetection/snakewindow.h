@@ -20,5 +20,6 @@ public:
 	SnakeWindow(FILE *data);
 	Snake *GetSnake(IplImage *image, IplImage *edge, const CvPoint& location);
 	Snake *GetSnake(IplImage *image, IplImage *edge, const CvPoint& location, const CvRect& bounding_rect);
+	Snake *GetSnake(IplImage *edge, const CvPoint& location, const CvRect& bounding_rect);
 	~SnakeWindow(void);
 };
