@@ -23,8 +23,9 @@
 #define IDB_BMP_BACKGROUND              153
 #define IDB_BMP_BACKGROUND1             154
 #define IDB_BMP_CANCEL                  155
-#define IDB_BITMAP3                     156
 #define IDB_BMP_OK                      156
+#define IDB_B                           157
+#define IDB_BMP_VIDEO                   157
 #define IDC_EDIT1                       1006
 #define IDC_EDIT_THRESHOLD              1006
 #define IDC_EDIT_MAX_AREA_AT_TOP        1006
@@ -95,6 +96,7 @@
 #define IDC_SLIDER_LENGTH               1049
 #define IDC_PICBOX                      1050
 #define IDC_STATIC_STUDENT_COUNT        1051
+#define IDC_PLAY_VIDEO                  1054
 #define ID_INPUT_VIDEO                  32771
 #define ID_MAIN_EXIT                    32772
 #define ID_MAIN_VIDEO                   32773
@@ -105,9 +107,9 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        157
+#define _APS_NEXT_RESOURCE_VALUE        158
 #define _APS_NEXT_COMMAND_VALUE         32776
-#define _APS_NEXT_CONTROL_VALUE         1054
+#define _APS_NEXT_CONTROL_VALUE         1055
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

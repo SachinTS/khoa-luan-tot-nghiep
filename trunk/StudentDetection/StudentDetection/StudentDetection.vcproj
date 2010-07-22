@@ -459,11 +459,11 @@
 				>
 			</File>
 			<File
-				RelativePath="C:\Documents and Settings\bin\Desktop\play.bmp"
+				RelativePath=".\res\play.bmp"
 				>
 			</File>
 			<File
-				RelativePath=".\res\play.bmp"
+				RelativePath="C:\Documents and Settings\bin\Desktop\play.bmp"
 				>
 			</File>
 			<File
@@ -475,11 +475,11 @@
 				>
 			</File>
 			<File
-				RelativePath="C:\Documents and Settings\bin\Desktop\student.bmp"
+				RelativePath=".\res\student.bmp"
 				>
 			</File>
 			<File
-				RelativePath=".\res\student.bmp"
+				RelativePath="C:\Documents and Settings\bin\Desktop\student.bmp"
 				>
 			</File>
 			<File
@@ -496,6 +496,10 @@
 			</File>
 			<File
 				RelativePath=".\res\toolbar1.bmp"
+				>
+			</File>
+			<File
+				RelativePath=".\res\video.bmp"
 				>
 			</File>
 		</Filter>

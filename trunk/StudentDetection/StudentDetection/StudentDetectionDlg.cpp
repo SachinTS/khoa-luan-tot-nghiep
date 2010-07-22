@@ -39,7 +39,7 @@ public:
 
 CAboutDlg::CAboutDlg() : CDialog(CAboutDlg::IDD)
 {
-
+	
 }
 
 BOOL CAboutDlg::OnInitDialog()
@@ -82,10 +82,10 @@ void CStudentDetectionDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BTN_STOP, m_btnStop);
 	DDX_Control(pDX, IDC_CHECK_VIEW_HAIR, m_checkViewHair);
 	DDX_Control(pDX, IDC_CHECK_VIEW_SVM, m_checkViewSVM);
-	DDX_Control(pDX, IDC_CHECK_VIEW_SHAPE, m_checkViewShape);
-	DDX_Control(pDX, IDC_SHOW_VIDEO, m_video);
+	DDX_Control(pDX, IDC_CHECK_VIEW_SHAPE, m_checkViewShape);	
 	DDX_Control(pDX, IDC_BTN_APPLY_PARAMS, m_btnApplyParams);
 	DDX_Control(pDX, IDC_STATIC_STUDENT_COUNT, m_static_student_count);
+	DDX_Control(pDX, IDC_PLAY_VIDEO, m_videoPlayer);
 }
 
 BEGIN_MESSAGE_MAP(CStudentDetectionDlg, CDialog)
@@ -109,6 +109,7 @@ BEGIN_MESSAGE_MAP(CStudentDetectionDlg, CDialog)
 	ON_BN_CLICKED(IDC_BTN_APPLY_PARAMS, &CStudentDetectionDlg::OnBnClickedBtnApplyParams)
 	ON_WM_ERASEBKGND()
 	ON_WM_CTLCOLOR()
+	ON_STN_CLICKED(IDC_PLAY_VIDEO, &CStudentDetectionDlg::OnStnClickedPlayVideo)
 END_MESSAGE_MAP()
 
 
@@ -188,6 +189,7 @@ BOOL CStudentDetectionDlg::OnInitDialog()
 	m_btnApplyParams.SetBitmaps(IDB_BMP_OK, RGB(255, 0, 0));
 	m_btnApplyParams.SetFlat();
 
+	m_bIsPlayVideo = false;
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
@@ -300,7 +302,7 @@ UINT playVideoThread(LPVOID lParam)
 		printf("Cannot open video.\n");
 		return EXIT_FAILURE;
 	}
-
+	
 	int count = 0;
 	float speed;
 	time_t start = time(NULL);
@@ -411,6 +413,7 @@ void CStudentDetectionDlg::OnBnClickedBtnPlay()
 
 		m_btnPlay.EnableWindow(0);
 		video_thread = AfxBeginThread(playVideoThread, &m_windowParam, THREAD_PRIORITY_NORMAL, 0, 0);
+		m_bIsPlayVideo = true;
 	}
 }
 
@@ -421,6 +424,7 @@ void CStudentDetectionDlg::OnBnClickedBtnStop()
 	{
 		video_thread->SuspendThread();		
 		m_btnPlay.EnableWindow();
+		m_bIsPlayVideo = false;
 	}
 }
 
@@ -445,6 +449,7 @@ void CStudentDetectionDlg::OnBnClickedCheckViewShape()
 LRESULT CStudentDetectionDlg::OnThreadFinished(WPARAM wParam,LPARAM lParam)
 {
 	m_btnPlay.EnableWindow();
+	m_bIsPlayVideo = false;
 	return 0;
 }
 
@@ -453,11 +458,13 @@ LRESULT CStudentDetectionDlg::OnThreadUpdateProgress(WPARAM wParam,LPARAM lParam
 	IplImage* frame = (IplImage*)wParam;
 	ImageProcessor imgProcess;
 	CRect clientRect;
-	m_video.GetClientRect(clientRect);
+	//m_video.GetClientRect(clientRect);
+	m_videoPlayer.GetClientRect(clientRect);
 
 	CvvImage cvv;
 	cvv.CopyOf(imgProcess.getSubImageAndResize(frame, cvRect(0,0,frame->width, frame->height), clientRect.Width(), clientRect.Height()));
-	cvv.Show(m_video.GetDC()->m_hDC, 0, 0, clientRect.Width(), clientRect.Height());
+	//cvv.Show(m_video.GetDC()->m_hDC, 0, 0, clientRect.Width(), clientRect.Height());
+	cvv.Show(m_videoPlayer.GetDC()->m_hDC, 0, 0, clientRect.Width(), clientRect.Height());
 	cvv.Destroy();	
 
 	return 0;
@@ -593,4 +600,19 @@ void CAboutDlg::OnBnClickedOk()
 {
 	// TODO: Add your control notification handler code here
 	OnOK();
+}
+
+void CStudentDetectionDlg::OnStnClickedPlayVideo()
+{
+	// TODO: Add your control notification handler code here
+	if(!m_bIsPlayVideo)
+	{
+		InputDlg dlg;
+		if(dlg.DoModal() == IDOK)
+		{
+			Utils utils;			
+			m_windowParam.m_videoPath = utils.ConvertToChar(dlg.m_videoPath);		
+			m_windowParam.m_maskPath = utils.ConvertToChar(dlg.m_maskPath);
+		}
+	}
 }

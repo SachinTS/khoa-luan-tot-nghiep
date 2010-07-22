@@ -95,7 +95,6 @@ CAPTION "StudentDetection"
 MENU IDR_MAINMENU
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
-    CONTROL         "",IDC_SHOW_VIDEO,"SysAnimate32",WS_BORDER | WS_TABSTOP,210,89,297,229
     CONTROL         "",IDC_TAB_PARAM,"SysTabControl32",0x0,15,18,183,302,WS_EX_TRANSPARENT
     CONTROL         "View Hair Window",IDC_CHECK_VIEW_HAIR,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,245,36,73,10
     CONTROL         "View SVM result Window",IDC_CHECK_VIEW_SVM,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,323,36,93,10
@@ -106,6 +105,7 @@ BEGIN
     CONTROL         151,IDC_PICBOX,"Static",SS_BITMAP | SS_CENTERIMAGE,342,60,20,20,WS_EX_TRANSPARENT
     CONTROL         152,IDC_STATIC,"Static",SS_BITMAP | SS_CENTERIMAGE,212,31,21,20,WS_EX_TRANSPARENT
     PUSHBUTTON      "",IDC_BTN_APPLY_PARAMS,95,326,26,20
+    CONTROL         157,IDC_PLAY_VIDEO,"Static",SS_BITMAP | SS_CENTERIMAGE | WS_BORDER,210,92,296,226,WS_EX_DLGMODALFRAME | WS_EX_CLIENTEDGE
 END
 
 IDD_DLG_HEAD_PARAMS DIALOGEX 0, 0, 192, 290
@@ -370,6 +370,7 @@ IDB_BMP_BACKGROUND      BITMAP                  "res\\background.bmp"
 IDB_BMP_BACKGROUND1     BITMAP                  "res\\background1.bmp"
 IDB_BMP_CANCEL          BITMAP                  "res\\btnCancel.bmp"
 IDB_BMP_OK              BITMAP                  "res\\btnOk.bmp"
+IDB_BMP_VIDEO           BITMAP                  "res\\video.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

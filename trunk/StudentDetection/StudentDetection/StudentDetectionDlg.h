@@ -72,10 +72,12 @@ public:
 	
 	WindowParams m_windowParam;
 	CWinThread *video_thread;
-	CAnimateCtrl m_video;
-	
+		
 	CShapeParamsDlg m_tabShapeParams;
 	CButtonST m_btnApplyParams;
 	afx_msg void OnBnClickedBtnApplyParams();
 	CStatic m_static_student_count;
+	CStatic m_videoPlayer;
+	afx_msg void OnStnClickedPlayVideo();
+	bool m_bIsPlayVideo;
 };
