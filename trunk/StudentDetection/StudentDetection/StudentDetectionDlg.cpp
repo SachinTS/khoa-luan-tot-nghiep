@@ -116,12 +116,12 @@ BOOL CStudentDetectionDlg::OnInitDialog()
 	// MG: Create the page dialogs, and set the initial Dialog
 	RECT Rect;
 	m_tabParams.GetItemRect( 0, &Rect );
-	m_tabHeadParams.Create( IDD_DLG_HEAD_PARAMS, &m_tabParams );
-	m_tabHeadParams.SetWindowPos( 0, Rect.left + 2, Rect.bottom + 2, 0, 0, SWP_NOSIZE|SWP_NOZORDER );
-	//m_tabHeadParams.OnInitDialog();
-	//m_tabHeadParams.SetParam(m_windowParam);
 
-	m_tabHeadParams.ShowWindow( SW_SHOWNA ); // MG: Sets the initial dialog
+	m_tabHeadParams = new HeadParamDlg(m_windowParam.m_DetectionParams.m_Head_Params);
+
+	m_tabHeadParams->Create( IDD_DLG_HEAD_PARAMS, &m_tabParams );
+	m_tabHeadParams->SetWindowPos( 0, Rect.left + 2, Rect.bottom + 2, 0, 0, SWP_NOSIZE|SWP_NOZORDER );	
+	m_tabHeadParams->ShowWindow( SW_SHOWNA ); // MG: Sets the initial dialog
 
 	m_tabParams.GetItemRect( 0, &Rect );
 	m_tabShapeParams.Create( IDD_DLG_SHAPE_PARAMS, &m_tabParams );
@@ -224,12 +224,12 @@ void CStudentDetectionDlg::OnTcnSelchangeTabParam(NMHDR *pNMHDR, LRESULT *pResul
 	
 	if( m_tabParams.GetCurSel()==0)
 	{
-		m_tabHeadParams.ShowWindow( SW_SHOWNA );
+		m_tabHeadParams->ShowWindow( SW_SHOWNA );
 		m_tabShapeParams.ShowWindow( SW_HIDE );
 	}
 	else if( m_tabParams.GetCurSel()==1)
 	{
-		m_tabHeadParams.ShowWindow( SW_HIDE );
+		m_tabHeadParams->ShowWindow( SW_HIDE );
 		m_tabShapeParams.ShowWindow( SW_SHOWNA );
 	}
 	
@@ -456,28 +456,27 @@ void CStudentDetectionDlg::OnBnClickedBtnApplyParams()
 	CString tmp;
 	Utils utils;
 
-	m_tabHeadParams.m_editMaxHeadArea.GetWindowTextW(tmp);
+	m_tabHeadParams->m_editMaxHeadArea.GetWindowTextW(tmp);
 	m_windowParam.m_DetectionParams.m_Head_Params.m_iMaxHeadArea = utils.ConvertToInt(tmp);
 
-	m_tabHeadParams.m_editMaxHeadAreaAtTop.GetWindowTextW(tmp);
+	m_tabHeadParams->m_editMaxHeadAreaAtTop.GetWindowTextW(tmp);
 	m_windowParam.m_DetectionParams.m_Head_Params.m_iMaxHeadAreaTop = utils.ConvertToInt(tmp);
 		
-	m_tabHeadParams.m_editMaxWidthHead.GetWindowTextW(tmp);
+	m_tabHeadParams->m_editMaxWidthHead.GetWindowTextW(tmp);
 	m_windowParam.m_DetectionParams.m_Head_Params.m_iMaxWidth  = utils.ConvertToInt(tmp);
 
-	m_tabHeadParams.m_editMinAreaAtBottom.GetWindowTextW(tmp);
+	m_tabHeadParams->m_editMinAreaAtBottom.GetWindowTextW(tmp);
 	m_windowParam.m_DetectionParams.m_Head_Params.m_iMinHeadAreaBottom = utils.ConvertToInt(tmp);
 
-	m_tabHeadParams.m_editMinHeadArea.GetWindowTextW(tmp);
+	m_tabHeadParams->m_editMinHeadArea.GetWindowTextW(tmp);
 	m_windowParam.m_DetectionParams.m_Head_Params.m_iMinHeadArea = utils.ConvertToInt(tmp);
 
-	m_tabHeadParams.m_editMinWidthHead.GetWindowTextW(tmp);
+	m_tabHeadParams->m_editMinWidthHead.GetWindowTextW(tmp);
 	m_windowParam.m_DetectionParams.m_Head_Params.m_iMinWidth  = utils.ConvertToInt(tmp);
 
-	m_tabHeadParams.m_editRelativeHeightWidth.GetWindowTextW(tmp);
+	m_tabHeadParams->m_editRelativeHeightWidth.GetWindowTextW(tmp);
 	m_windowParam.m_DetectionParams.m_Head_Params.m_iRelative_Height_Width  = utils.ConvertToInt(tmp);
 
-	m_tabHeadParams.m_editRelativeWidthHeight.GetWindowTextW(tmp);
+	m_tabHeadParams->m_editRelativeWidthHeight.GetWindowTextW(tmp);
 	m_windowParam.m_DetectionParams.m_Head_Params.m_iRelative_Width_Height  = utils.ConvertToInt(tmp);
-
 }

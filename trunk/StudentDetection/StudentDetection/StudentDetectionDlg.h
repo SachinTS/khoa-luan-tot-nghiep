@@ -45,7 +45,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:				
 	CTabCtrl m_tabParams;
-	HeadParamDlg m_tabHeadParams;
+	HeadParamDlg *m_tabHeadParams;
 	afx_msg void OnTcnSelchangeTabParam(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnMainVideo();
 	afx_msg void OnMainExit();
@@ -66,7 +66,7 @@ public:
 	afx_msg LRESULT OnThreadUpdateProgress(WPARAM wParam,LPARAM lParam);
 	afx_msg LRESULT OnThreadUpdateInfo(WPARAM wParam,LPARAM lParam);
 
-	WindowParams m_windowParam;	
+	WindowParams m_windowParam;
 	CWinThread *video_thread;
 	CAnimateCtrl m_video;
 	

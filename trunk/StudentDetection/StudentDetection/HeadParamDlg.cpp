@@ -20,20 +20,23 @@ HeadParamDlg::~HeadParamDlg()
 {
 }
 
+HeadParamDlg::HeadParamDlg(Head_Params params, CWnd *pParent)
+{
+	m_params = params;
+}
+
 BOOL HeadParamDlg::OnInitDialog()
 {
-	CDialog::OnInitDialog();
-
-	m_params.LoadParamsFromXML("config.xml");
+	CDialog::OnInitDialog();	
 	Utils utils;
-	m_editMaxHeadArea.SetWindowTextW(utils.ConvertToCString(m_params.m_DetectionParams.m_Head_Params.m_iMaxHeadArea));
-	m_editMaxHeadAreaAtTop.SetWindowTextW(utils.ConvertToCString(m_params.m_DetectionParams.m_Head_Params.m_iMaxHeadAreaTop));
-	m_editMaxWidthHead.SetWindowTextW(utils.ConvertToCString(m_params.m_DetectionParams.m_Head_Params.m_iMaxWidth));
-	m_editMinAreaAtBottom.SetWindowTextW(utils.ConvertToCString(m_params.m_DetectionParams.m_Head_Params.m_iMinHeadAreaBottom));
-	m_editMinHeadArea.SetWindowTextW(utils.ConvertToCString(m_params.m_DetectionParams.m_Head_Params.m_iMinHeadArea));
-	m_editMinWidthHead.SetWindowTextW(utils.ConvertToCString(m_params.m_DetectionParams.m_Head_Params.m_iMinWidth));
-	m_editRelativeHeightWidth.SetWindowTextW(utils.ConvertToCString(m_params.m_DetectionParams.m_Head_Params.m_iRelative_Height_Width));
-	m_editRelativeWidthHeight.SetWindowTextW(utils.ConvertToCString(m_params.m_DetectionParams.m_Head_Params.m_iRelative_Width_Height));
+	m_editMaxHeadArea.SetWindowTextW(utils.ConvertToCString(m_params.m_iMaxHeadArea));
+	m_editMaxHeadAreaAtTop.SetWindowTextW(utils.ConvertToCString(m_params.m_iMaxHeadAreaTop));
+	m_editMaxWidthHead.SetWindowTextW(utils.ConvertToCString(m_params.m_iMaxWidth));
+	m_editMinAreaAtBottom.SetWindowTextW(utils.ConvertToCString(m_params.m_iMinHeadAreaBottom));
+	m_editMinHeadArea.SetWindowTextW(utils.ConvertToCString(m_params.m_iMinHeadArea));
+	m_editMinWidthHead.SetWindowTextW(utils.ConvertToCString(m_params.m_iMinWidth));
+	m_editRelativeHeightWidth.SetWindowTextW(utils.ConvertToCString(m_params.m_iRelative_Height_Width));
+	m_editRelativeWidthHeight.SetWindowTextW(utils.ConvertToCString(m_params.m_iRelative_Width_Height));
 
 	return TRUE;
 }

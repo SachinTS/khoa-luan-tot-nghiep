@@ -8,6 +8,7 @@ class HeadParamDlg : public CDialog
 
 public:
 	HeadParamDlg(CWnd* pParent = NULL);   // standard constructor	
+	HeadParamDlg(Head_Params headParam, CWnd* pParent = NULL);   // standard constructor	
 	virtual ~HeadParamDlg();	
 	BOOL OnInitDialog();
 
@@ -19,7 +20,7 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
-	WindowParams m_params;
+	Head_Params m_params;
 	CEdit m_editMinWidthHead;
 	CEdit m_editMaxWidthHead;
 	CEdit m_editMinHeadArea;
