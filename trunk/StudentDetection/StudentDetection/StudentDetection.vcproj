@@ -569,6 +569,10 @@
 			>
 		</File>
 		<File
+			RelativePath=".\GaussModel.txt"
+			>
+		</File>
+		<File
 			RelativePath=".\medium.txt"
 			>
 		</File>

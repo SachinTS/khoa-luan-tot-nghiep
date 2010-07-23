@@ -4,5 +4,5 @@
 	<GaussianParams threshold="-6.5" />
 	<HeadParams max_width="90" min_width="8" min_area="100" max_area="10000" relative_width_height="2" relative_height_width="3" max_head_area_top="1800" min_head_area_bottom="1200"/>
 <ModelSVM>E:\\Data\\model.xml</ModelSVM>
-<ModelGauss>E:\\Data\\out.txt</ModelGauss>
+<ModelGauss>GaussModel.txt</ModelGauss>
 </Params>
