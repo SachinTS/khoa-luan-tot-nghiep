@@ -34,4 +34,6 @@ public:
 	bool SBitdraw(CDC *pDC, UINT nIDResource);
 	HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 
+	CEdit m_editThreshold;
+	CEdit m_editLength;
 };

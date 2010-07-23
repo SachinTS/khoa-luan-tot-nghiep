@@ -26,6 +26,8 @@ BOOL CShapeParamsDlg::OnInitDialog() {
 	Utils utils;
 	m_sttThreshold.SetWindowTextW(utils.ConvertToCString(CStudentDetectionDlg::detector->threshold));
 	m_sttLength.SetWindowTextW(utils.ConvertToCString(CStudentDetectionDlg::detector->l));
+	m_editThreshold.SetWindowTextW(utils.ConvertToCString(CStudentDetectionDlg::detector->threshold));
+	m_editLength.SetWindowTextW(utils.ConvertToCString(CStudentDetectionDlg::detector->l));
 	m_sliderThreshold.SetRange(11, 99);
 	m_sliderLength.SetRange(2, 10);
 	m_sliderThreshold.SetPos(CStudentDetectionDlg::detector->threshold*100);
@@ -42,14 +44,16 @@ void CShapeParamsDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Slider(pDX, IDC_SLIDER_LENGTH, m_iLength);
 	DDX_Control(pDX, IDC_STATIC_THRESHOLD, m_sttThreshold);
 	DDX_Control(pDX, IDC_STATIC_LENGTH, m_sttLength);
+	DDX_Control(pDX, IDC_EDIT_THRESHOLD, m_editThreshold);
+	DDX_Control(pDX, IDC_EDIT_LENGTH, m_editLength);
 }
 
 
 
 BEGIN_MESSAGE_MAP(CShapeParamsDlg, CDialog)
 	ON_WM_HSCROLL()
-	ON_WM_ERASEBKGND()
-	ON_WM_CTLCOLOR()
+	//ON_WM_ERASEBKGND()
+	//ON_WM_CTLCOLOR()
 END_MESSAGE_MAP()
 
 
@@ -60,11 +64,15 @@ void CShapeParamsDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 	if (nPos >= 2 && nPos <= 10) {
 		m_sttLength.SetWindowTextW(_T(""));
 		m_sttLength.SetWindowTextW(utils.ConvertToCString((int)nPos));
+		m_editLength.SetWindowTextW(_T(""));
+		m_editLength.SetWindowTextW(utils.ConvertToCString((int)nPos));
 		CStudentDetectionDlg::detector->l = nPos;
 	}
 	else if (nPos >= 11 && nPos <= 99) {
 		m_sttThreshold.SetWindowTextW(_T(""));
 		m_sttThreshold.SetWindowTextW(utils.ConvertToCString((float)(nPos*1.0/100)));
+		m_editThreshold.SetWindowTextW(_T(""));
+		m_editThreshold.SetWindowTextW(utils.ConvertToCString((float)(nPos*1.0/100)));
 		CStudentDetectionDlg::detector->threshold = (float)nPos*1.0/100;
 	}
 
@@ -92,10 +100,9 @@ HBRUSH CShapeParamsDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 
 BOOL CShapeParamsDlg::OnEraseBkgnd(CDC* pDC)
 {
-	CDialog::OnEraseBkgnd(pDC);
 	SBitdraw(pDC,IDB_BMP_BACKGROUND1);
-	return true;
-	
+	CDialog::OnEraseBkgnd(pDC);
+	return TRUE;
 }
 
 bool CShapeParamsDlg::SBitdraw(CDC *pDC, UINT nIDResource)
