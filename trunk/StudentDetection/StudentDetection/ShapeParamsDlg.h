@@ -22,7 +22,6 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 public:
-	CButton m_btnApply;
 	CSliderCtrl m_sliderThreshold;
 	CSliderCtrl m_sliderLength;
 	int m_iThreshold;
@@ -30,4 +29,9 @@ public:
 	CStatic m_sttThreshold;
 	CStatic m_sttLength;
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+	
+	BOOL OnEraseBkgnd(CDC* pDC);
+	bool SBitdraw(CDC *pDC, UINT nIDResource);
+	HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
+
 };

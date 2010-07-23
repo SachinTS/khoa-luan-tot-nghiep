@@ -36,7 +36,6 @@ BOOL CShapeParamsDlg::OnInitDialog() {
 void CShapeParamsDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_BTN_APPLY, m_btnApply);
 	DDX_Control(pDX, IDC_SLIDER_THRESHOLD, m_sliderThreshold);
 	DDX_Control(pDX, IDC_SLIDER_LENGTH, m_sliderLength);
 	DDX_Slider(pDX, IDC_SLIDER_THRESHOLD, m_iThreshold);
@@ -49,7 +48,10 @@ void CShapeParamsDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CShapeParamsDlg, CDialog)
 	ON_WM_HSCROLL()
+	ON_WM_ERASEBKGND()
+	ON_WM_CTLCOLOR()
 END_MESSAGE_MAP()
+
 
 void CShapeParamsDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
@@ -67,4 +69,49 @@ void CShapeParamsDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 	}
 
 	CDialog::OnHScroll(nSBCode, nPos, pScrollBar);
+}
+
+// HeadParamDlg message handlers
+HBRUSH CShapeParamsDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor) 
+{
+	HBRUSH hbr;
+
+	if( nCtlColor == CTLCOLOR_STATIC )
+	{
+		pDC->SetBkMode(TRANSPARENT);
+		hbr = (HBRUSH)GetStockObject( NULL_BRUSH );
+	}
+
+	else
+	{
+		hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
+	}
+	
+	return hbr;
+}
+
+BOOL CShapeParamsDlg::OnEraseBkgnd(CDC* pDC)
+{
+	CDialog::OnEraseBkgnd(pDC);
+	SBitdraw(pDC,IDB_BMP_BACKGROUND1);
+	return true;
+	
+}
+
+bool CShapeParamsDlg::SBitdraw(CDC *pDC, UINT nIDResource)
+{
+	CBitmap* m_bitmap;
+	m_bitmap=new CBitmap();
+	m_bitmap->LoadBitmap(nIDResource);
+	if(!m_bitmap->m_hObject)
+		return true;
+	CRect rect;
+	GetClientRect(&rect);
+	CDC dc;
+	dc.CreateCompatibleDC(pDC);	
+	dc.SelectObject(m_bitmap);
+
+	int xo=0, yo=0;
+	pDC->BitBlt(xo, yo, rect.Width(),rect.Height(), &dc, 0, 0, SRCCOPY);
+	return true;
 }

@@ -135,7 +135,7 @@ BOOL CStudentDetectionDlg::OnInitDialog()
 	tci.pszText = _T("Head Params");
 	m_tabParams.InsertItem(0, &tci);
 
-	tci.pszText = _T("Omega Params");
+	tci.pszText = _T("Shape Params");
 	m_tabParams.InsertItem(1, &tci);
 	
 	// MG: Create the page dialogs, and set the initial Dialog
@@ -581,6 +581,7 @@ BOOL CStudentDetectionDlg::OnEraseBkgnd(CDC* pDC)
 
 	return rVal;
 }
+
 bool CStudentDetectionDlg::SBitdraw(CDC *pDC, UINT nIDResource)
 {
 	CBitmap* m_bitmap;
