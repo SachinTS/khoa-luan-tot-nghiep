@@ -385,28 +385,35 @@ UINT playVideoThread(LPVOID lParam)
 		vectorRect = utils.ConnectOverlapRects(vectorRect);
 
 		for (unsigned int i = 0; i < vectorRect.size(); i++) {
+			// kiem tra rect co shape
 			CvRect rect = vectorRect.at(i);
 			CvPoint location = cvPoint(rect.x+rect.width*1.0f/3, rect.y+rect.height*1.0f/3);
-			//Snake *fit_snake = snake_window->GetSnake(result, hair_canny, location);
-
 
 			Snake *fit_snake;
 			int current_y = rect.y+rect.height*1.0f/3;
 			int frame_height_step = frame->height*1.0/3;
 			int dis = 1;
 			if (current_y >= 0 && current_y < frame_height_step) {
+				// far -> small shape
 				dis = 3;
 			}
 			else if (current_y >= frame_height_step && current_y < frame_height_step*2) {
+				// medium shape
 				dis = 2;
 			}
 			else if (current_y >= frame_height_step*2 && current_y <frame->height) {
+				// near -> big shape
 				dis = 1;
 			}
 			fit_snake = CStudentDetectionDlg::detector->GetSnake(hair_canny, dis, location, rect);
 
+			// rect co shape dau nguoi trong if
 			if (fit_snake != NULL && param->m_isViewShapeDetection) {
+				// ve shape
 				fit_snake->DrawCurve(result, location);
+				// ***********************************
+				// tang bien diem so nguoi
+				// ***********************************
 			}
 		}
 		
@@ -416,6 +423,7 @@ UINT playVideoThread(LPVOID lParam)
 		count++;
 
 		PostMessage(param->m_hWnd,WM_USER_THREAD_UPDATE_PROGRESS,(WPARAM)result,0);
+		// chinh lai cho nay, doi lai bien dem count (thoa ca 2 SVM + shape)
 		PostMessage(param->m_hWnd,WM_USER_THREAD_UPDATE_INFO,(WPARAM)vectorRect.size(),0);
 		cvReleaseImage(&subtract);
 					
@@ -439,7 +447,6 @@ UINT playVideoThread(LPVOID lParam)
 }
 void CStudentDetectionDlg::OnBnClickedBtnPlay()
 {
-	// TODO: Add your control notification handler code here
 	if(m_btnPlay.IsWindowEnabled())
 	{
 		if(m_windowParam.m_videoPath == NULL)
@@ -456,7 +463,6 @@ void CStudentDetectionDlg::OnBnClickedBtnPlay()
 
 void CStudentDetectionDlg::OnBnClickedBtnStop()
 {
-	// TODO: Add your control notification handler code here
 	if(video_thread != NULL)
 	{
 		video_thread->SuspendThread();		
@@ -467,19 +473,16 @@ void CStudentDetectionDlg::OnBnClickedBtnStop()
 
 void CStudentDetectionDlg::OnBnClickedCheckViewHair()
 {
-	// TODO: Add your control notification handler code here
 	m_windowParam.m_isViewHairDetection = m_checkViewHair.GetCheck();
 }
 
 void CStudentDetectionDlg::OnBnClickedCheckViewSvm()
 {
-	// TODO: Add your control notification handler code here
 	m_windowParam.m_isViewSVMDetection = m_checkViewSVM.GetCheck();
 }
 
 void CStudentDetectionDlg::OnBnClickedCheckViewShape()
 {
-	// TODO: Add your control notification handler code here
 	m_windowParam.m_isViewShapeDetection = m_checkViewShape.GetCheck();
 }
 

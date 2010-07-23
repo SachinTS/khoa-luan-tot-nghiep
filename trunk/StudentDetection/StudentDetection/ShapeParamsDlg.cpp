@@ -26,9 +26,9 @@ BOOL CShapeParamsDlg::OnInitDialog() {
 	Utils utils;
 	m_sttThreshold.SetWindowTextW(utils.ConvertToCString(CStudentDetectionDlg::detector->threshold));
 	m_sttLength.SetWindowTextW(utils.ConvertToCString(CStudentDetectionDlg::detector->l));
-	m_sliderThreshold.SetRange(100, 200);
+	m_sliderThreshold.SetRange(11, 99);
 	m_sliderLength.SetRange(2, 10);
-	m_sliderThreshold.SetPos(CStudentDetectionDlg::detector->threshold*1000);
+	m_sliderThreshold.SetPos(CStudentDetectionDlg::detector->threshold*100);
 	m_sliderLength.SetPos(CStudentDetectionDlg::detector->l);
 	return TRUE;
 }
@@ -60,10 +60,10 @@ void CShapeParamsDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 		m_sttLength.SetWindowTextW(utils.ConvertToCString((int)nPos));
 		CStudentDetectionDlg::detector->l = nPos;
 	}
-	else if (nPos >= 100 && nPos <= 200) {
+	else if (nPos >= 11 && nPos <= 99) {
 		m_sttThreshold.SetWindowTextW(_T(""));
-		m_sttThreshold.SetWindowTextW(utils.ConvertToCString((float)(nPos*1.0/1000)));
-		CStudentDetectionDlg::detector->threshold = (float)nPos*1.0/1000;
+		m_sttThreshold.SetWindowTextW(utils.ConvertToCString((float)(nPos*1.0/100)));
+		CStudentDetectionDlg::detector->threshold = (float)nPos*1.0/100;
 	}
 
 	CDialog::OnHScroll(nSBCode, nPos, pScrollBar);
