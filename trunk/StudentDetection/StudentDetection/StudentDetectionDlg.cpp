@@ -64,14 +64,19 @@ END_MESSAGE_MAP()
 
 // CStudentDetectionDlg dialog
 
-
-
+SnakeDetector * CStudentDetectionDlg::detector = NULL;
 
 CStudentDetectionDlg::CStudentDetectionDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CStudentDetectionDlg::IDD, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	video_thread = NULL;
+	CStudentDetectionDlg::detector = new SnakeDetector( "shape.xml" );
+}
+
+CStudentDetectionDlg::~CStudentDetectionDlg() {
+	if (CStudentDetectionDlg::detector != NULL)
+		delete CStudentDetectionDlg::detector;
 }
 
 void CStudentDetectionDlg::DoDataExchange(CDataExchange* pDX)
@@ -311,6 +316,8 @@ UINT playVideoThread(LPVOID lParam)
 	IplImage *subtract;
 	IplImage *mask = cvLoadImage(param->m_maskPath, CV_LOAD_IMAGE_GRAYSCALE);	
 	IplImage *result = cvCloneImage(frame);
+	IplImage *hair_canny = cvCreateImage(cvGetSize(frame), IPL_DEPTH_8U, 1);
+
 
 	int fps = cvGetCaptureProperty(capture, CV_CAP_PROP_FPS);
 
@@ -340,7 +347,11 @@ UINT playVideoThread(LPVOID lParam)
 		}				
 		
 		m_gauss.SetThreshold(param->m_DetectionParams.m_Gaussian_Params.m_fThreshold);
-		subtract = m_gauss.Classify(frame, mask);										
+		subtract = m_gauss.Classify(frame, mask);
+
+		cvSmooth(subtract, hair_canny, CV_MEDIAN);
+		cvCanny(hair_canny, hair_canny, 10, 100);
+
 		
 		cvFindContours(subtract, storage, &contours, sizeof(CvContour), CV_RETR_EXTERNAL);
 
@@ -372,6 +383,32 @@ UINT playVideoThread(LPVOID lParam)
 		}
 		
 		vectorRect = utils.ConnectOverlapRects(vectorRect);
+
+		for (unsigned int i = 0; i < vectorRect.size(); i++) {
+			CvRect rect = vectorRect.at(i);
+			CvPoint location = cvPoint(rect.x+rect.width*1.0f/3, rect.y+rect.height*1.0f/3);
+			//Snake *fit_snake = snake_window->GetSnake(result, hair_canny, location);
+
+
+			Snake *fit_snake;
+			int current_y = rect.y+rect.height*1.0f/3;
+			int frame_height_step = frame->height*1.0/3;
+			int dis = 1;
+			if (current_y >= 0 && current_y < frame_height_step) {
+				dis = 3;
+			}
+			else if (current_y >= frame_height_step && current_y < frame_height_step*2) {
+				dis = 2;
+			}
+			else if (current_y >= frame_height_step*2 && current_y <frame->height) {
+				dis = 1;
+			}
+			fit_snake = CStudentDetectionDlg::detector->GetSnake(hair_canny, dis, location, rect);
+
+			if (fit_snake != NULL && param->m_isViewShapeDetection) {
+				fit_snake->DrawCurve(result, location);
+			}
+		}
 		
 		if(param->m_isViewSVMDetection)
 			utils.OutputResult(result, vectorRect, CV_RGB(255,0,0));

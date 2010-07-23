@@ -561,7 +561,15 @@
 			</File>
 		</Filter>
 		<File
+			RelativePath=".\big.txt"
+			>
+		</File>
+		<File
 			RelativePath=".\config.xml"
+			>
+		</File>
+		<File
+			RelativePath=".\medium.txt"
 			>
 		</File>
 		<File
@@ -570,6 +578,10 @@
 		</File>
 		<File
 			RelativePath=".\shape.xml"
+			>
+		</File>
+		<File
+			RelativePath=".\small.txt"
 			>
 		</File>
 	</Files>

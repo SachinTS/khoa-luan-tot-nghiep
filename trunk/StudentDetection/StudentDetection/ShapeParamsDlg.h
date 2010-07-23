@@ -24,10 +24,8 @@ public:
 	CButton m_btnApply;
 	CSliderCtrl m_sliderThreshold;
 	CSliderCtrl m_sliderLength;
-	CEdit m_editThreshold;
-	CEdit m_editLength;
-	CString m_sThreshold;
-	CString m_sLength;
 	int m_iThreshold;
 	int m_iLength;
+	CStatic m_sttThreshold;
+	CStatic m_sttLength;
 };

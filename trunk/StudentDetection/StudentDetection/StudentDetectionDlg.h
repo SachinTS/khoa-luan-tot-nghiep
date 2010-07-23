@@ -10,6 +10,7 @@
 #include "stdio.h"
 #include "time.h"
 #include "HoGProcessor.h"
+#include "SnakeDetector.h"
 #include "GaussFilterColor.h"
 #include "Utils.h"
 #include "WindowParams.h"
@@ -43,10 +44,11 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
-public:			
+public:
 	BOOL OnEraseBkgnd(CDC* pDC);
 	bool SBitdraw(CDC *pDC, UINT nIDResource);
 	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
+	~CStudentDetectionDlg(void);
 
 	CTabCtrl m_tabParams;
 	HeadParamDlg *m_tabHeadParams;
@@ -80,4 +82,5 @@ public:
 	CStatic m_videoPlayer;
 	afx_msg void OnStnClickedPlayVideo();
 	bool m_bIsPlayVideo;
+	static SnakeDetector *detector;
 };

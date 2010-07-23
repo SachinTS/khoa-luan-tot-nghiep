@@ -97,6 +97,8 @@
 #define IDC_PICBOX                      1050
 #define IDC_STATIC_STUDENT_COUNT        1051
 #define IDC_PLAY_VIDEO                  1054
+#define IDC_STATIC_THRESHOLD            1055
+#define IDC_STATIC_LENGTH               1056
 #define ID_INPUT_VIDEO                  32771
 #define ID_MAIN_EXIT                    32772
 #define ID_MAIN_VIDEO                   32773
@@ -109,7 +111,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        158
 #define _APS_NEXT_COMMAND_VALUE         32776
-#define _APS_NEXT_CONTROL_VALUE         1055
+#define _APS_NEXT_CONTROL_VALUE         1057
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif
