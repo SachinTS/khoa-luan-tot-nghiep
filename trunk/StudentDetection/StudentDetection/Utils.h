@@ -14,6 +14,7 @@ public:
 	void OutputResult(IplImage* img, vector<CvRect> vRect, CvScalar color);
 	char* ConvertToChar(const CString &s);
 	CString ConvertToCString(int number);
+	CString ConvertToCString(float number);
 	int ConvertToInt(const CString &s);
 	Utils(void);
 	~Utils(void);

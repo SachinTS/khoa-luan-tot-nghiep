@@ -50,12 +50,21 @@ SnakeDetector::~SnakeDetector(void)
 }
 
 Snake *SnakeDetector::GetSnake(IplImage *gray, int distance, CvPoint location, CvRect rect) {
+	SnakeWindow *win = NULL;
 	switch (distance) {
 		case 1:
-			return bigw->GetSnake(gray, location, rect);
+			win = bigw;
+			break;
 		case 2:
-			return mediumw->GetSnake(gray, location, rect);
+			win = mediumw;
+			break;
 		case 3:
-			return smallw->GetSnake(gray, location, rect);
+			win = smallw;
+			break;
+		default:
+			return NULL;
 	}
+	win->threshold = this->threshold;
+	win->l = this->l;
+	return win->GetSnake(gray, location, rect);
 }

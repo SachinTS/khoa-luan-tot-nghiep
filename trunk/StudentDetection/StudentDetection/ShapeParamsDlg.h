@@ -12,6 +12,7 @@ class CShapeParamsDlg : public CDialog
 public:
 	CShapeParamsDlg(CWnd* pParent = NULL);   // standard constructor
 	virtual ~CShapeParamsDlg();
+	BOOL OnInitDialog();
 
 // Dialog Data
 	enum { IDD = IDD_DLG_SHAPE_PARAMS };
@@ -28,4 +29,5 @@ public:
 	int m_iLength;
 	CStatic m_sttThreshold;
 	CStatic m_sttLength;
+	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 };

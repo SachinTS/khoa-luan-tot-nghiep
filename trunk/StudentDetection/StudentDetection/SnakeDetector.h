@@ -1,9 +1,9 @@
 #pragma once
 #include "snakewindow.h"
 #include "cv.h"
-//#include "snake.h"
 #include "tinyxml.h"
 #include "tinystr.h"
+
 
 class SnakeDetector
 {

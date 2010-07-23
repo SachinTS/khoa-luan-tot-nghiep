@@ -39,6 +39,13 @@ CString Utils::ConvertToCString(int number)
 	t.Format(_T("%d"), number);
 	return t;
 }
+
+CString Utils::ConvertToCString(float number) {
+	CString t;
+	t.Format(_T("%f"), number);
+	return t;
+}
+
 vector<CvRect> Utils::ConnectOverlapRects(vector<CvRect> inVector){
 	if(inVector.size()>0){
 		vector<CvRect> result;
