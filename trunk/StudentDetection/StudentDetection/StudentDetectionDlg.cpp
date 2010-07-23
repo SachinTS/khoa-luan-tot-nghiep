@@ -464,7 +464,7 @@ void CStudentDetectionDlg::OnBnClickedBtnPlay()
 		}
 
 		m_btnPlay.EnableWindow(0);
-		video_thread = AfxBeginThread(playVideoThread, &m_windowParam, THREAD_PRIORITY_NORMAL, 0, 0);
+		video_thread = AfxBeginThread(playVideoThread, CStudentDetectionDlg::m_windowParam, THREAD_PRIORITY_NORMAL, 0, 0);
 		m_bIsPlayVideo = true;
 	}
 }
