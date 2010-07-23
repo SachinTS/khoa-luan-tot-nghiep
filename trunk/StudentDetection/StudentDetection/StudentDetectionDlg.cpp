@@ -65,18 +65,25 @@ END_MESSAGE_MAP()
 // CStudentDetectionDlg dialog
 
 SnakeDetector * CStudentDetectionDlg::detector = NULL;
+WindowParams * CStudentDetectionDlg::m_windowParam = NULL;
 
 CStudentDetectionDlg::CStudentDetectionDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CStudentDetectionDlg::IDD, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 	video_thread = NULL;
+
+	CStudentDetectionDlg::m_windowParam = new WindowParams();
+	CStudentDetectionDlg::m_windowParam->LoadParamsFromXML("config.xml");
+
 	CStudentDetectionDlg::detector = new SnakeDetector( "shape.xml" );
 }
 
 CStudentDetectionDlg::~CStudentDetectionDlg() {
 	if (CStudentDetectionDlg::detector != NULL)
 		delete CStudentDetectionDlg::detector;
+	if (CStudentDetectionDlg::m_windowParam != NULL)
+		delete CStudentDetectionDlg::m_windowParam;
 }
 
 void CStudentDetectionDlg::DoDataExchange(CDataExchange* pDX)
@@ -125,8 +132,7 @@ BOOL CStudentDetectionDlg::OnInitDialog()
 {
 	CDialog::OnInitDialog();
 
-	m_windowParam.LoadParamsFromXML("config.xml");
-	m_windowParam.m_hWnd = this->m_hWnd;
+	CStudentDetectionDlg::m_windowParam->m_hWnd = this->m_hWnd;
 
 	//create tab
 	TC_ITEM tci;
@@ -142,7 +148,7 @@ BOOL CStudentDetectionDlg::OnInitDialog()
 	RECT Rect;
 	m_tabParams.GetItemRect( 0, &Rect );
 
-	m_tabHeadParams = new HeadParamDlg(m_windowParam.m_DetectionParams.m_Head_Params);
+	m_tabHeadParams = new HeadParamDlg(CStudentDetectionDlg::m_windowParam->m_DetectionParams.m_Head_Params);
 
 	m_tabHeadParams->Create( IDD_DLG_HEAD_PARAMS, &m_tabParams );
 	m_tabHeadParams->SetWindowPos( 0, Rect.left + 2, Rect.bottom + 2, 0, 0, SWP_NOSIZE|SWP_NOZORDER );	
@@ -179,11 +185,11 @@ BOOL CStudentDetectionDlg::OnInitDialog()
 	// TODO: Add extra initialization here
 	//init checkboxes
 	m_checkViewHair.SetCheck(1);
-	m_windowParam.m_isViewHairDetection = 1;
+	CStudentDetectionDlg::m_windowParam->m_isViewHairDetection = 1;
 	m_checkViewShape.SetCheck(1);
-	m_windowParam.m_isViewShapeDetection = 1;
+	CStudentDetectionDlg::m_windowParam->m_isViewShapeDetection = 1;
 	m_checkViewSVM.SetCheck(1);
-	m_windowParam.m_isViewSVMDetection = 1;
+	CStudentDetectionDlg::m_windowParam->m_isViewSVMDetection = 1;
 
 	//init image for buttons
 	m_btnPlay.SetBitmaps(IDB_BMP_PLAY, RGB(255, 255, 255));
@@ -274,8 +280,8 @@ void CStudentDetectionDlg::OnMainVideo()
 	if(dlg.DoModal() == IDOK)
 	{
 		Utils utils;			
-		m_windowParam.m_videoPath = utils.ConvertToChar(dlg.m_videoPath);		
-		m_windowParam.m_maskPath = utils.ConvertToChar(dlg.m_maskPath);
+		CStudentDetectionDlg::m_windowParam->m_videoPath = utils.ConvertToChar(dlg.m_videoPath);		
+		CStudentDetectionDlg::m_windowParam->m_maskPath = utils.ConvertToChar(dlg.m_maskPath);
 	}
 }
 
@@ -451,7 +457,7 @@ void CStudentDetectionDlg::OnBnClickedBtnPlay()
 {
 	if(m_btnPlay.IsWindowEnabled())
 	{
-		if(m_windowParam.m_videoPath == NULL)
+		if(CStudentDetectionDlg::m_windowParam->m_videoPath == NULL)
 		{
 			MessageBox(_T("Please select video"), _T("Information"));
 			return;
@@ -475,17 +481,17 @@ void CStudentDetectionDlg::OnBnClickedBtnStop()
 
 void CStudentDetectionDlg::OnBnClickedCheckViewHair()
 {
-	m_windowParam.m_isViewHairDetection = m_checkViewHair.GetCheck();
+	CStudentDetectionDlg::m_windowParam->m_isViewHairDetection = m_checkViewHair.GetCheck();
 }
 
 void CStudentDetectionDlg::OnBnClickedCheckViewSvm()
 {
-	m_windowParam.m_isViewSVMDetection = m_checkViewSVM.GetCheck();
+	CStudentDetectionDlg::m_windowParam->m_isViewSVMDetection = m_checkViewSVM.GetCheck();
 }
 
 void CStudentDetectionDlg::OnBnClickedCheckViewShape()
 {
-	m_windowParam.m_isViewShapeDetection = m_checkViewShape.GetCheck();
+	CStudentDetectionDlg::m_windowParam->m_isViewShapeDetection = m_checkViewShape.GetCheck();
 }
 
 LRESULT CStudentDetectionDlg::OnThreadFinished(WPARAM wParam,LPARAM lParam)
@@ -530,28 +536,28 @@ void CStudentDetectionDlg::OnBnClickedBtnApplyParams()
 	Utils utils;
 	
 	m_tabHeadParams->m_editMaxHeadArea.GetWindowTextW(tmp);
-	m_windowParam.m_DetectionParams.m_Head_Params.m_iMaxHeadArea = utils.ConvertToInt(tmp);
+	CStudentDetectionDlg::m_windowParam->m_DetectionParams.m_Head_Params.m_iMaxHeadArea = utils.ConvertToInt(tmp);
 
 	m_tabHeadParams->m_editMaxHeadAreaAtTop.GetWindowTextW(tmp);
-	m_windowParam.m_DetectionParams.m_Head_Params.m_iMaxHeadAreaTop = utils.ConvertToInt(tmp);
+	CStudentDetectionDlg::m_windowParam->m_DetectionParams.m_Head_Params.m_iMaxHeadAreaTop = utils.ConvertToInt(tmp);
 		
 	m_tabHeadParams->m_editMaxWidthHead.GetWindowTextW(tmp);
-	m_windowParam.m_DetectionParams.m_Head_Params.m_iMaxWidth  = utils.ConvertToInt(tmp);
+	CStudentDetectionDlg::m_windowParam->m_DetectionParams.m_Head_Params.m_iMaxWidth  = utils.ConvertToInt(tmp);
 
 	m_tabHeadParams->m_editMinAreaAtBottom.GetWindowTextW(tmp);
-	m_windowParam.m_DetectionParams.m_Head_Params.m_iMinHeadAreaBottom = utils.ConvertToInt(tmp);
+	CStudentDetectionDlg::m_windowParam->m_DetectionParams.m_Head_Params.m_iMinHeadAreaBottom = utils.ConvertToInt(tmp);
 
 	m_tabHeadParams->m_editMinHeadArea.GetWindowTextW(tmp);
-	m_windowParam.m_DetectionParams.m_Head_Params.m_iMinHeadArea = utils.ConvertToInt(tmp);
+	CStudentDetectionDlg::m_windowParam->m_DetectionParams.m_Head_Params.m_iMinHeadArea = utils.ConvertToInt(tmp);
 
 	m_tabHeadParams->m_editMinWidthHead.GetWindowTextW(tmp);
-	m_windowParam.m_DetectionParams.m_Head_Params.m_iMinWidth  = utils.ConvertToInt(tmp);
+	CStudentDetectionDlg::m_windowParam->m_DetectionParams.m_Head_Params.m_iMinWidth  = utils.ConvertToInt(tmp);
 
 	m_tabHeadParams->m_editRelativeHeightWidth.GetWindowTextW(tmp);
-	m_windowParam.m_DetectionParams.m_Head_Params.m_iRelative_Height_Width  = utils.ConvertToInt(tmp);
+	CStudentDetectionDlg::m_windowParam->m_DetectionParams.m_Head_Params.m_iRelative_Height_Width  = utils.ConvertToInt(tmp);
 
 	m_tabHeadParams->m_editRelativeWidthHeight.GetWindowTextW(tmp);
-	m_windowParam.m_DetectionParams.m_Head_Params.m_iRelative_Width_Height  = utils.ConvertToInt(tmp);
+	CStudentDetectionDlg::m_windowParam->m_DetectionParams.m_Head_Params.m_iRelative_Width_Height  = utils.ConvertToInt(tmp);
 }
 /*
 BOOL CStudentDetectionDlg::OnEraseBkgnd(CDC* pDC)
@@ -662,8 +668,8 @@ void CStudentDetectionDlg::OnStnClickedPlayVideo()
 		if(dlg.DoModal() == IDOK)
 		{
 			Utils utils;			
-			m_windowParam.m_videoPath = utils.ConvertToChar(dlg.m_videoPath);		
-			m_windowParam.m_maskPath = utils.ConvertToChar(dlg.m_maskPath);
+			CStudentDetectionDlg::m_windowParam->m_videoPath = utils.ConvertToChar(dlg.m_videoPath);		
+			CStudentDetectionDlg::m_windowParam->m_maskPath = utils.ConvertToChar(dlg.m_maskPath);
 		}
 	}
 }

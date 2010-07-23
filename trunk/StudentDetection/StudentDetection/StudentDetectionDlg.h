@@ -72,7 +72,7 @@ public:
 	afx_msg LRESULT OnThreadUpdateProgress(WPARAM wParam,LPARAM lParam);
 	afx_msg LRESULT OnThreadUpdateInfo(WPARAM wParam,LPARAM lParam);
 	
-	WindowParams m_windowParam;
+	static WindowParams *m_windowParam;
 	CWinThread *video_thread;
 		
 	CShapeParamsDlg m_tabShapeParams;

@@ -24,10 +24,6 @@ protected:
 public:
 	CSliderCtrl m_sliderThreshold;
 	CSliderCtrl m_sliderLength;
-	int m_iThreshold;
-	int m_iLength;
-	CStatic m_sttThreshold;
-	CStatic m_sttLength;
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	
 	BOOL OnEraseBkgnd(CDC* pDC);
@@ -36,4 +32,6 @@ public:
 
 	CEdit m_editThreshold;
 	CEdit m_editLength;
+	CEdit m_editGaussianThreshold;
+	CSliderCtrl m_sliderGaussianThreshold;
 };
