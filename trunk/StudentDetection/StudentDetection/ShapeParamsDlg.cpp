@@ -52,8 +52,8 @@ void CShapeParamsDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CShapeParamsDlg, CDialog)
 	ON_WM_HSCROLL()
-	//ON_WM_ERASEBKGND()
-	//ON_WM_CTLCOLOR()
+	ON_WM_ERASEBKGND()
+	ON_WM_CTLCOLOR()
 END_MESSAGE_MAP()
 
 
@@ -82,6 +82,7 @@ void CShapeParamsDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 // HeadParamDlg message handlers
 HBRUSH CShapeParamsDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor) 
 {
+	/*
 	HBRUSH hbr;
 
 	if( nCtlColor == CTLCOLOR_STATIC )
@@ -96,13 +97,65 @@ HBRUSH CShapeParamsDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 	}
 	
 	return hbr;
+	*/
+	HBRUSH hbr = CWnd::OnCtlColor(pDC, pWnd, nCtlColor);
+
+    DWORD dwStyle = pWnd->GetStyle();
+    if ( dwStyle & (BS_AUTORADIOBUTTON | BS_RADIOBUTTON | BS_AUTOCHECKBOX |BS_CHECKBOX) )
+	{
+        hbr = (HBRUSH) GetStockObject (WHITE_BRUSH);
+    }
+	else
+	{
+		switch(nCtlColor)
+		{
+		case CTLCOLOR_STATIC:
+		case CTLCOLOR_EDIT:
+			pDC->SetBkMode(TRANSPARENT);			
+			hbr = (HBRUSH)GetStockObject( NULL_BRUSH );			
+			break;	
+		default:
+			hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
+			break;
+		}
+	}
+
+	int id = pWnd->GetDlgCtrlID();
+	if(id == IDC_EDIT_LENGTH || id == IDC_EDIT_THRESHOLD)
+	{		
+		pDC->SetBkMode(TRANSPARENT);		  
+		hbr = (HBRUSH)GetStockObject(WHITE_BRUSH);	
+	}
+
+    return hbr;
 }
 
 BOOL CShapeParamsDlg::OnEraseBkgnd(CDC* pDC)
 {
+	/*
 	SBitdraw(pDC,IDB_BMP_BACKGROUND1);
 	CDialog::OnEraseBkgnd(pDC);
 	return TRUE;
+	*/
+	CBitmap m_bitmap;
+	BOOL rVal = FALSE;
+
+	if( m_bitmap.LoadBitmap( IDB_BMP_BACKGROUND1 ) )
+	{
+		CRect rect;
+		GetClientRect( &rect );
+
+		CDC dc;
+		dc.CreateCompatibleDC( pDC );
+		CBitmap* pOldBitmap = dc.SelectObject( &m_bitmap );
+
+		pDC->BitBlt( 0, 0, rect.Width(), rect.Height(), &dc, 0, 0, SRCCOPY);
+
+		dc.SelectObject(pOldBitmap);
+		rVal = TRUE;
+	}
+
+	return rVal;
 }
 
 bool CShapeParamsDlg::SBitdraw(CDC *pDC, UINT nIDResource)

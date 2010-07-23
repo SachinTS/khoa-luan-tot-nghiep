@@ -88,9 +88,9 @@ void CStudentDetectionDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_CHECK_VIEW_HAIR, m_checkViewHair);
 	DDX_Control(pDX, IDC_CHECK_VIEW_SVM, m_checkViewSVM);
 	DDX_Control(pDX, IDC_CHECK_VIEW_SHAPE, m_checkViewShape);	
-	DDX_Control(pDX, IDC_BTN_APPLY_PARAMS, m_btnApplyParams);
-	DDX_Control(pDX, IDC_STATIC_STUDENT_COUNT, m_static_student_count);
+	DDX_Control(pDX, IDC_BTN_APPLY_PARAMS, m_btnApplyParams);	
 	DDX_Control(pDX, IDC_PLAY_VIDEO, m_videoPlayer);
+	DDX_Control(pDX, IDC_EDIT_STUDENT_COUNT, m_editStudentCount);
 }
 
 BEGIN_MESSAGE_MAP(CStudentDetectionDlg, CDialog)
@@ -195,6 +195,8 @@ BOOL CStudentDetectionDlg::OnInitDialog()
 	m_btnApplyParams.SetFlat();
 
 	m_bIsPlayVideo = false;
+
+	m_editStudentCount.SetWindowTextW(_T("0"));
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
@@ -514,7 +516,8 @@ LRESULT CStudentDetectionDlg::OnThreadUpdateInfo(WPARAM wParam,LPARAM lParam)
 {
 	Utils utils;
 	int count = (int)wParam;
-	m_static_student_count.SetWindowTextW(utils.ConvertToCString(count));
+	//m_static_student_count.SetWindowTextW(utils.ConvertToCString(count));
+	m_editStudentCount.SetWindowTextW(utils.ConvertToCString(count));
 	//m_static_student_count.Invalidate();
 	return 0;
 }
@@ -624,17 +627,24 @@ HBRUSH CStudentDetectionDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
     }
 	else
 	{
-		if( nCtlColor == CTLCOLOR_STATIC )
+		switch(nCtlColor)
 		{
+		case CTLCOLOR_STATIC:
+		case CTLCOLOR_EDIT:
 			pDC->SetBkMode(TRANSPARENT);			
-			hbr = (HBRUSH)GetStockObject( NULL_BRUSH );
-		}
-		else
-		{
+			hbr = (HBRUSH)GetStockObject( NULL_BRUSH );			
+			break;	
+		default:
 			hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
+			break;
 		}
 	}
 
+	if(pWnd->GetDlgCtrlID() == IDC_EDIT_STUDENT_COUNT)
+	{		
+		pDC->SetBkMode(TRANSPARENT);		  
+		hbr = (HBRUSH)GetStockObject(WHITE_BRUSH);	
+	}
     return hbr;
 }
 void CAboutDlg::OnBnClickedOk()

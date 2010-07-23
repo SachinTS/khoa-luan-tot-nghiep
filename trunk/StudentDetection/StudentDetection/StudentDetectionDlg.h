@@ -77,10 +77,10 @@ public:
 		
 	CShapeParamsDlg m_tabShapeParams;
 	CButtonST m_btnApplyParams;
-	afx_msg void OnBnClickedBtnApplyParams();
-	CStatic m_static_student_count;
+	afx_msg void OnBnClickedBtnApplyParams();	
 	CStatic m_videoPlayer;
 	afx_msg void OnStnClickedPlayVideo();
 	bool m_bIsPlayVideo;
 	static SnakeDetector *detector;
+	CEdit m_editStudentCount;
 };

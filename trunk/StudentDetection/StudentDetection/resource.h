@@ -30,6 +30,7 @@
 #define IDC_EDIT_THRESHOLD              1006
 #define IDC_EDIT_MAX_AREA_AT_TOP        1006
 #define IDC_EDIT_PROGRESS               1006
+#define IDC_EDIT_STUDENT_COUNT          1006
 #define IDC_EDIT2                       1007
 #define IDC_EDIT_LENGTH                 1007
 #define IDC_EDIT_MIN_AREA_AT_BOTTOM     1007
