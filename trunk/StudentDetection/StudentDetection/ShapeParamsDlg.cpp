@@ -26,12 +26,13 @@ BOOL CShapeParamsDlg::OnInitDialog() {
 	Utils utils;
 	m_editThreshold.SetWindowTextW(utils.ConvertToCString(CStudentDetectionDlg::detector->threshold));
 	m_editLength.SetWindowTextW(utils.ConvertToCString(CStudentDetectionDlg::detector->l));
+	m_editGaussianThreshold.SetWindowTextW(utils.ConvertToCString(CStudentDetectionDlg::m_windowParam->m_DetectionParams.m_Gaussian_Params.m_fThreshold));
 	m_sliderThreshold.SetRange(11, 99);
 	m_sliderLength.SetRange(2, 10);
-	m_sliderGaussianThreshold.SetRange(5, 8);
+	m_sliderGaussianThreshold.SetRange(500, 800);
 	m_sliderThreshold.SetPos(CStudentDetectionDlg::detector->threshold*100);
 	m_sliderLength.SetPos(CStudentDetectionDlg::detector->l);
-	m_sliderGaussianThreshold.SetPos(CStudentDetectionDlg::m_windowParam->m_DetectionParams.m_Gaussian_Params.m_fThreshold);
+	m_sliderGaussianThreshold.SetPos(CStudentDetectionDlg::m_windowParam->m_DetectionParams.m_Gaussian_Params.m_fThreshold*-100);
 	return TRUE;
 }
 
@@ -69,6 +70,11 @@ void CShapeParamsDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 		m_editThreshold.SetWindowTextW(utils.ConvertToCString((float)(nPos*1.0/100)));
 		CStudentDetectionDlg::detector->threshold = (float)nPos*1.0/100;
 	}
+	else if (nPos >= 500 && nPos <= 800) {
+		m_editGaussianThreshold.SetWindowTextW(_T(""));
+		m_editGaussianThreshold.SetWindowTextW(utils.ConvertToCString((float)(nPos*-1.0/100)));
+		CStudentDetectionDlg::m_windowParam->m_DetectionParams.m_Gaussian_Params.m_fThreshold = (float)nPos*-1.0/100;
+	}
 
 	CDialog::OnHScroll(nSBCode, nPos, pScrollBar);
 }
@@ -76,22 +82,6 @@ void CShapeParamsDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 // HeadParamDlg message handlers
 HBRUSH CShapeParamsDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor) 
 {
-	/*
-	HBRUSH hbr;
-
-	if( nCtlColor == CTLCOLOR_STATIC )
-	{
-		pDC->SetBkMode(TRANSPARENT);
-		hbr = (HBRUSH)GetStockObject( NULL_BRUSH );
-	}
-
-	else
-	{
-		hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
-	}
-	
-	return hbr;
-	*/
 	HBRUSH hbr = CWnd::OnCtlColor(pDC, pWnd, nCtlColor);
 
     DWORD dwStyle = pWnd->GetStyle();
@@ -115,7 +105,7 @@ HBRUSH CShapeParamsDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 	}
 
 	int id = pWnd->GetDlgCtrlID();
-	if(id == IDC_EDIT_LENGTH || id == IDC_EDIT_THRESHOLD)
+	if(id == IDC_EDIT_LENGTH || id == IDC_EDIT_THRESHOLD || id == IDC_EDIT_GAUSSIAN_THRESHOLD)
 	{		
 		pDC->SetBkMode(TRANSPARENT);		  
 		hbr = (HBRUSH)GetStockObject(WHITE_BRUSH);	
