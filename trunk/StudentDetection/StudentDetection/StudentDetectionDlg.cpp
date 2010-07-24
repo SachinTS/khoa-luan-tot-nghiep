@@ -84,6 +84,8 @@ CStudentDetectionDlg::~CStudentDetectionDlg() {
 		delete CStudentDetectionDlg::detector;
 	if (CStudentDetectionDlg::m_windowParam != NULL)
 		delete CStudentDetectionDlg::m_windowParam;
+	if(m_bIsPlayVideo)
+		video_thread->SuspendThread();
 }
 
 void CStudentDetectionDlg::DoDataExchange(CDataExchange* pDX)
@@ -315,8 +317,13 @@ UINT playVideoThread(LPVOID lParam)
 		printf("Cannot open video.\n");
 		return EXIT_FAILURE;
 	}
+
+	//ofstream outFile;
+	//outFile.open("abc.txt");
+
 	
 	int count = 0;
+	int student_count = 0;
 	float speed;
 	time_t start = time(NULL);
 
@@ -350,12 +357,18 @@ UINT playVideoThread(LPVOID lParam)
 		frame = cvQueryFrame(capture);
 		
 		if (frame == NULL) {
-			printf("End video.\n");
+	//		printf("End video.\n");
 			break;
 		}				
 		
-		m_gauss.SetThreshold(param->m_DetectionParams.m_Gaussian_Params.m_fThreshold);
-		subtract = m_gauss.Classify(frame, mask);
+		if(param->m_isStopVideo)		
+			break;
+		
+		student_count = 0;
+		vectorRect.clear();	
+
+		//m_gauss.SetThreshold(param->m_DetectionParams.m_Gaussian_Params.m_fThreshold);
+		subtract = m_gauss.Classify(frame, mask, param->m_DetectionParams.m_Gaussian_Params.m_fThreshold);
 
 		cvSmooth(subtract, hair_canny, CV_MEDIAN);
 		cvCanny(hair_canny, hair_canny, 10, 100);
@@ -365,9 +378,7 @@ UINT playVideoThread(LPVOID lParam)
 
 		cvCopyImage(frame, result);
 
-		if (contours) {				
-			vectorRect.clear();						
-			
+		if (contours) {								
 			while (contours != NULL) {				
 				CvRect rectHead = cvBoundingRect(contours);					
 				if(!utils.CheckRectHead(rectHead, frame->height, param->m_DetectionParams.m_Head_Params))
@@ -416,13 +427,14 @@ UINT playVideoThread(LPVOID lParam)
 			fit_snake = CStudentDetectionDlg::detector->GetSnake(hair_canny, dis, location, rect);
 
 			// rect co shape dau nguoi trong if
-			if (fit_snake != NULL && param->m_isViewShapeDetection) {
-				// ve shape
-				fit_snake->DrawCurve(result, location);
-				// ***********************************
-				// tang bien diem so nguoi
-				// ***********************************
-			}
+			if (fit_snake != NULL)
+			{
+				student_count++;
+				if(param->m_isViewShapeDetection) {
+					// ve shape
+					fit_snake->DrawCurve(result, location);			
+				}
+			}			
 		}
 		
 		if(param->m_isViewSVMDetection)
@@ -432,12 +444,13 @@ UINT playVideoThread(LPVOID lParam)
 
 		PostMessage(param->m_hWnd,WM_USER_THREAD_UPDATE_PROGRESS,(WPARAM)result,0);
 		// chinh lai cho nay, doi lai bien dem count (thoa ca 2 SVM + shape)
-		PostMessage(param->m_hWnd,WM_USER_THREAD_UPDATE_INFO,(WPARAM)vectorRect.size(),0);
+		PostMessage(param->m_hWnd,WM_USER_THREAD_UPDATE_INFO,(WPARAM)student_count,0);
 		cvReleaseImage(&subtract);
-					
-		if(cvWaitKey(fps) == 27)
-			break;
+			
+	//	outFile<<student_count<<endl;
 	}
+
+	//outFile.close();
 
 	PostMessage(param->m_hWnd,WM_USER_THREAD_FINISHED,(WPARAM)result,0);
 
@@ -466,14 +479,15 @@ void CStudentDetectionDlg::OnBnClickedBtnPlay()
 		m_btnPlay.EnableWindow(0);
 		video_thread = AfxBeginThread(playVideoThread, CStudentDetectionDlg::m_windowParam, THREAD_PRIORITY_NORMAL, 0, 0);
 		m_bIsPlayVideo = true;
+		m_windowParam->m_isStopVideo = false;
 	}
 }
 
 void CStudentDetectionDlg::OnBnClickedBtnStop()
-{
+{	
 	if(video_thread != NULL)
 	{
-		video_thread->SuspendThread();		
+		m_windowParam->m_isStopVideo = true;
 		m_btnPlay.EnableWindow();
 		m_bIsPlayVideo = false;
 	}
@@ -498,6 +512,10 @@ LRESULT CStudentDetectionDlg::OnThreadFinished(WPARAM wParam,LPARAM lParam)
 {
 	m_btnPlay.EnableWindow();
 	m_bIsPlayVideo = false;
+	m_windowParam->m_isStopVideo = true;
+
+	Invalidate();
+	
 	return 0;
 }
 

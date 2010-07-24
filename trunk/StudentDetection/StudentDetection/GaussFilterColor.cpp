@@ -81,6 +81,76 @@ IplImage* gray = cvCreateImage(cvGetSize(img), img->depth, 1);
 	return gray;
 }
 
+IplImage* GaussFilterColor::Classify(IplImage *img, IplImage *mask, float thresh)
+{
+	IplImage* gray = cvCreateImage(cvGetSize(img), img->depth, 1);
+
+	//Convert To Hsv Color System
+	IplImage* imgHsv = cvCreateImage(cvGetSize(img), img->depth, img->nChannels);
+
+	cvSmooth(img, imgHsv, CV_MEDIAN, 5, 5);
+	cvCopy(imgHsv, img);
+
+	cvCvtColor(img, imgHsv, CV_BGR2HSV);
+	
+	//Inverse Covariance.
+	double InvCov[2][2];
+	
+	//InvCov[0][0] = 1/(*(float*)CV_MAT_ELEM_PTR(*corrvariant, 0, 0));
+	//InvCov[1][1] = 1/ (*(float*)CV_MAT_ELEM_PTR(*corrvariant, 1, 1));
+
+	InvCov[0][0] = 1/ (*(float *)corrvariant->data.ptr);	
+	InvCov[1][1] = 1/ *((float *)(corrvariant->data.ptr + corrvariant->step + sizeof(corrvariant->type)));
+
+	double sub[3];//Temp Variables
+	double rsl[3];//Temp Variables
+	double b;//Temp Variables
+
+	
+	for(int i = 0; i < imgHsv->height; i++)
+	{
+		char* ptrMaskTmp = mask->imageData + i*mask->widthStep;
+		uchar* ptrTmp = (uchar*)(imgHsv->imageData + i*imgHsv->widthStep);
+		uchar* ptrGrayTmp = (uchar*)(gray->imageData + i*gray->widthStep);
+		
+		for(int j = 0; j < imgHsv->width; j++)
+		{			
+			char* ptrMask = ptrMaskTmp + j;
+			uchar* ptrGray = ptrGrayTmp + j;
+
+			if(ptrMask[0] == 0){
+				//Read 2 Images Pixel				
+				uchar* ptr = ptrTmp + (j*imgHsv->nChannels);//Read HSV
+				
+				sub[0] = ptr[1] - *(float *)(mean->data.ptr); // (*(float*)CV_MAT_ELEM_PTR(*mean, 0, 0));
+				sub[1] = ptr[2] - *(float *)(mean->data.ptr + mean->step);//(*(float*)CV_MAT_ELEM_PTR(*mean, 1, 0));
+
+				rsl[0] = sub[0]*InvCov[0][0];
+				rsl[1] = sub[1]*InvCov[1][1];
+
+				b = rsl[0]*sub[0] + rsl[1]*sub[1];
+				b = -0.5*b;
+
+				double temp = logOfSqrt2PiVariance + b;
+				
+				if (temp > thresh)
+				{				
+					*ptrGray = 255;
+				}
+				else
+				{
+					*ptrGray = 0;
+				}
+			}
+			else
+				*ptrGray = 0;
+		}
+	}
+				
+	cvReleaseImage(&imgHsv);
+	return gray;
+}
+
 IplImage* GaussFilterColor::Classify(IplImage *img, IplImage *mask)
 {
 	IplImage* gray = cvCreateImage(cvGetSize(img), img->depth, 1);

@@ -7,6 +7,8 @@ WindowParams::WindowParams(void)
 	m_modelSVMPath = NULL;
 	m_maskPath = NULL;
 	m_videoPath = NULL;
+
+	m_isStopVideo = false;
 }
 
 WindowParams::~WindowParams(void)

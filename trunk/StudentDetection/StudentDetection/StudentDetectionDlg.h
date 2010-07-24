@@ -27,7 +27,7 @@ class CStudentDetectionDlg : public CDialog
 // Construction
 public:
 	CStudentDetectionDlg(CWnd* pParent = NULL);	// standard constructor
-
+	
 // Dialog Data
 	enum { IDD = IDD_STUDENTDETECTION_DIALOG };
 

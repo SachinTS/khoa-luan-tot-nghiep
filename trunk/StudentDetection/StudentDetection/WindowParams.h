@@ -7,6 +7,7 @@ public:
 	int m_isViewHairDetection;
 	int m_isViewSVMDetection;
 	int m_isViewShapeDetection;
+	int m_isStopVideo;
 
 	char* m_videoPath;
 	char* m_maskPath;

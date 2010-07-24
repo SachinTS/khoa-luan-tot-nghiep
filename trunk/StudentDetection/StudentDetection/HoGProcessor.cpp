@@ -531,7 +531,7 @@ CvRect HoGProcessor::detectObject(CvSVM *svmModel, IplImage *input, IplImage *re
 				//double predict_rs = svmModel->predict(img_feature_vector);
 				
 				//if(predict_rs == 1)
-				if(predict_rs >= -0.2)
+				if(predict_rs >= -1)
 				{
 					lstRect.push_back(rect);		
 					//cvRectangle(result, cvPoint(rect.x, rect.y), cvPoint(rect.x+rect.width, rect.y+rect.height), CV_RGB(0,255,0));
