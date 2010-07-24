@@ -46,11 +46,11 @@ int WindowParams::LoadParamsFromXML(char fileName[])
 		pElem->QueryIntAttribute("total_bin", &m_DetectionParams.m_HOG_Params.m_inBin);
 		pElem->QueryFloatAttribute("overlap", &m_DetectionParams.m_HOG_Params.m_fStepOverlap);
 	}
-	
+		
 	pElem = hRoot.FirstChild("SVMParams").Element();
 	if (pElem)
 	{
-		//read params
+		pElem->QueryFloatAttribute("confidence_score", &m_DetectionParams.m_SVM_Params.m_fConfidenceScore);
 	}
 	
 	pElem = hRoot.FirstChild("GaussianParams").Element();

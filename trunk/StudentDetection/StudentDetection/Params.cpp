@@ -37,7 +37,7 @@ int Params::LoadParamsFromXML(char fileName[])
 	pElem = hRoot.FirstChild("SVMParams").Element();
 	if (pElem)
 	{
-		//read params
+		pElem->QueryFloatAttribute("confidence_score", &m_SVM_Params.m_fConfidenceScore);
 	}
 	
 	pElem = hRoot.FirstChild("GaussianParams").Element();

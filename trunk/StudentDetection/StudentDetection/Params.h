@@ -11,7 +11,7 @@ struct HOG_Params{
 };
 
 struct SVM_Params{
-	int m_nPositive;
+	float m_fConfidenceScore;
 };
 
 struct Gaussian_Params{

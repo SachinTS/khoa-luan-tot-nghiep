@@ -1,6 +1,6 @@
 <Params>
 	<HOGParams cell_width="4" cell_height="4" block_width="2" block_height="2" overlap="0.5" total_bin="9"/>
-	<SVMParams />
+	<SVMParams confidence_score="-0.5" />
 	<GaussianParams threshold="-6.5" />
 	<HeadParams max_width="90" min_width="8" min_area="100" max_area="10000" relative_width_height="2" relative_height_width="3" max_head_area_top="1800" min_head_area_bottom="1200"/>
 <ModelSVM>E:\\Data\\model.xml</ModelSVM>

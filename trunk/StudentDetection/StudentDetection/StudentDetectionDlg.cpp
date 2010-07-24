@@ -394,7 +394,7 @@ UINT playVideoThread(LPVOID lParam)
 				if(param->m_isViewHairDetection)
 					cvRectangle(result, cvPoint(rectHead.x, rectHead.y), cvPoint(rectHead.x + rectHead.width, rectHead.y + rectHead.height), CV_RGB(255,255,255));
 					
-				CvRect detectedRect = hog.detectObject(&svm, frame, result, rectHead);
+				CvRect detectedRect = hog.detectObject(&svm, frame, result, rectHead, param->m_DetectionParams.m_SVM_Params.m_fConfidenceScore);
 				if(detectedRect.width > 0){
 					vectorRect.push_back(detectedRect);
 				}

@@ -26,12 +26,13 @@ public:
 	CSliderCtrl m_sliderLength;
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	
-	BOOL OnEraseBkgnd(CDC* pDC);
-	bool SBitdraw(CDC *pDC, UINT nIDResource);
+	BOOL OnEraseBkgnd(CDC* pDC);	
 	HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 
 	CEdit m_editThreshold;
 	CEdit m_editLength;
 	CEdit m_editGaussianThreshold;
 	CSliderCtrl m_sliderGaussianThreshold;
+	CSliderCtrl m_sliderConfidenceScore;
+	CEdit m_editConfidenceScore;
 };

@@ -27,12 +27,17 @@ BOOL CShapeParamsDlg::OnInitDialog() {
 	m_editThreshold.SetWindowTextW(utils.ConvertToCString(CStudentDetectionDlg::detector->threshold));
 	m_editLength.SetWindowTextW(utils.ConvertToCString(CStudentDetectionDlg::detector->l));
 	m_editGaussianThreshold.SetWindowTextW(utils.ConvertToCString(CStudentDetectionDlg::m_windowParam->m_DetectionParams.m_Gaussian_Params.m_fThreshold));
+	m_editConfidenceScore.SetWindowTextW(utils.ConvertToCString(CStudentDetectionDlg::m_windowParam->m_DetectionParams.m_SVM_Params.m_fConfidenceScore));
+	
 	m_sliderThreshold.SetRange(11, 99);
 	m_sliderLength.SetRange(2, 10);
 	m_sliderGaussianThreshold.SetRange(500, 800);
+	m_sliderConfidenceScore.SetRange(200, 600);
+	
 	m_sliderThreshold.SetPos(CStudentDetectionDlg::detector->threshold*100);
 	m_sliderLength.SetPos(CStudentDetectionDlg::detector->l);
-	m_sliderGaussianThreshold.SetPos(CStudentDetectionDlg::m_windowParam->m_DetectionParams.m_Gaussian_Params.m_fThreshold*-100);
+	m_sliderGaussianThreshold.SetPos(CStudentDetectionDlg::m_windowParam->m_DetectionParams.m_Gaussian_Params.m_fThreshold*-100);		
+	m_sliderConfidenceScore.SetPos((CStudentDetectionDlg::m_windowParam->m_DetectionParams.m_SVM_Params.m_fConfidenceScore + 4)*100);
 	return TRUE;
 }
 
@@ -45,6 +50,8 @@ void CShapeParamsDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_EDIT_LENGTH, m_editLength);
 	DDX_Control(pDX, IDC_EDIT_GAUSSIAN_THRESHOLD, m_editGaussianThreshold);
 	DDX_Control(pDX, IDC_SLIDER_GAUSSIAN_THRESHOLD, m_sliderGaussianThreshold);
+	DDX_Control(pDX, IDC_SLIDER_SVM_CONFIDENCESCORE, m_sliderConfidenceScore);
+	DDX_Control(pDX, IDC_EDIT_SVM_CONFIDENCESCORE, m_editConfidenceScore);
 }
 
 
@@ -59,24 +66,29 @@ END_MESSAGE_MAP()
 void CShapeParamsDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
 	Utils utils;
-	
-	if (nPos >= 2 && nPos <= 10) {
-		m_editLength.SetWindowTextW(_T(""));
-		m_editLength.SetWindowTextW(utils.ConvertToCString((int)nPos));
-		CStudentDetectionDlg::detector->l = nPos;
-	}
-	else if (nPos >= 11 && nPos <= 99) {
-		m_editThreshold.SetWindowTextW(_T(""));
-		m_editThreshold.SetWindowTextW(utils.ConvertToCString((float)(nPos*1.0/100)));
-		CStudentDetectionDlg::detector->threshold = (float)nPos*1.0/100;
-	}
-	else if (nPos >= 500 && nPos <= 800) {
-		m_editGaussianThreshold.SetWindowTextW(_T(""));
+	int id = pScrollBar->GetDlgCtrlID();
+	switch(id)
+	{
+	case IDC_SLIDER_SVM_CONFIDENCESCORE:
+		m_editConfidenceScore.SetWindowTextW(utils.ConvertToCString((float)(nPos*-1.0/100)));
+		CStudentDetectionDlg::m_windowParam->m_DetectionParams.m_SVM_Params.m_fConfidenceScore = (float)nPos*1.0/100 - 4;
+		break;
+	case IDC_SLIDER_GAUSSIAN_THRESHOLD:
 		m_editGaussianThreshold.SetWindowTextW(utils.ConvertToCString((float)(nPos*-1.0/100)));
 		CStudentDetectionDlg::m_windowParam->m_DetectionParams.m_Gaussian_Params.m_fThreshold = (float)nPos*-1.0/100;
+		break;
+	case IDC_SLIDER_LENGTH:
+		m_editLength.SetWindowTextW(utils.ConvertToCString((int)nPos));
+		CStudentDetectionDlg::detector->l = nPos;
+		break;
+	case IDC_SLIDER_THRESHOLD:
+		m_editThreshold.SetWindowTextW(utils.ConvertToCString((float)(nPos*1.0/100)));
+		CStudentDetectionDlg::detector->threshold = (float)nPos*1.0/100;
+		break;
+	default:
+		CDialog::OnHScroll(nSBCode, nPos, pScrollBar);
+		break;
 	}
-
-	CDialog::OnHScroll(nSBCode, nPos, pScrollBar);
 }
 
 // HeadParamDlg message handlers
@@ -105,7 +117,7 @@ HBRUSH CShapeParamsDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 	}
 
 	int id = pWnd->GetDlgCtrlID();
-	if(id == IDC_EDIT_LENGTH || id == IDC_EDIT_THRESHOLD || id == IDC_EDIT_GAUSSIAN_THRESHOLD)
+	if(id == IDC_EDIT_LENGTH || id == IDC_EDIT_THRESHOLD || id == IDC_EDIT_GAUSSIAN_THRESHOLD || id == IDC_EDIT_SVM_CONFIDENCESCORE)
 	{		
 		pDC->SetBkMode(TRANSPARENT);		  
 		hbr = (HBRUSH)GetStockObject(WHITE_BRUSH);	
@@ -115,12 +127,7 @@ HBRUSH CShapeParamsDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 }
 
 BOOL CShapeParamsDlg::OnEraseBkgnd(CDC* pDC)
-{
-	/*
-	SBitdraw(pDC,IDB_BMP_BACKGROUND1);
-	CDialog::OnEraseBkgnd(pDC);
-	return TRUE;
-	*/
+{	
 	CBitmap m_bitmap;
 	BOOL rVal = FALSE;
 
@@ -140,22 +147,4 @@ BOOL CShapeParamsDlg::OnEraseBkgnd(CDC* pDC)
 	}
 
 	return rVal;
-}
-
-bool CShapeParamsDlg::SBitdraw(CDC *pDC, UINT nIDResource)
-{
-	CBitmap* m_bitmap;
-	m_bitmap=new CBitmap();
-	m_bitmap->LoadBitmap(nIDResource);
-	if(!m_bitmap->m_hObject)
-		return true;
-	CRect rect;
-	GetClientRect(&rect);
-	CDC dc;
-	dc.CreateCompatibleDC(pDC);	
-	dc.SelectObject(m_bitmap);
-
-	int xo=0, yo=0;
-	pDC->BitBlt(xo, yo, rect.Width(),rect.Height(), &dc, 0, 0, SRCCOPY);
-	return true;
 }
