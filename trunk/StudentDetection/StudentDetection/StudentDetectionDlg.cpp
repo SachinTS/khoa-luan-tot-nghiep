@@ -82,10 +82,10 @@ CStudentDetectionDlg::CStudentDetectionDlg(CWnd* pParent /*=NULL*/)
 CStudentDetectionDlg::~CStudentDetectionDlg() {
 	if (CStudentDetectionDlg::detector != NULL)
 		delete CStudentDetectionDlg::detector;
+	if(!m_windowParam->m_isStopVideo)	
+		m_windowParam->m_isStopVideo = true;
 	if (CStudentDetectionDlg::m_windowParam != NULL)
 		delete CStudentDetectionDlg::m_windowParam;
-	if(m_bIsPlayVideo)
-		video_thread->SuspendThread();
 }
 
 void CStudentDetectionDlg::DoDataExchange(CDataExchange* pDX)
@@ -202,7 +202,7 @@ BOOL CStudentDetectionDlg::OnInitDialog()
 	m_btnApplyParams.SetBitmaps(IDB_BMP_OK, RGB(255, 0, 0));
 	m_btnApplyParams.SetFlat();
 
-	m_bIsPlayVideo = false;
+	m_windowParam->m_isStopVideo = true;
 
 	m_editStudentCount.SetWindowTextW(_T("0"));
 	return TRUE;  // return TRUE  unless you set the focus to a control
@@ -281,8 +281,13 @@ void CStudentDetectionDlg::OnMainVideo()
 	InputDlg dlg;
 	if(dlg.DoModal() == IDOK)
 	{
-		Utils utils;			
-		CStudentDetectionDlg::m_windowParam->m_videoPath = utils.ConvertToChar(dlg.m_videoPath);		
+		Utils utils;
+		if(CStudentDetectionDlg::m_windowParam->m_videoPath != NULL)
+			delete[] CStudentDetectionDlg::m_windowParam->m_videoPath;
+		CStudentDetectionDlg::m_windowParam->m_videoPath = utils.ConvertToChar(dlg.m_videoPath);
+
+		if(CStudentDetectionDlg::m_windowParam->m_maskPath != NULL)
+			delete[] CStudentDetectionDlg::m_windowParam->m_maskPath;
 		CStudentDetectionDlg::m_windowParam->m_maskPath = utils.ConvertToChar(dlg.m_maskPath);
 	}
 }
@@ -314,7 +319,7 @@ UINT playVideoThread(LPVOID lParam)
 	
 	CvCapture *capture = cvCaptureFromFile(param->m_videoPath);	
 	if (capture == NULL) {
-		printf("Cannot open video.\n");
+	//	printf("Cannot open video.\n");
 		return EXIT_FAILURE;
 	}
 
@@ -347,11 +352,10 @@ UINT playVideoThread(LPVOID lParam)
 	hog.SetParams(param->m_DetectionParams.m_HOG_Params.m_cell, param->m_DetectionParams.m_HOG_Params.m_block, param->m_DetectionParams.m_HOG_Params.m_fStepOverlap);
 
 	CvSVM svm;
-	
-	CvRect window = cvRect(0,0,48,48);
-	
 	svm.load(param->m_modelSVMPath);
-			
+
+	CvRect window = cvRect(0,0,48,48);
+				
 	vector<CvRect> vectorRect;
 	while (1) {
 		frame = cvQueryFrame(capture);
@@ -367,12 +371,10 @@ UINT playVideoThread(LPVOID lParam)
 		student_count = 0;
 		vectorRect.clear();	
 
-		//m_gauss.SetThreshold(param->m_DetectionParams.m_Gaussian_Params.m_fThreshold);
 		subtract = m_gauss.Classify(frame, mask, param->m_DetectionParams.m_Gaussian_Params.m_fThreshold);
 
 		cvSmooth(subtract, hair_canny, CV_MEDIAN);
 		cvCanny(hair_canny, hair_canny, 10, 100);
-
 		
 		cvFindContours(subtract, storage, &contours, sizeof(CvContour), CV_RETR_EXTERNAL);
 
@@ -452,13 +454,15 @@ UINT playVideoThread(LPVOID lParam)
 
 	//outFile.close();
 
-	PostMessage(param->m_hWnd,WM_USER_THREAD_FINISHED,(WPARAM)result,0);
+	PostMessage(param->m_hWnd,WM_USER_THREAD_FINISHED,0,0);
 
 	time_t end = time(NULL);
 	speed = count*1.0/(end-start);
 	printf("fps: %2.3f.\n", speed);
 
 	cvDestroyAllWindows();
+
+	svm.clear();
 
 	cvReleaseCapture(&capture);
 	cvReleaseImage(&mask);
@@ -478,7 +482,6 @@ void CStudentDetectionDlg::OnBnClickedBtnPlay()
 
 		m_btnPlay.EnableWindow(0);
 		video_thread = AfxBeginThread(playVideoThread, CStudentDetectionDlg::m_windowParam, THREAD_PRIORITY_NORMAL, 0, 0);
-		m_bIsPlayVideo = true;
 		m_windowParam->m_isStopVideo = false;
 	}
 }
@@ -489,7 +492,6 @@ void CStudentDetectionDlg::OnBnClickedBtnStop()
 	{
 		m_windowParam->m_isStopVideo = true;
 		m_btnPlay.EnableWindow();
-		m_bIsPlayVideo = false;
 	}
 }
 
@@ -511,7 +513,6 @@ void CStudentDetectionDlg::OnBnClickedCheckViewShape()
 LRESULT CStudentDetectionDlg::OnThreadFinished(WPARAM wParam,LPARAM lParam)
 {
 	m_btnPlay.EnableWindow();
-	m_bIsPlayVideo = false;
 	m_windowParam->m_isStopVideo = true;
 
 	Invalidate();
@@ -522,27 +523,28 @@ LRESULT CStudentDetectionDlg::OnThreadFinished(WPARAM wParam,LPARAM lParam)
 LRESULT CStudentDetectionDlg::OnThreadUpdateProgress(WPARAM wParam,LPARAM lParam)
 {
 	IplImage* frame = (IplImage*)wParam;
+	IplImage* displayImg;
 	ImageProcessor imgProcess;
-	CRect clientRect;
-	//m_video.GetClientRect(clientRect);
+
+	CRect clientRect;	
 	m_videoPlayer.GetClientRect(clientRect);
 
 	CvvImage cvv;
-	cvv.CopyOf(imgProcess.getSubImageAndResize(frame, cvRect(0,0,frame->width, frame->height), clientRect.Width(), clientRect.Height()));
-	//cvv.Show(m_video.GetDC()->m_hDC, 0, 0, clientRect.Width(), clientRect.Height());
+	displayImg = imgProcess.getSubImageAndResize(frame, cvRect(0,0,frame->width, frame->height), clientRect.Width(), clientRect.Height());
+	cvv.CopyOf(displayImg);
 	cvv.Show(m_videoPlayer.GetDC()->m_hDC, 0, 0, clientRect.Width(), clientRect.Height());
-	cvv.Destroy();	
-
+	
+	cvv.Destroy();
+	cvReleaseImage(&displayImg);
 	return 0;
 }
 
 LRESULT CStudentDetectionDlg::OnThreadUpdateInfo(WPARAM wParam,LPARAM lParam)
 {
 	Utils utils;
-	int count = (int)wParam;
-	//m_static_student_count.SetWindowTextW(utils.ConvertToCString(count));
+	int count = (int)wParam;	
 	m_editStudentCount.SetWindowTextW(utils.ConvertToCString(count));
-	//m_static_student_count.Invalidate();
+	
 	return 0;
 }
 
@@ -577,15 +579,7 @@ void CStudentDetectionDlg::OnBnClickedBtnApplyParams()
 	m_tabHeadParams->m_editRelativeWidthHeight.GetWindowTextW(tmp);
 	CStudentDetectionDlg::m_windowParam->m_DetectionParams.m_Head_Params.m_iRelative_Width_Height  = utils.ConvertToInt(tmp);
 }
-/*
-BOOL CStudentDetectionDlg::OnEraseBkgnd(CDC* pDC)
-{
-	// TODO: Add your message handler code here and/or call default
-	CDialog::OnEraseBkgnd(pDC);
-	SBitdraw(pDC,IDB_BMP_BACKGROUND);
-	return true;	
-}
-*/
+
 BOOL CStudentDetectionDlg::OnEraseBkgnd(CDC* pDC) 
 {
 	CBitmap m_bitmap;
@@ -609,39 +603,8 @@ BOOL CStudentDetectionDlg::OnEraseBkgnd(CDC* pDC)
 	return rVal;
 }
 
-bool CStudentDetectionDlg::SBitdraw(CDC *pDC, UINT nIDResource)
-{
-	CBitmap* m_bitmap;
-	m_bitmap=new CBitmap();
-	m_bitmap->LoadBitmap(nIDResource);
-	if(!m_bitmap->m_hObject)
-		return true;
-	CRect rect;
-	GetClientRect(&rect);
-	CDC dc;
-	dc.CreateCompatibleDC(pDC);	
-	dc.SelectObject(m_bitmap);
-
-	int xo=0, yo=0;
-	pDC->BitBlt(xo, yo, rect.Width(),rect.Height(), &dc, 0, 0, SRCCOPY);
-	return true;
-}
 HBRUSH CStudentDetectionDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor) 
-{
-	/*
-	HBRUSH hbr;
-	if( nCtlColor == CTLCOLOR_STATIC )
-	{
-		pDC->SetBkMode(TRANSPARENT);		
-		hbr = (HBRUSH)GetStockObject( NULL_BRUSH );
-	}
-	else
-	{
-		hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);		
-	}	
-	return hbr;	
-	*/
-
+{	
 	HBRUSH hbr = CWnd::OnCtlColor(pDC, pWnd, nCtlColor);
 
     DWORD dwStyle = pWnd->GetStyle();
@@ -680,7 +643,7 @@ void CAboutDlg::OnBnClickedOk()
 void CStudentDetectionDlg::OnStnClickedPlayVideo()
 {
 	// TODO: Add your control notification handler code here
-	if(!m_bIsPlayVideo)
+	if(m_windowParam->m_isStopVideo)
 	{
 		InputDlg dlg;
 		if(dlg.DoModal() == IDOK)

@@ -8,6 +8,8 @@ GaussFilterColor::GaussFilterColor(void)
 
 GaussFilterColor::~GaussFilterColor(void)
 {
+	cvReleaseMat(&mean);
+	cvReleaseMat(&corrvariant);
 }
 
 void GaussFilterColor::SetThreshold(double thresh)
@@ -17,7 +19,7 @@ void GaussFilterColor::SetThreshold(double thresh)
 
 IplImage* GaussFilterColor::Classify(IplImage *img)
 {
-IplImage* gray = cvCreateImage(cvGetSize(img), img->depth, 1);
+	IplImage* gray = cvCreateImage(cvGetSize(img), img->depth, 1);
 
 	//Convert To Hsv Color System
 	IplImage* imgHsv = cvCreateImage(cvGetSize(img), img->depth, img->nChannels);
@@ -93,19 +95,9 @@ IplImage* GaussFilterColor::Classify(IplImage *img, IplImage *mask, float thresh
 
 	cvCvtColor(img, imgHsv, CV_BGR2HSV);
 	
-	//Inverse Covariance.
-	double InvCov[2][2];
-	
-	//InvCov[0][0] = 1/(*(float*)CV_MAT_ELEM_PTR(*corrvariant, 0, 0));
-	//InvCov[1][1] = 1/ (*(float*)CV_MAT_ELEM_PTR(*corrvariant, 1, 1));
-
+	//Inverse Covariance.	
 	InvCov[0][0] = 1/ (*(float *)corrvariant->data.ptr);	
 	InvCov[1][1] = 1/ *((float *)(corrvariant->data.ptr + corrvariant->step + sizeof(corrvariant->type)));
-
-	double sub[3];//Temp Variables
-	double rsl[3];//Temp Variables
-	double b;//Temp Variables
-
 	
 	for(int i = 0; i < imgHsv->height; i++)
 	{
@@ -164,18 +156,8 @@ IplImage* GaussFilterColor::Classify(IplImage *img, IplImage *mask)
 	cvCvtColor(img, imgHsv, CV_BGR2HSV);
 	
 	//Inverse Covariance.
-	double InvCov[2][2];
-	
-	//InvCov[0][0] = 1/(*(float*)CV_MAT_ELEM_PTR(*corrvariant, 0, 0));
-	//InvCov[1][1] = 1/ (*(float*)CV_MAT_ELEM_PTR(*corrvariant, 1, 1));
-
 	InvCov[0][0] = 1/ (*(float *)corrvariant->data.ptr);	
 	InvCov[1][1] = 1/ *((float *)(corrvariant->data.ptr + corrvariant->step + sizeof(corrvariant->type)));
-
-	double sub[3];//Temp Variables
-	double rsl[3];//Temp Variables
-	double b;//Temp Variables
-
 	
 	for(int i = 0; i < imgHsv->height; i++)
 	{

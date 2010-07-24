@@ -112,18 +112,30 @@ void TrainSVMDlg::OnBnClickedBtnTrainSvm()
 	m_editSubfixPos.GetWindowTextW(posfix);
 
 	m_editProgress.SetWindowTextW(_T("Begin training positive images... \n"));
-	CvMat* pos_mat = hog.train_64x128(utils.ConvertToChar(prefix),utils.ConvertToChar(posfix), cvSize(48,48), endIndexPos - startIndexPos + 1, startIndexPos , endIndexPos);
+	
+	char *preFix = utils.ConvertToChar(prefix);
+	char *posFix = utils.ConvertToChar(posfix);
+	CvMat* pos_mat = hog.train_64x128(preFix, posFix, cvSize(48,48), endIndexPos - startIndexPos + 1, startIndexPos , endIndexPos);
+	delete[] preFix;
+	delete[] posFix;
 	m_editProgress.SetWindowTextW(_T("Train positive images completed... \n"));
 	
 	m_editPrefixNeg.GetWindowTextW(prefix);
 	m_editSubfixNeg.GetWindowTextW(posfix);
+	
 	m_editProgress.SetWindowTextW(_T("Begin training negative images... \n"));
-	CvMat* neg_mat = hog.train_large(utils.ConvertToChar(prefix),utils.ConvertToChar(posfix), cvSize(48,48), endIndexNeg - startIndexNeg + 1, 3, 3, startIndexNeg, endIndexNeg);
+	preFix = utils.ConvertToChar(prefix);
+	posFix = utils.ConvertToChar(posfix);
+	CvMat* neg_mat = hog.train_large(preFix, posFix, cvSize(48,48), endIndexNeg - startIndexNeg + 1, 3, 3, startIndexNeg, endIndexNeg);
+	delete[] preFix;
+	delete[] posFix;
 	m_editProgress.SetWindowTextW(_T("Training negative images completed... \n"));
 
 	m_editProgress.SetWindowTextW(_T("Begin training SVM... \n"));	
 	m_editOutPath.GetWindowTextW(tmp);
-	hog.trainSVM(pos_mat, neg_mat, utils.ConvertToChar(tmp) );
+	char *fileOutput = utils.ConvertToChar(tmp);
+	hog.trainSVM(pos_mat, neg_mat, fileOutput );
+	delete[] fileOutput;
 	m_editProgress.SetWindowTextW(_T("Train SVM completed... \n"));
 }
 

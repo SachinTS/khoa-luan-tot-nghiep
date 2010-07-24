@@ -103,6 +103,9 @@
 #define IDC_SLIDER_GAUSSIAN_THRESHOLD   1057
 #define IDC_EDIT3                       1058
 #define IDC_EDIT_GAUSSIAN_THRESHOLD     1058
+#define IDC_SLIDER_SVM_CONFIDENCESCORE  1059
+#define IDC_EDIT_GAUSSIAN_THRESHOLD2    1060
+#define IDC_EDIT_SVM_CONFIDENCESCORE    1060
 #define ID_INPUT_VIDEO                  32771
 #define ID_MAIN_EXIT                    32772
 #define ID_MAIN_VIDEO                   32773

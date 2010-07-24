@@ -94,10 +94,18 @@ void TrainGaussDlg::OnBnClickedBtnTrainGauss()
 	m_editOutPath.GetWindowTextW(tmp);
 
 	m_editProgress.SetWindowTextW(_T("Begin training gaussian..."));
-	gauss.TrainData(utils.ConvertToChar(prefix), utils.ConvertToChar(posfix), startIndx - endIndx + 1, startIndx, endIndx, utils.ConvertToChar(tmp));
+	char *preFix = utils.ConvertToChar(prefix);
+	char *posFix = utils.ConvertToChar(posfix);
+	char *fileOutput = utils.ConvertToChar(tmp);
+	
+	gauss.TrainData(preFix, posFix , startIndx - endIndx + 1, startIndx, endIndx, fileOutput);
 	m_editProgress.SetWindowTextW(_T("Train Gaussian completed"));
 
 	MessageBox(_T("Train Gaussian completed"), _T("Information"));	
+
+	delete[] preFix;
+	delete[] posFix;
+	delete[] fileOutput;
 }
 
 BOOL TrainGaussDlg::OnEraseBkgnd(CDC* pDC)

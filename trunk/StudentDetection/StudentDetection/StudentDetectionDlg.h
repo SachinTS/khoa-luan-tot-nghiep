@@ -46,7 +46,6 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	BOOL OnEraseBkgnd(CDC* pDC);
-	bool SBitdraw(CDC *pDC, UINT nIDResource);
 	afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 	~CStudentDetectionDlg(void);
 
@@ -79,8 +78,7 @@ public:
 	CButtonST m_btnApplyParams;
 	afx_msg void OnBnClickedBtnApplyParams();	
 	CStatic m_videoPlayer;
-	afx_msg void OnStnClickedPlayVideo();
-	bool m_bIsPlayVideo;
+	afx_msg void OnStnClickedPlayVideo();	
 	static SnakeDetector *detector;
 	CEdit m_editStudentCount;
 };

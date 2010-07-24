@@ -10,6 +10,12 @@ using namespace std;
 class GaussFilterColor
 {
 public:	
+	double InvCov[2][2];
+	
+	double sub[3];
+	double rsl[3];
+	double b;
+
 	double phi;
 	double logOfSqrt2PiVariance;
 	double threshold;

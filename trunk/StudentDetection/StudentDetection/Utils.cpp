@@ -19,7 +19,7 @@ void Utils::OutputResult(IplImage* img, vector<CvRect> vRect, CvScalar color){
 char* Utils::ConvertToChar(const CString &s)
 { 
     int size = s.GetLength(); 
-    char *res= new char[size+1]; 
+    char *res= new char[size + 1]; 
     memset(res,0,size+1); 
     wcstombs(res, s, size+1); 
     return res; 
@@ -27,10 +27,13 @@ char* Utils::ConvertToChar(const CString &s)
 
 int Utils::ConvertToInt(const CString &s){
 	int size = s.GetLength(); 
-    char *res= new char[size+1]; 
+    char *res= new char[size + 1]; 
     memset(res,0,size+1); 
-    wcstombs(res, s, size+1); 
-	return atoi(res);
+    wcstombs(res, s, size+1);
+	int num = atoi(res);
+	
+	delete[] res;
+	return num;
 }
 
 CString Utils::ConvertToCString(int number)
@@ -89,6 +92,7 @@ vector<CvRect> Utils::ConnectOverlapRects(vector<CvRect> inVector){
 			result.push_back(*iter1);
 		}
 
+		inVector.clear();
 		return result;
 	}
 	else

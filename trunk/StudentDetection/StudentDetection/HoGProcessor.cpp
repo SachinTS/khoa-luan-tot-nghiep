@@ -370,10 +370,8 @@ CvMat* HoGProcessor::calculateHOG_window(IplImage **integrals, CvRect window, in
 	 is divided into 2x2 such cells(i.e. the block is 16x16 pixels).
 	 So a 64x128 pixels window would be divided into 7x15 overlapping blocks
 	*/
-	int block_start_x, block_start_y, cell_width = m_cell.width;
-	int cell_height = m_cell.height;
-	int block_width = m_block.width, block_height = m_block.height;
-
+	int block_start_x, block_start_y;	
+	
 	/* The length of the feature vector for a cell is 9
 	(since no. of bins is 9), for block it would be 
 	9*(no. of cells in the block) = 9*4 = 36. And the lenght
@@ -381,8 +379,8 @@ CvMat* HoGProcessor::calculateHOG_window(IplImage **integrals, CvRect window, in
 	blocks in the window)
 	*/
 	int lenghth_feature_of_block = 9 * m_block.height * m_block.width;
-	int num_overlap_block_of_width = ((window.width - cell_width * block_width) / (cell_width * m_fStepOverlap)) + 1;
-	int num_overlap_block_of_height = ((window.height - cell_height * block_height)/ (cell_height * m_fStepOverlap)) + 1;
+	int num_overlap_block_of_width = ((window.width - m_cell.width * m_block.width) / (m_cell.width * m_fStepOverlap)) + 1;
+	int num_overlap_block_of_height = ((window.height - m_cell.height * m_block.height)/ (m_cell.height * m_fStepOverlap)) + 1;
 	int total_block_of_window = num_overlap_block_of_width * num_overlap_block_of_height ;
 
 	CvMat* window_feature_vector = cvCreateMat(1
@@ -391,23 +389,25 @@ CvMat* HoGProcessor::calculateHOG_window(IplImage **integrals, CvRect window, in
 	
 	CvMat vector_block;
 	int startcol = 0;
-
+	
+	int widthBlockInPixels = m_cell.width * m_block.width;
+	int heightBlockInPixels = m_cell.height * m_block.height;
 	for(block_start_y = window.y; 
-		block_start_y <= window.y + window.height - cell_height * block_height; 
-		block_start_y += cell_height * m_fStepOverlap)
+		block_start_y <= window.y + window.height - m_cell.height * m_block.height; 
+		block_start_y += m_cell.height * m_fStepOverlap)
 	{//overllap
 
 			for(block_start_x = window.x; 
-				block_start_x <= window.x + window.width - cell_width * block_width;
-				block_start_x += cell_width * m_fStepOverlap)
+				block_start_x <= window.x + window.width - m_cell.width * m_block.width;
+				block_start_x += m_cell.width * m_fStepOverlap)
 			{//overllap
 
-			 cvGetCols(window_feature_vector, &vector_block, startcol, startcol+36);
+			cvGetCols(window_feature_vector, &vector_block, startcol, startcol+36);
 
-			calculateHOG_block(cvRect(block_start_x,
-				  block_start_y, cell_width * block_width, cell_height
-				  * block_height), &vector_block, integrals, cvSize(
-				  cell_width, cell_height), normalization);
+			calculateHOG_block(
+				cvRect(block_start_x, block_start_y, widthBlockInPixels , heightBlockInPixels)
+				, &vector_block, integrals, m_cell
+				, normalization);
 
 			startcol+= lenghth_feature_of_block;
 			}
@@ -474,7 +474,7 @@ CvRect HoGProcessor::MergeRect(vector<CvRect> lstRect)
 	return r;	
 }
 
-CvRect HoGProcessor::detectObject(CvSVM *svmModel, IplImage *input, IplImage *result, CvRect rectHead, int normalization){
+CvRect HoGProcessor::detectObject(CvSVM *svmModel, IplImage *input, IplImage *result, CvRect rectHead, float confidenceScore, int normalization){
 	int StepWidth = 10;
 	int StepHeight = 10;
 	
@@ -487,15 +487,16 @@ CvRect HoGProcessor::detectObject(CvSVM *svmModel, IplImage *input, IplImage *re
 
 	//loai bo truong hop toc dai
 	if(rectHead.height > rectHead.width)
-		rectHead.height = rectHead.width;
-	
-	vector<CvRect> lstRect;
+		rectHead.height = rectHead.width;		
 
 	CvRect rectHuman = cvRect(rectHead.x + rectHead.width/2 - rectHead.width*scaleWidth/2, 
 		rectHead.y - 6, 
 		rectHead.width*scaleWidth, 
 		rectHead.height*scaleHeight);
 
+	vector<CvRect> lstRect;
+	CvMat* img_feature_vector;
+	IplImage **newIntegrals;
 	for(int i = 0; i < nWindow; i++)
 	{
 		for(int j = 0; j < nWindow; j++)
@@ -509,15 +510,12 @@ CvRect HoGProcessor::detectObject(CvSVM *svmModel, IplImage *input, IplImage *re
 			if(rect.x < 0) rect.x = 0;
 			if(rect.y < 0) rect.y = 0;
 			if(rect.x + rect.width > input->width) rect.width = input->width - rect.x;
-			if(rect.y + rect.height > input->height) rect.height = input->height - rect.y;
-
-			CvMat* img_feature_vector;
+			if(rect.y + rect.height > input->height) rect.height = input->height - rect.y;		
 			
 			IplImage* candidate_img = ip.getSubImageAndResize(input, rect, 48, 48);
 			if(candidate_img)
 			{
-				IplImage **newIntegrals = calculateIntegralHOG(candidate_img);
-
+				newIntegrals = calculateIntegralHOG(candidate_img);
 				img_feature_vector = calculateHOG_window(newIntegrals,cvRect(0,0,48,48),4);
 				
 				for (int k = 0; k < 9; k++)
@@ -527,17 +525,77 @@ CvRect HoGProcessor::detectObject(CvSVM *svmModel, IplImage *input, IplImage *re
 				cvReleaseImage(newIntegrals);
 				cvReleaseImage(&candidate_img);
 
-				double predict_rs = svmModel->predict(img_feature_vector, true);
-				//double predict_rs = svmModel->predict(img_feature_vector);
-				
-				//if(predict_rs == 1)
-				if(predict_rs >= -1)
-				{
+				double predict_rs = svmModel->predict(img_feature_vector, true);				
+				if(predict_rs >= confidenceScore)				
 					lstRect.push_back(rect);		
-					//cvRectangle(result, cvPoint(rect.x, rect.y), cvPoint(rect.x+rect.width, rect.y+rect.height), CV_RGB(0,255,0));
-				}	
-				else
-					//cvRectangle(result, cvPoint(rect.x, rect.y), cvPoint(rect.x+rect.width, rect.y+rect.height), CV_RGB(0,0,255));
+								
+				cvReleaseMat(&img_feature_vector);	
+			}				
+		}
+	}	
+
+	if(lstRect.size() > 0)
+	{		
+		return MergeRect(lstRect);				
+	}	
+	return cvRect(0,0,-1,-1);	
+}
+
+
+CvRect HoGProcessor::detectObject(CvSVM *svmModel, IplImage *input, IplImage *result, CvRect rectHead, int normalization){
+	int StepWidth = 10;
+	int StepHeight = 10;
+	
+	int nWindow = 3;
+	
+	int scaleWidth = 2;
+	int scaleHeight = 2;
+
+	ImageProcessor ip;
+
+	//loai bo truong hop toc dai
+	if(rectHead.height > rectHead.width)
+		rectHead.height = rectHead.width;		
+
+	CvRect rectHuman = cvRect(rectHead.x + rectHead.width/2 - rectHead.width*scaleWidth/2, 
+		rectHead.y - 6, 
+		rectHead.width*scaleWidth, 
+		rectHead.height*scaleHeight);
+
+	vector<CvRect> lstRect;
+	CvMat* img_feature_vector;
+	IplImage **newIntegrals;
+	for(int i = 0; i < nWindow; i++)
+	{
+		for(int j = 0; j < nWindow; j++)
+		{
+			CvRect rect;
+			rect.width = rectHuman.width + StepWidth*i;
+			rect.height = rectHuman.height + StepHeight*j;
+			rect.x = rectHuman.x - StepWidth*i/2;
+			rect.y = rectHuman.y - StepHeight*j/2;
+						
+			if(rect.x < 0) rect.x = 0;
+			if(rect.y < 0) rect.y = 0;
+			if(rect.x + rect.width > input->width) rect.width = input->width - rect.x;
+			if(rect.y + rect.height > input->height) rect.height = input->height - rect.y;		
+			
+			IplImage* candidate_img = ip.getSubImageAndResize(input, rect, 48, 48);
+			if(candidate_img)
+			{
+				newIntegrals = calculateIntegralHOG(candidate_img);
+				img_feature_vector = calculateHOG_window(newIntegrals,cvRect(0,0,48,48),4);
+				
+				for (int k = 0; k < 9; k++)
+				{
+					cvReleaseImage(&newIntegrals[k]);				
+				}
+				cvReleaseImage(newIntegrals);
+				cvReleaseImage(&candidate_img);
+
+				double predict_rs = svmModel->predict(img_feature_vector, true);				
+				if(predict_rs >= -1)				
+					lstRect.push_back(rect);		
 								
 				cvReleaseMat(&img_feature_vector);	
 			}				
@@ -560,20 +618,14 @@ CvRect HoGProcessor::detectObject(CvSVM *svmModel, IplImage *input, IplImage *re
 */
 void HoGProcessor::calulateHOG_rect(CvRect cell, CvMat* hog_cell, IplImage** integrals,int normalization){
 	/*Calculate the bin values for each of the bin of the histogram one by one*/
-	char buffer[50];
-	float* temp;
 	for(int i = 0; i < 9; i++){
 		float a = ((double*)(integrals[i]->imageData + (cell.y)*(integrals[i]->widthStep)))[cell.x];		
-		//float a = CV_IMAGE_ELEM(integrals[i],double,cell.y,cell.x);
-			
+					
 		float b = ((double*)(integrals[i]->imageData + (cell.y + cell.height)*(integrals[i]->widthStep)))[cell.x + cell.width];
-		//float b = CV_IMAGE_ELEM(integrals[i],double,cell.y + cell.height,cell.x+cell.width);
-	
+		
 		float c = ((double*)(integrals[i]->imageData + (cell.y)*(integrals[i]->widthStep)))[cell.x + cell.width];
-		//float c= CV_IMAGE_ELEM(integrals[i], double, cell.y, cell.x+cell.width);
 		
 		float d = ((double*)(integrals[i]->imageData + (cell.y + cell.height)*(integrals[i]->widthStep)))[cell.x];
-		//float d = CV_IMAGE_ELEM(integrals[i],double,cell.y+cell.height,cell.x);
 		
 		((float*)hog_cell->data.fl)[i] = (a+b)-(c+d);
 	}
@@ -591,8 +643,9 @@ IplImage* HoGProcessor::doSobel(IplImage *in, int xorder, int yorder, int apertu
 }
 
 IplImage**  HoGProcessor::calculateIntegralHOG(IplImage *in){
+	CvSize size = cvGetSize(in);
 	/* Convert the input image to grayscale*/
-	IplImage* img_gray = cvCreateImage(cvGetSize(in), IPL_DEPTH_8U, 1);
+	IplImage* img_gray = cvCreateImage(size, IPL_DEPTH_8U, 1);
 	cvCvtColor(in, img_gray, CV_BGR2GRAY);
 	cvEqualizeHist(img_gray, img_gray);
 
@@ -612,7 +665,7 @@ IplImage**  HoGProcessor::calculateIntegralHOG(IplImage *in){
 	*/
 	IplImage** bins = (IplImage**)malloc(9*sizeof(IplImage*));
 	for(int i = 0; i < 9; i++){
-		bins[i] = cvCreateImage(cvGetSize(in), IPL_DEPTH_32F, 1);
+		bins[i] = cvCreateImage(size, IPL_DEPTH_32F, 1);
 		cvSetZero(bins[i]);
 	}
 
@@ -647,8 +700,7 @@ IplImage**  HoGProcessor::calculateIntegralHOG(IplImage *in){
 		}
 		
 		/*For every pixel in a row gradient orientation and magnitude are
-		calculated and corresponding values set for the bin images.*/
-		
+		calculated and corresponding values set for the bin images.*/		
 		for( x = 0; x < in->width; x++){
 			/*
 			 if the xsobel derivative is zero for a pixel , a small value is added to it,
@@ -658,11 +710,8 @@ IplImage**  HoGProcessor::calculateIntegralHOG(IplImage *in){
 			 {-90 -90} to {0 -180}. This is just a matter of convention.
 			 {-90 -90} values can also be used for the calulation
 			*/
-			
-			//xDevValue = CV_IMAGE_ELEM(xsobel, float, y,  x);
-			xDevValue = ((float*)(xsobel->imageData + y*(xsobel->widthStep)))[x];
-
-			//yDevValue = CV_IMAGE_ELEM(ysobel, float, y,  x);
+						
+			xDevValue = ((float*)(xsobel->imageData + y*(xsobel->widthStep)))[x];			
 			yDevValue = ((float*)(ysobel->imageData + y*(ysobel->widthStep)))[x];
 
 			if(xDevValue == 0){
@@ -677,7 +726,6 @@ IplImage**  HoGProcessor::calculateIntegralHOG(IplImage *in){
 			corresponding pixel value is made equal to the gradient magnitude
 			at that pixel in the corresponding bin image
 			*/
-
 			if(temp_gradient <= 20){
 				ptrs[0][x] = temp_magnitude;
 			} else if ( temp_gradient <= 40){
@@ -712,9 +760,9 @@ IplImage**  HoGProcessor::calculateIntegralHOG(IplImage *in){
 		cvReleaseImage(&bins[i]);
 	}
 	cvReleaseImage(bins);	
-	
+		
 	free(ptrs);
-
+	
 	/* The function returns an array of 9 images which constitue the
 	integral histogram*/
 	return (integrals);

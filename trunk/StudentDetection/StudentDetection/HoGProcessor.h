@@ -42,7 +42,7 @@ public:
 	IplImage** integrals,CvSize cell, int normalization);
 		
 	CvRect detectObject(CvSVM *svmModel, IplImage *input, IplImage* result, CvRect rectHead, int normalization = 4);
-	
+	CvRect detectObject(CvSVM *svmModel, IplImage *input, IplImage *result, CvRect rectHead, float confidenceScore, int normalization);
 	CvMat* calculateHOG_window(IplImage** integrals, CvRect window, int normalization) ;
 public:
 	~HoGProcessor(void);
