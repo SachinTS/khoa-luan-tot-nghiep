@@ -78,7 +78,21 @@ public:
 	CButtonST m_btnApplyParams;
 	afx_msg void OnBnClickedBtnApplyParams();	
 	CStatic m_videoPlayer;
-	afx_msg void OnStnClickedPlayVideo();	
+	afx_msg void OnStnClickedPlayVideo();
+
 	static SnakeDetector *detector;
+	static CvCapture *capture;
+	static IplImage *mask;
+	static IplImage *result;
+	static IplImage *subtract;
+	static IplImage *frame;
+	static IplImage *hair_canny;
+	static CvMemStorage *storage;
+	static CvSeq *contours;
+	static GaussFilterColor *m_gauss;
+	static HoGProcessor *hog;
+	static CvSVM *svm;
+
+
 	CEdit m_editStudentCount;
 };

@@ -91,7 +91,7 @@ BOOL HeadParamDlg::OnEraseBkgnd(CDC* pDC)
 	return true;
 	
 }
-bool HeadParamDlg::SBitdraw(CDC *pDC, UINT nIDResource)
+BOOL HeadParamDlg::SBitdraw(CDC *pDC, UINT nIDResource)
 {
 	CBitmap* m_bitmap;
 	m_bitmap=new CBitmap();

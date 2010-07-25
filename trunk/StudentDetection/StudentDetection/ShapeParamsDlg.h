@@ -26,7 +26,8 @@ public:
 	CSliderCtrl m_sliderLength;
 	afx_msg void OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
 	
-	BOOL OnEraseBkgnd(CDC* pDC);	
+	BOOL OnEraseBkgnd(CDC* pDC);
+	BOOL SBitdraw(CDC *pDC, UINT nIDResource);
 	HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 
 	CEdit m_editThreshold;

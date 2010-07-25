@@ -66,6 +66,17 @@ END_MESSAGE_MAP()
 
 SnakeDetector * CStudentDetectionDlg::detector = NULL;
 WindowParams * CStudentDetectionDlg::m_windowParam = NULL;
+CvCapture * CStudentDetectionDlg::capture = NULL;
+IplImage * CStudentDetectionDlg::mask = NULL;
+IplImage * CStudentDetectionDlg::result = NULL;
+IplImage * CStudentDetectionDlg::subtract = NULL;
+IplImage * CStudentDetectionDlg::frame = NULL;
+IplImage * CStudentDetectionDlg::hair_canny = NULL;
+CvMemStorage * CStudentDetectionDlg::storage = NULL;
+CvSeq * CStudentDetectionDlg::contours = NULL;
+GaussFilterColor * CStudentDetectionDlg::m_gauss = NULL;
+HoGProcessor * CStudentDetectionDlg::hog = NULL;
+CvSVM * CStudentDetectionDlg::svm = NULL;
 
 CStudentDetectionDlg::CStudentDetectionDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CStudentDetectionDlg::IDD, pParent)
@@ -77,15 +88,50 @@ CStudentDetectionDlg::CStudentDetectionDlg(CWnd* pParent /*=NULL*/)
 	CStudentDetectionDlg::m_windowParam->LoadParamsFromXML("config.xml");
 
 	CStudentDetectionDlg::detector = new SnakeDetector( "shape.xml" );
+	CStudentDetectionDlg::m_gauss = new GaussFilterColor();
+	CStudentDetectionDlg::hog = new HoGProcessor();
+	CStudentDetectionDlg::svm = new CvSVM();
 }
 
 CStudentDetectionDlg::~CStudentDetectionDlg() {
 	if (CStudentDetectionDlg::detector != NULL)
 		delete CStudentDetectionDlg::detector;
+
 	if(!m_windowParam->m_isStopVideo)	
 		m_windowParam->m_isStopVideo = true;
+
 	if (CStudentDetectionDlg::m_windowParam != NULL)
 		delete CStudentDetectionDlg::m_windowParam;
+
+	if (CStudentDetectionDlg::capture != NULL)
+		cvReleaseCapture(&CStudentDetectionDlg::capture);
+
+	if (CStudentDetectionDlg::mask != NULL)
+		cvReleaseImage(&CStudentDetectionDlg::mask);
+
+	if (CStudentDetectionDlg::result != NULL)
+		cvReleaseImage(&CStudentDetectionDlg::result);
+
+	if (CStudentDetectionDlg::subtract != NULL)
+		cvReleaseImage(&CStudentDetectionDlg::subtract);
+
+	if (CStudentDetectionDlg::storage != NULL)
+		cvReleaseMemStorage(&CStudentDetectionDlg::storage);
+
+	if (CStudentDetectionDlg::frame != NULL)
+		cvReleaseImage(&CStudentDetectionDlg::frame);
+
+	if (CStudentDetectionDlg::hair_canny != NULL)
+		cvReleaseImage(&CStudentDetectionDlg::hair_canny);
+
+	if (CStudentDetectionDlg::m_gauss != NULL)
+		delete CStudentDetectionDlg::m_gauss;
+
+	if (CStudentDetectionDlg::hog != NULL)
+		delete CStudentDetectionDlg::hog;
+
+	if (CStudentDetectionDlg::svm != NULL)
+		delete CStudentDetectionDlg::svm;
 }
 
 void CStudentDetectionDlg::DoDataExchange(CDataExchange* pDX)
@@ -184,7 +230,6 @@ BOOL CStudentDetectionDlg::OnInitDialog()
 	SetIcon(m_hIcon, TRUE);			// Set big icon
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
-	// TODO: Add extra initialization here
 	//init checkboxes
 	m_checkViewHair.SetCheck(1);
 	CStudentDetectionDlg::m_windowParam->m_isViewHairDetection = 1;
@@ -258,9 +303,7 @@ HCURSOR CStudentDetectionDlg::OnQueryDragIcon()
 }
 
 void CStudentDetectionDlg::OnTcnSelchangeTabParam(NMHDR *pNMHDR, LRESULT *pResult)
-{
-	// TODO: Add your control notification handler code here
-	
+{	
 	if( m_tabParams.GetCurSel()==0)
 	{
 		m_tabHeadParams->ShowWindow( SW_SHOWNA );
@@ -294,74 +337,65 @@ void CStudentDetectionDlg::OnMainVideo()
 
 void CStudentDetectionDlg::OnMainExit()
 {
-	// TODO: Add your command handler code here
 	OnOK();
 }
 
 void CStudentDetectionDlg::OnMainTraindata()
 {
-	// TODO: Add your command handler code here
 	TrainDataDlg dlg;
 	dlg.DoModal();
 }
 
 void CStudentDetectionDlg::OnMainAbout()
 {
-	// TODO: Add your command handler code here
 	AboutDlg dlg;
 	dlg.DoModal();
 }
 
 UINT playVideoThread(LPVOID lParam)
 {	
-	WindowParams* param = (WindowParams*)lParam;
+	WindowParams* param = CStudentDetectionDlg::m_windowParam;
 	Utils utils;
 	
-	CvCapture *capture = cvCaptureFromFile(param->m_videoPath);	
-	if (capture == NULL) {
-	//	printf("Cannot open video.\n");
+	CStudentDetectionDlg::capture = cvCaptureFromFile(param->m_videoPath);	
+	if (CStudentDetectionDlg::capture == NULL) {
 		return EXIT_FAILURE;
 	}
-
-	//ofstream outFile;
-	//outFile.open("abc.txt");
-
 	
-	int count = 0;
+
+	//int count = 0;
 	int student_count = 0;
-	float speed;
-	time_t start = time(NULL);
+	//float speed;
+	//time_t start = time(NULL);
 
-	IplImage *frame = cvQueryFrame(capture);
-	IplImage *subtract;
-	IplImage *mask = cvLoadImage(param->m_maskPath, CV_LOAD_IMAGE_GRAYSCALE);	
-	IplImage *result = cvCloneImage(frame);
-	IplImage *hair_canny = cvCreateImage(cvGetSize(frame), IPL_DEPTH_8U, 1);
+	CStudentDetectionDlg::frame = cvQueryFrame(CStudentDetectionDlg::capture);
+	CStudentDetectionDlg::mask = cvLoadImage(param->m_maskPath, CV_LOAD_IMAGE_GRAYSCALE);	
+	CStudentDetectionDlg::result = cvCloneImage(CStudentDetectionDlg::frame);
+	CStudentDetectionDlg::hair_canny = cvCreateImage(cvGetSize(CStudentDetectionDlg::frame), IPL_DEPTH_8U, 1);
 
 
-	int fps = cvGetCaptureProperty(capture, CV_CAP_PROP_FPS);
+	int fps = cvGetCaptureProperty(CStudentDetectionDlg::capture, CV_CAP_PROP_FPS);
 
-	CvMemStorage *storage = cvCreateMemStorage();		
-	CvSeq *contours = 0;
+	CStudentDetectionDlg::storage = cvCreateMemStorage();		
+	CStudentDetectionDlg::contours = 0;
 
-	GaussFilterColor m_gauss;
-	m_gauss.LoadData(param->m_modelGaussPath);
-	m_gauss.SetThreshold(param->m_DetectionParams.m_Gaussian_Params.m_fThreshold);
+	GaussFilterColor *m_gauss = CStudentDetectionDlg::m_gauss;
+	m_gauss->LoadData(param->m_modelGaussPath);
+	m_gauss->SetThreshold(param->m_DetectionParams.m_Gaussian_Params.m_fThreshold);
 
-	HoGProcessor hog;
-	hog.SetParams(param->m_DetectionParams.m_HOG_Params.m_cell, param->m_DetectionParams.m_HOG_Params.m_block, param->m_DetectionParams.m_HOG_Params.m_fStepOverlap);
+	HoGProcessor *hog = CStudentDetectionDlg::hog;
+	hog->SetParams(param->m_DetectionParams.m_HOG_Params.m_cell, param->m_DetectionParams.m_HOG_Params.m_block, param->m_DetectionParams.m_HOG_Params.m_fStepOverlap);
 
-	CvSVM svm;
-	svm.load(param->m_modelSVMPath);
+	CvSVM *svm = CStudentDetectionDlg::svm;
+	svm->load(param->m_modelSVMPath);
 
 	CvRect window = cvRect(0,0,48,48);
 				
 	vector<CvRect> vectorRect;
 	while (1) {
-		frame = cvQueryFrame(capture);
+		CStudentDetectionDlg::frame = cvQueryFrame(CStudentDetectionDlg::capture);
 		
-		if (frame == NULL) {
-	//		printf("End video.\n");
+		if (CStudentDetectionDlg::frame == NULL) {
 			break;
 		}				
 		
@@ -371,35 +405,46 @@ UINT playVideoThread(LPVOID lParam)
 		student_count = 0;
 		vectorRect.clear();	
 
-		subtract = m_gauss.Classify(frame, mask, param->m_DetectionParams.m_Gaussian_Params.m_fThreshold);
+		CStudentDetectionDlg::subtract = m_gauss->Classify(
+			CStudentDetectionDlg::frame, 
+			CStudentDetectionDlg::mask, 
+			param->m_DetectionParams.m_Gaussian_Params.m_fThreshold);
 
-		cvSmooth(subtract, hair_canny, CV_MEDIAN);
-		cvCanny(hair_canny, hair_canny, 10, 100);
+		cvSmooth(CStudentDetectionDlg::subtract, CStudentDetectionDlg::hair_canny, CV_MEDIAN);
+		cvCanny(CStudentDetectionDlg::hair_canny, CStudentDetectionDlg::hair_canny, 10, 100);
 		
-		cvFindContours(subtract, storage, &contours, sizeof(CvContour), CV_RETR_EXTERNAL);
+		cvFindContours(CStudentDetectionDlg::subtract, CStudentDetectionDlg::storage, &CStudentDetectionDlg::contours, sizeof(CvContour), CV_RETR_EXTERNAL);
 
-		cvCopyImage(frame, result);
+		cvCopyImage(CStudentDetectionDlg::frame, CStudentDetectionDlg::result);
 
-		if (contours) {								
-			while (contours != NULL) {				
-				CvRect rectHead = cvBoundingRect(contours);					
-				if(!utils.CheckRectHead(rectHead, frame->height, param->m_DetectionParams.m_Head_Params))
+		if (CStudentDetectionDlg::contours) {								
+			while (CStudentDetectionDlg::contours != NULL) {				
+				CvRect rectHead = cvBoundingRect(CStudentDetectionDlg::contours);					
+				if(!utils.CheckRectHead(
+					rectHead, 
+					CStudentDetectionDlg::frame->height, 
+					param->m_DetectionParams.m_Head_Params))
 				{										
 					if(param->m_isViewHairDetection)
-						cvRectangle(result, cvPoint(rectHead.x, rectHead.y), cvPoint(rectHead.x + rectHead.width, rectHead.y + rectHead.height), CV_RGB(255,255,0));
-					contours = contours->h_next;
+						cvRectangle(CStudentDetectionDlg::result, cvPoint(rectHead.x, rectHead.y), cvPoint(rectHead.x + rectHead.width, rectHead.y + rectHead.height), CV_RGB(255,255,0));
+					CStudentDetectionDlg::contours = CStudentDetectionDlg::contours->h_next;
 					continue;
 				}					
 					
 				if(param->m_isViewHairDetection)
-					cvRectangle(result, cvPoint(rectHead.x, rectHead.y), cvPoint(rectHead.x + rectHead.width, rectHead.y + rectHead.height), CV_RGB(255,255,255));
+					cvRectangle(CStudentDetectionDlg::result, cvPoint(rectHead.x, rectHead.y), cvPoint(rectHead.x + rectHead.width, rectHead.y + rectHead.height), CV_RGB(255,255,255));
 					
-				CvRect detectedRect = hog.detectObject(&svm, frame, result, rectHead, param->m_DetectionParams.m_SVM_Params.m_fConfidenceScore);
+				CvRect detectedRect = hog->detectObject(
+					svm,
+					CStudentDetectionDlg::frame, 
+					CStudentDetectionDlg::result, 
+					rectHead, 
+					param->m_DetectionParams.m_SVM_Params.m_fConfidenceScore);
 				if(detectedRect.width > 0){
 					vectorRect.push_back(detectedRect);
 				}
 		
-				contours = contours->h_next;					
+				CStudentDetectionDlg::contours = CStudentDetectionDlg::contours->h_next;					
 			}
 		}
 		
@@ -412,7 +457,7 @@ UINT playVideoThread(LPVOID lParam)
 
 			Snake *fit_snake;
 			int current_y = rect.y+rect.height*1.0f/3;
-			int frame_height_step = frame->height*1.0/3;
+			int frame_height_step = CStudentDetectionDlg::frame->height*1.0/3;
 			int dis = 1;
 			if (current_y >= 0 && current_y < frame_height_step) {
 				// far -> small shape
@@ -422,11 +467,11 @@ UINT playVideoThread(LPVOID lParam)
 				// medium shape
 				dis = 2;
 			}
-			else if (current_y >= frame_height_step*2 && current_y <frame->height) {
+			else if (current_y >= frame_height_step*2 && current_y < CStudentDetectionDlg::frame->height) {
 				// near -> big shape
 				dis = 1;
 			}
-			fit_snake = CStudentDetectionDlg::detector->GetSnake(hair_canny, dis, location, rect);
+			fit_snake = CStudentDetectionDlg::detector->GetSnake(CStudentDetectionDlg::hair_canny, dis, location, rect);
 
 			// rect co shape dau nguoi trong if
 			if (fit_snake != NULL)
@@ -434,41 +479,28 @@ UINT playVideoThread(LPVOID lParam)
 				student_count++;
 				if(param->m_isViewShapeDetection) {
 					// ve shape
-					fit_snake->DrawCurve(result, location);			
+					fit_snake->DrawCurve(CStudentDetectionDlg::result, location);			
 				}
 			}			
 		}
 		
 		if(param->m_isViewSVMDetection)
-			utils.OutputResult(result, vectorRect, CV_RGB(255,0,0));
+			utils.OutputResult(CStudentDetectionDlg::result, vectorRect, CV_RGB(255,0,0));
 					
-		count++;
+		//count++;
 
-		PostMessage(param->m_hWnd,WM_USER_THREAD_UPDATE_PROGRESS,(WPARAM)result,0);
+		PostMessage(param->m_hWnd,WM_USER_THREAD_UPDATE_PROGRESS,(WPARAM)CStudentDetectionDlg::result,0);
 		// chinh lai cho nay, doi lai bien dem count (thoa ca 2 SVM + shape)
 		PostMessage(param->m_hWnd,WM_USER_THREAD_UPDATE_INFO,(WPARAM)student_count,0);
-		cvReleaseImage(&subtract);
-			
-	//	outFile<<student_count<<endl;
 	}
 
-	//outFile.close();
 
+	//time_t end = time(NULL);
+	//speed = count*1.0/(end-start);
+	//printf("fps: %2.3f.\n", speed);
+
+	svm->clear();
 	PostMessage(param->m_hWnd,WM_USER_THREAD_FINISHED,0,0);
-
-	time_t end = time(NULL);
-	speed = count*1.0/(end-start);
-	printf("fps: %2.3f.\n", speed);
-
-	cvDestroyAllWindows();
-
-	svm.clear();
-
-	cvReleaseCapture(&capture);
-	cvReleaseImage(&mask);
-	cvReleaseImage(&result);		
-	cvReleaseImage(&subtract);		
-	cvReleaseMemStorage(&storage);	
 }
 void CStudentDetectionDlg::OnBnClickedBtnPlay()
 {

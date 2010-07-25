@@ -21,7 +21,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	BOOL OnEraseBkgnd(CDC* pDC);
-	bool SBitdraw(CDC *pDC, UINT nIDResource);
+	BOOL SBitdraw(CDC *pDC, UINT nIDResource);
 	HBRUSH OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor);
 	Head_Params m_params;
 	CEdit m_editMinWidthHead;

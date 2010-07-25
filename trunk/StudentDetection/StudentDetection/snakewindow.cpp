@@ -18,6 +18,7 @@ SnakeWindow::SnakeWindow(const char *sData) {
 	this->l = 5;
 	this->threshold = 0.15f;
 	this->delta = 4;
+	fclose(data);
 }
 
 SnakeWindow::SnakeWindow(const char *sData, float threshold, float delta, int l) {
@@ -37,6 +38,7 @@ SnakeWindow::SnakeWindow(const char *sData, float threshold, float delta, int l)
 	this->l = l;
 	this->threshold = threshold;
 	this->delta = delta;
+	fclose(data);
 }
 
 

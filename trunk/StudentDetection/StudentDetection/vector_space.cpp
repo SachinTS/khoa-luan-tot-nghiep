@@ -28,6 +28,7 @@ void VectorSpace::GenerateSnake() {
 	if (snakes.size() > 0) {
 		return;
 	}
+
 	vector<CvPoint> ctrl_points = this->origin_snake->ctrl_points;
 	int size = ctrl_points.size();
 	// (Qx Qy)^T
