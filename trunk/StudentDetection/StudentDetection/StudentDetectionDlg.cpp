@@ -476,7 +476,6 @@ UINT playVideoThread(LPVOID lParam)
 	cvReleaseImage(&result);
 	cvReleaseImage(&mask);
 	cvReleaseImage(&hair_canny);
-	cvReleaseImage(&frame);
 	cvReleaseImage(&subtract);
 	cvReleaseCapture(&capture);
 	cvReleaseMemStorage(&storage);
