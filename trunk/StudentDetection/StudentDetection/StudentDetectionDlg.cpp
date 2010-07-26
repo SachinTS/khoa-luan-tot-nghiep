@@ -468,6 +468,7 @@ UINT playVideoThread(LPVOID lParam)
 			PostMessage(param->m_hWnd,WM_USER_THREAD_UPDATE_PROGRESS,(WPARAM)result,0);
 			// chinh lai cho nay, doi lai bien dem count (thoa ca 2 SVM + shape)
 			PostMessage(param->m_hWnd,WM_USER_THREAD_UPDATE_INFO,(WPARAM)student_count,0);
+			//PostMessage(param->m_hWnd,WM_USER_THREAD_UPDATE_INFO,(WPARAM)vectorRect.size(),0);
 		}
 	}
 
