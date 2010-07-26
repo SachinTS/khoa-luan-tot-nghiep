@@ -87,6 +87,6 @@ public:
 
 	CRect m_rectPlayVideo;
 	CEdit m_editStudentCount;
-	CButton m_btnPause;
+	CButtonST m_btnPause;
 	afx_msg void OnBnClickedBtnPause();
 };

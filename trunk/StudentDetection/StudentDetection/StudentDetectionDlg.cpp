@@ -216,6 +216,8 @@ BOOL CStudentDetectionDlg::OnInitDialog()
 	m_btnPlay.SetFlat();
 	m_btnStop.SetBitmaps(IDB_BMP_STOP, RGB(255, 255, 255));
 	m_btnStop.SetFlat();
+	m_btnPause.SetBitmaps(IDB_BMP_PAUSE, RGB(255, 255, 255));
+	m_btnPause.SetFlat();
 
 	m_btnApplyParams.SetBitmaps(IDB_BMP_OK, RGB(255, 0, 0));
 	m_btnApplyParams.SetFlat();

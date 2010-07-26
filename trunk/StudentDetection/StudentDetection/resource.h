@@ -26,6 +26,8 @@
 #define IDB_BMP_OK                      156
 #define IDB_B                           157
 #define IDB_BMP_VIDEO                   157
+#define IDB_BITMAP2                     158
+#define IDB_BMP_PAUSE                   158
 #define IDC_EDIT1                       1006
 #define IDC_EDIT_THRESHOLD              1006
 #define IDC_EDIT_MAX_AREA_AT_TOP        1006
@@ -104,7 +106,6 @@
 #define IDC_EDIT3                       1058
 #define IDC_EDIT_GAUSSIAN_THRESHOLD     1058
 #define IDC_SLIDER_SVM_CONFIDENCESCORE  1059
-#define IDC_BUTTON1                     1059
 #define IDC_BTN_PAUSE                   1059
 #define IDC_EDIT_GAUSSIAN_THRESHOLD2    1060
 #define IDC_EDIT_SVM_CONFIDENCESCORE    1060
@@ -118,7 +119,7 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        158
+#define _APS_NEXT_RESOURCE_VALUE        159
 #define _APS_NEXT_COMMAND_VALUE         32776
 #define _APS_NEXT_CONTROL_VALUE         1060
 #define _APS_NEXT_SYMED_VALUE           101

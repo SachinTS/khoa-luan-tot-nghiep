@@ -467,6 +467,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\res\pause.bmp"
+				>
+			</File>
+			<File
 				RelativePath=".\res\play.bmp"
 				>
 			</File>

@@ -99,14 +99,14 @@ BEGIN
     CONTROL         "View Hair Window",IDC_CHECK_VIEW_HAIR,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,245,36,73,10
     CONTROL         "View SVM result Window",IDC_CHECK_VIEW_SVM,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,323,36,93,10
     CONTROL         "View Shape Matching",IDC_CHECK_VIEW_SHAPE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,420,36,83,10
-    PUSHBUTTON      "",IDC_BTN_PLAY,342,326,22,20
-    PUSHBUTTON      "",IDC_BTN_STOP,368,326,23,20
+    PUSHBUTTON      "",IDC_BTN_PLAY,327,326,22,20
+    PUSHBUTTON      "",IDC_BTN_STOP,353,326,23,20
     CONTROL         151,IDC_PICBOX,"Static",SS_BITMAP | SS_CENTERIMAGE,342,60,20,20,WS_EX_TRANSPARENT
     CONTROL         152,IDC_STATIC,"Static",SS_BITMAP | SS_CENTERIMAGE,212,31,21,20,WS_EX_TRANSPARENT
     PUSHBUTTON      "",IDC_BTN_APPLY_PARAMS,95,326,26,20
     CONTROL         157,IDC_PLAY_VIDEO,"Static",SS_BITMAP | SS_CENTERIMAGE | WS_BORDER,210,92,296,226,WS_EX_DLGMODALFRAME | WS_EX_CLIENTEDGE
     EDITTEXT        IDC_EDIT_STUDENT_COUNT,369,63,40,14,ES_AUTOHSCROLL | ES_READONLY,WS_EX_TRANSPARENT
-    PUSHBUTTON      "pause",IDC_BTN_PAUSE,397,326,29,20
+    PUSHBUTTON      "",IDC_BTN_PAUSE,382,326,22,20
 END
 
 IDD_DLG_HEAD_PARAMS DIALOGEX 0, 0, 192, 290
@@ -380,6 +380,7 @@ IDB_BMP_BACKGROUND1     BITMAP                  "res\\background1.bmp"
 IDB_BMP_CANCEL          BITMAP                  "res\\btnCancel.bmp"
 IDB_BMP_OK              BITMAP                  "res\\btnOk.bmp"
 IDB_BMP_VIDEO           BITMAP                  "res\\video.bmp"
+IDB_BMP_PAUSE           BITMAP                  "res\\pause.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
