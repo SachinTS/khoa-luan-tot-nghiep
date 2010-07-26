@@ -104,6 +104,8 @@
 #define IDC_EDIT3                       1058
 #define IDC_EDIT_GAUSSIAN_THRESHOLD     1058
 #define IDC_SLIDER_SVM_CONFIDENCESCORE  1059
+#define IDC_BUTTON1                     1059
+#define IDC_BTN_PAUSE                   1059
 #define IDC_EDIT_GAUSSIAN_THRESHOLD2    1060
 #define IDC_EDIT_SVM_CONFIDENCESCORE    1060
 #define ID_INPUT_VIDEO                  32771
@@ -118,7 +120,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        158
 #define _APS_NEXT_COMMAND_VALUE         32776
-#define _APS_NEXT_CONTROL_VALUE         1059
+#define _APS_NEXT_CONTROL_VALUE         1060
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

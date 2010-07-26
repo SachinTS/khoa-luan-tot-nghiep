@@ -117,6 +117,7 @@ void CStudentDetectionDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BTN_APPLY_PARAMS, m_btnApplyParams);	
 	DDX_Control(pDX, IDC_PLAY_VIDEO, m_videoPlayer);
 	DDX_Control(pDX, IDC_EDIT_STUDENT_COUNT, m_editStudentCount);
+	DDX_Control(pDX, IDC_BTN_PAUSE, m_btnPause);
 }
 
 BEGIN_MESSAGE_MAP(CStudentDetectionDlg, CDialog)
@@ -141,6 +142,7 @@ BEGIN_MESSAGE_MAP(CStudentDetectionDlg, CDialog)
 	ON_WM_ERASEBKGND()
 	ON_WM_CTLCOLOR()
 	ON_STN_CLICKED(IDC_PLAY_VIDEO, &CStudentDetectionDlg::OnStnClickedPlayVideo)
+	ON_BN_CLICKED(IDC_BTN_PAUSE, &CStudentDetectionDlg::OnBnClickedBtnPause)
 END_MESSAGE_MAP()
 
 
@@ -221,6 +223,9 @@ BOOL CStudentDetectionDlg::OnInitDialog()
 	m_windowParam->m_isStopVideo = true;
 
 	m_editStudentCount.SetWindowTextW(_T("0"));
+
+	m_videoPlayer.GetClientRect(m_rectPlayVideo);
+
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
 
@@ -361,104 +366,107 @@ UINT playVideoThread(LPVOID lParam)
 				
 	vector<CvRect> vectorRect;
 	while (1) {
-		frame = cvQueryFrame(capture);
-		
-		if (frame == NULL) {
-			break;
-		}				
-		
-		if(param->m_isStopVideo)		
-			break;
-		
-		student_count = 0;
-		vectorRect.clear();	
+		if(!param->m_isPauseVideo)
+		{
+			frame = cvQueryFrame(capture);
+			
+			if (frame == NULL) {
+				break;
+			}				
+			
+			if(param->m_isStopVideo)		
+				break;
+			
+			student_count = 0;
+			vectorRect.clear();	
 
-		subtract = m_gauss->Classify(
-			frame, 
-			mask, 
-			param->m_DetectionParams.m_Gaussian_Params.m_fThreshold);
+			subtract = m_gauss->Classify(
+				frame, 
+				mask, 
+				param->m_DetectionParams.m_Gaussian_Params.m_fThreshold);
 
-		cvSmooth(subtract, hair_canny, CV_MEDIAN);
-		cvCanny(hair_canny, hair_canny, 10, 100);
-		
-		cvFindContours(subtract, storage, &contours, sizeof(CvContour), CV_RETR_EXTERNAL);
+			cvSmooth(subtract, hair_canny, CV_MEDIAN);
+			cvCanny(hair_canny, hair_canny, 10, 100);
+			
+			cvFindContours(subtract, storage, &contours, sizeof(CvContour), CV_RETR_EXTERNAL);
 
-		cvCopyImage(frame, result);
+			cvCopyImage(frame, result);
 
-		if (contours) {								
-			while (contours != NULL) {				
-				CvRect rectHead = cvBoundingRect(contours);					
-				if(!utils.CheckRectHead(
-					rectHead, 
-					frame->height, 
-					param->m_DetectionParams.m_Head_Params))
-				{										
+			if (contours) {								
+				while (contours != NULL) {				
+					CvRect rectHead = cvBoundingRect(contours);					
+					if(!utils.CheckRectHead(
+						rectHead, 
+						frame->height, 
+						param->m_DetectionParams.m_Head_Params))
+					{										
+						if(param->m_isViewHairDetection)
+							cvRectangle(result, cvPoint(rectHead.x, rectHead.y), cvPoint(rectHead.x + rectHead.width, rectHead.y + rectHead.height), CV_RGB(255,255,0));
+						contours = contours->h_next;
+						continue;
+					}					
+						
 					if(param->m_isViewHairDetection)
-						cvRectangle(result, cvPoint(rectHead.x, rectHead.y), cvPoint(rectHead.x + rectHead.width, rectHead.y + rectHead.height), CV_RGB(255,255,0));
-					contours = contours->h_next;
-					continue;
-				}					
-					
-				if(param->m_isViewHairDetection)
-					cvRectangle(result, cvPoint(rectHead.x, rectHead.y), cvPoint(rectHead.x + rectHead.width, rectHead.y + rectHead.height), CV_RGB(255,255,255));
-					
-				CvRect detectedRect = hog->detectObject(
-					svm,
-					frame, 
-					result, 
-					rectHead, 
-					param->m_DetectionParams.m_SVM_Params.m_fConfidenceScore);
-				if(detectedRect.width > 0){
-					vectorRect.push_back(detectedRect);
+						cvRectangle(result, cvPoint(rectHead.x, rectHead.y), cvPoint(rectHead.x + rectHead.width, rectHead.y + rectHead.height), CV_RGB(255,255,255));
+						
+					CvRect detectedRect = hog->detectObject(
+						svm,
+						frame, 
+						result, 
+						rectHead, 
+						param->m_DetectionParams.m_SVM_Params.m_fConfidenceScore);
+					if(detectedRect.width > 0){
+						vectorRect.push_back(detectedRect);
+					}
+			
+					contours = contours->h_next;					
 				}
-		
-				contours = contours->h_next;					
 			}
-		}
-		
-		vectorRect = utils.ConnectOverlapRects(vectorRect);
+			
+			vectorRect = utils.ConnectOverlapRects(vectorRect);
 
-		for (unsigned int i = 0; i < vectorRect.size(); i++) {
-			// kiem tra rect co shape
-			CvRect rect = vectorRect.at(i);
-			CvPoint location = cvPoint(rect.x+rect.width*1.0f/3, rect.y+rect.height*1.0f/3);
+			for (unsigned int i = 0; i < vectorRect.size(); i++) {
+				// kiem tra rect co shape
+				CvRect rect = vectorRect.at(i);
+				CvPoint location = cvPoint(rect.x+rect.width*1.0f/3, rect.y+rect.height*1.0f/3);
 
-			Snake *fit_snake;
-			int current_y = rect.y+rect.height*1.0f/3;
-			int frame_height_step = frame->height*1.0/3;
-			int dis = 1;
-			if (current_y >= 0 && current_y < frame_height_step) {
-				// far -> small shape
-				dis = 3;
-			}
-			else if (current_y >= frame_height_step && current_y < frame_height_step*2) {
-				// medium shape
-				dis = 2;
-			}
-			else if (current_y >= frame_height_step*2 && current_y < frame->height) {
-				// near -> big shape
-				dis = 1;
-			}
-			fit_snake = CStudentDetectionDlg::detector->GetSnake(hair_canny, dis, location, rect);
-
-			// rect co shape dau nguoi trong if
-			if (fit_snake != NULL)
-			{
-				student_count++;
-				if(param->m_isViewShapeDetection) {
-					// ve shape
-					fit_snake->DrawCurve(result, location);			
+				Snake *fit_snake;
+				int current_y = rect.y+rect.height*1.0f/3;
+				int frame_height_step = frame->height*1.0/3;
+				int dis = 1;
+				if (current_y >= 0 && current_y < frame_height_step) {
+					// far -> small shape
+					dis = 3;
 				}
-			}			
-		}
-		
-		if(param->m_isViewSVMDetection)
-			utils.OutputResult(result, vectorRect, CV_RGB(255,0,0));
-					
+				else if (current_y >= frame_height_step && current_y < frame_height_step*2) {
+					// medium shape
+					dis = 2;
+				}
+				else if (current_y >= frame_height_step*2 && current_y < frame->height) {
+					// near -> big shape
+					dis = 1;
+				}
+				fit_snake = CStudentDetectionDlg::detector->GetSnake(hair_canny, dis, location, rect);
 
-		PostMessage(param->m_hWnd,WM_USER_THREAD_UPDATE_PROGRESS,(WPARAM)result,0);
-		// chinh lai cho nay, doi lai bien dem count (thoa ca 2 SVM + shape)
-		PostMessage(param->m_hWnd,WM_USER_THREAD_UPDATE_INFO,(WPARAM)student_count,0);
+				// rect co shape dau nguoi trong if
+				if (fit_snake != NULL)
+				{
+					student_count++;
+					if(param->m_isViewShapeDetection) {
+						// ve shape
+						fit_snake->DrawCurve(result, location);			
+					}
+				}			
+			}
+			
+			if(param->m_isViewSVMDetection)
+				utils.OutputResult(result, vectorRect, CV_RGB(255,0,0));
+						
+
+			PostMessage(param->m_hWnd,WM_USER_THREAD_UPDATE_PROGRESS,(WPARAM)result,0);
+			// chinh lai cho nay, doi lai bien dem count (thoa ca 2 SVM + shape)
+			PostMessage(param->m_hWnd,WM_USER_THREAD_UPDATE_INFO,(WPARAM)student_count,0);
+		}
 	}
 
 
@@ -526,15 +534,12 @@ LRESULT CStudentDetectionDlg::OnThreadUpdateProgress(WPARAM wParam,LPARAM lParam
 {
 	IplImage* frame = (IplImage*)wParam;
 	IplImage* displayImg;
-	ImageProcessor imgProcess;
-
-	CRect clientRect;	
-	m_videoPlayer.GetClientRect(clientRect);
+	ImageProcessor imgProcess;	
 
 	CvvImage cvv;
-	displayImg = imgProcess.getSubImageAndResize(frame, cvRect(0,0,frame->width, frame->height), clientRect.Width(), clientRect.Height());
+	displayImg = imgProcess.getSubImageAndResize(frame, cvRect(0,0,frame->width, frame->height), m_rectPlayVideo.Width(), m_rectPlayVideo.Height());
 	cvv.CopyOf(displayImg);
-	cvv.Show(m_videoPlayer.GetDC()->m_hDC, 0, 0, clientRect.Width(), clientRect.Height());
+	cvv.Show(m_videoPlayer.GetDC()->m_hDC, 0, 0, m_rectPlayVideo.Width(), m_rectPlayVideo.Height());
 	
 	cvv.Destroy();
 	cvReleaseImage(&displayImg);
@@ -655,4 +660,10 @@ void CStudentDetectionDlg::OnStnClickedPlayVideo()
 			CStudentDetectionDlg::m_windowParam->m_maskPath = utils.ConvertToChar(dlg.m_maskPath);
 		}
 	}
+}
+
+void CStudentDetectionDlg::OnBnClickedBtnPause()
+{
+	// TODO: Add your control notification handler code here
+	m_windowParam->m_isPauseVideo = !m_windowParam->m_isPauseVideo;
 }

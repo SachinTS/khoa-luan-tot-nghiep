@@ -9,6 +9,7 @@ WindowParams::WindowParams(void)
 	m_videoPath = NULL;
 
 	m_isStopVideo = false;
+	m_isPauseVideo = false;
 }
 
 WindowParams::~WindowParams(void)

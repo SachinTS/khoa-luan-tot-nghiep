@@ -8,6 +8,7 @@ public:
 	int m_isViewSVMDetection;
 	int m_isViewShapeDetection;
 	int m_isStopVideo;
+	int m_isPauseVideo;
 
 	char* m_videoPath;
 	char* m_maskPath;
