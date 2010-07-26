@@ -63,7 +63,7 @@ void VectorSpace::GenerateSnake() {
 	for (int i = -12; i <= 18; i+=3) {
 		// translate Oy
 		for (int j = -21; j <= 12; j+=3) {
-			// scale x
+			// scale
 			for (float k = 0.9; k <= 1.1; k += 0.1) {
 				// rotate
 				for (float r = -5; r <= 5; r += 5) {
