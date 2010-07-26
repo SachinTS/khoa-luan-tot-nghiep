@@ -171,6 +171,7 @@ Snake::~Snake(void)
 	this->ctrl_points.clear();
 	cvReleaseMat(&Snake::Global_B);
 	cvReleaseMat(&Snake::Global_B_Step);
+	cvReleaseMat(&ctrl_mat);
 }
 
 float Snake::B1(float u) {
@@ -280,7 +281,7 @@ CvMat *Snake::CurveCalculate() {
 	return ctrl_mat;
 }
 
-CvMat *Snake::DrawCurve(IplImage *image) {
+void Snake::DrawCurve(IplImage *image) {
 
     CvMat *curve_mat = cvCreateMat(round(N*1.0/this->step+3), 2, CV_32FC1);
 	CvMat *global_mat = Snake::Global_B_Step;
@@ -293,10 +294,10 @@ CvMat *Snake::DrawCurve(IplImage *image) {
 		cvCircle(image, cvPoint(x, y), 0, CV_RGB(255, 0, 0), 1);
 	}
     //N+3 x 2 matrix
-    return curve_mat;
+    cvReleaseMat(&curve_mat);
 }
 
-CvMat *Snake::DrawCurve(IplImage *image, CvPoint location) {
+void Snake::DrawCurve(IplImage *image, CvPoint location) {
 
 	CvMat *curve_mat = cvCreateMat(round(N*1.0/this->step+3), 2, CV_32FC1);
 	CvMat *global_mat = Snake::Global_B_Step;
@@ -309,7 +310,7 @@ CvMat *Snake::DrawCurve(IplImage *image, CvPoint location) {
 		cvCircle(image, cvPoint(x+location.x, y+location.y), 0, CV_RGB(0, 255, 255), 2);
 	}
     //N+3 x 2 matrix
-    return curve_mat;
+    cvReleaseMat(&curve_mat);
 }
 
 CvMat *Snake::BuildingGlobalMatrixWithStep() {

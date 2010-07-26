@@ -37,8 +37,8 @@ public:
 	Snake(FILE *data, int m);
 	Snake(vector<CvPoint> templ_points);
 	Snake(vector<CvPoint> ctrl_points, bool pad);
-	CvMat *DrawCurve(IplImage *img);
-	CvMat *DrawCurve(IplImage *image, CvPoint location);
+	void DrawCurve(IplImage *img);
+	void DrawCurve(IplImage *image, CvPoint location);
 	double Likelihood(IplImage *edge, int l, float delta, const CvPoint& location);
 	double Likelihood(IplImage *edge, int l, float delta, const CvPoint& location, const CvRect& bounding_rect);
 	~Snake(void);

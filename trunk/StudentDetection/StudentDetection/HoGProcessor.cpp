@@ -415,7 +415,80 @@ CvMat* HoGProcessor::calculateHOG_window(IplImage **integrals, CvRect window, in
 
 	return window_feature_vector;
 }
+CvMat* HoGProcessor::calculateHOG_window(IplImage *img, IplImage **integrals, CvRect window, int normalization){
+	/*
+	 A cell size of 8x8 pixels is considered and each block
+	 is divided into 2x2 such cells(i.e. the block is 16x16 pixels).
+	 So a 64x128 pixels window would be divided into 7x15 overlapping blocks
+	*/
+	int block_start_x, block_start_y, cell_width = m_cell.width;
+	int cell_height = m_cell.height;
+	int block_width = m_block.width, block_height = m_block.height;
 
+	/* The length of the feature vector for a cell is 9
+	(since no. of bins is 9), for block it would be 
+	9*(no. of cells in the block) = 9*4 = 36. And the lenght
+	of the feature vector for a window would be 36*(no. of 
+	blocks in the window)
+	*/
+	int lenghth_feature_of_block = 9 * m_block.height * m_block.width;
+	int num_overlap_block_of_width = ((window.width - cell_width * block_width) / (cell_width * m_fStepOverlap)) + 1;
+	int num_overlap_block_of_height = ((window.height - cell_height * block_height)/ (cell_height * m_fStepOverlap)) + 1;
+	int total_block_of_window = num_overlap_block_of_width * num_overlap_block_of_height ;
+
+	CvMat* window_feature_vector = cvCreateMat(1
+		, total_block_of_window	* lenghth_feature_of_block
+		, CV_32FC1);		  
+	
+	CvMat vector_block;
+	int startcol = 0;
+	
+	cvNamedWindow("aaa");
+	IplImage *imgHog = cvCreateImage(cvSize(9,9), img->depth, 1);
+	IplImage *imgHogShow = cvCreateImage(cvSize(81,81), img->depth, 1);
+	
+	for(block_start_y = window.y; 
+		block_start_y <= window.y + window.height - cell_height * block_height; 
+		block_start_y += cell_height * m_fStepOverlap)
+	{//overllap
+
+			for(block_start_x = window.x; 
+				block_start_x <= window.x + window.width - cell_width * block_width;
+				block_start_x += cell_width * m_fStepOverlap)
+			{//overllap
+				
+				cvGetCols(window_feature_vector, &vector_block, startcol, startcol+36);
+
+				calculateHOG_block(cvRect(block_start_x,
+					  block_start_y, cell_width * block_width, cell_height
+					  * block_height), &vector_block, integrals, cvSize(
+					  cell_width, cell_height), normalization);
+
+				startcol += lenghth_feature_of_block;
+
+				int row=0;
+				int col=0;
+				for(row = 0; row < 9; row++)
+				{
+					for(col = 0; col < 9; col++)
+					{
+						float cell1 = CV_MAT_ELEM(vector_block, float, 0, (9 * row + col));
+						CV_IMAGE_ELEM(imgHog, uchar, row, col) = cell1 * 255;					
+					}
+				}
+
+				cvResize(imgHog, imgHogShow);
+				cvShowImage("aaa", imgHogShow);
+
+				cvWaitKey();			
+			}
+	}
+
+	cvReleaseImage(&imgHog);
+	cvReleaseImage(&imgHogShow);
+
+	return window_feature_vector;
+}
 /* This function takes in a block as a rectangle and
 calculates the hog features for the block by dividing
 it into cells of size cell( the supplied parameter),

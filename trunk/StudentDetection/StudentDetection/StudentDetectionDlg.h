@@ -81,14 +81,6 @@ public:
 	afx_msg void OnStnClickedPlayVideo();
 
 	static SnakeDetector *detector;
-	static CvCapture *capture;
-	static IplImage *mask;
-	static IplImage *result;
-	static IplImage *subtract;
-	static IplImage *frame;
-	static IplImage *hair_canny;
-	static CvMemStorage *storage;
-	static CvSeq *contours;
 	static GaussFilterColor *m_gauss;
 	static HoGProcessor *hog;
 	static CvSVM *svm;
