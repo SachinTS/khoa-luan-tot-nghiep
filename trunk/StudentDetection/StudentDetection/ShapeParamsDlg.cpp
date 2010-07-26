@@ -83,7 +83,7 @@ void CShapeParamsDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 	else if (nPos >= 900 && nPos <= 1300) {
 		m_editConfidenceScore.SetWindowTextW(_T(""));
 		m_editConfidenceScore.SetWindowTextW(utils.ConvertToCString((float)(nPos*1.0/100 - 11)));
-		CStudentDetectionDlg::m_windowParam->m_DetectionParams.m_Gaussian_Params.m_fThreshold = (float)nPos*1.0/100 - 11;
+		CStudentDetectionDlg::m_windowParam->m_DetectionParams.m_SVM_Params.m_fConfidenceScore = (float)nPos*1.0/100 - 11;
 	}
 
 	CDialog::OnHScroll(nSBCode, nPos, pScrollBar);

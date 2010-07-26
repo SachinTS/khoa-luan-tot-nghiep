@@ -488,6 +488,7 @@ double Snake::Likelihood(IplImage *edge, int l, float delta, const CvPoint& loca
 	p = -sum/(2*delta*delta);
 	p = exp(p);
 
+	cvReleaseMat(&curve_mat);
 	return p;
 }
 
@@ -622,5 +623,6 @@ double Snake::Likelihood(IplImage *edge, int l, float delta, const CvPoint& loca
 	p = -sum/(2*delta*delta);
 	p = exp(p);
 
+	cvReleaseMat(&curve_mat);
 	return p;
 }
