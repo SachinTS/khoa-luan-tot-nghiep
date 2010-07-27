@@ -148,6 +148,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="cxcore210.lib cv210.lib highgui210.lib ml210.lib"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -471,11 +472,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\res\play.bmp"
+				RelativePath="C:\Documents and Settings\bin\Desktop\play.bmp"
 				>
 			</File>
 			<File
-				RelativePath="C:\Documents and Settings\bin\Desktop\play.bmp"
+				RelativePath=".\res\play.bmp"
 				>
 			</File>
 			<File
@@ -487,11 +488,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\res\student.bmp"
+				RelativePath="C:\Documents and Settings\bin\Desktop\student.bmp"
 				>
 			</File>
 			<File
-				RelativePath="C:\Documents and Settings\bin\Desktop\student.bmp"
+				RelativePath=".\res\student.bmp"
 				>
 			</File>
 			<File
