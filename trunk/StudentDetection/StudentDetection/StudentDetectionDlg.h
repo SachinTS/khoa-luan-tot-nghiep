@@ -89,4 +89,5 @@ public:
 	CEdit m_editStudentCount;
 	CButtonST m_btnPause;
 	afx_msg void OnBnClickedBtnPause();
+	CEdit m_edit_fps;
 };

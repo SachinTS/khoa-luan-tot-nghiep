@@ -36,6 +36,7 @@
 #define IDC_EDIT2                       1007
 #define IDC_EDIT_LENGTH                 1007
 #define IDC_EDIT_MIN_AREA_AT_BOTTOM     1007
+#define IDC_EDIT_FPS                    1007
 #define IDC_BUTTON2                     1008
 #define IDC_BTN_BROWSE_VIDEO            1008
 #define IDC_EDIT_START_INDEX_SVM        1008

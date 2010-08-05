@@ -10,6 +10,7 @@
 #include "ImageProcessor.h"
 #include "afxwin.h"
 #include "BtnST.h"
+#include "time.h"
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -118,6 +119,7 @@ void CStudentDetectionDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_PLAY_VIDEO, m_videoPlayer);
 	DDX_Control(pDX, IDC_EDIT_STUDENT_COUNT, m_editStudentCount);
 	DDX_Control(pDX, IDC_BTN_PAUSE, m_btnPause);
+	DDX_Control(pDX, IDC_EDIT_FPS, m_edit_fps);
 }
 
 BEGIN_MESSAGE_MAP(CStudentDetectionDlg, CDialog)
@@ -367,6 +369,11 @@ UINT playVideoThread(LPVOID lParam)
 	CvRect window = cvRect(0,0,48,48);
 				
 	vector<CvRect> vectorRect;
+
+	time_t start, end;
+	start = time(NULL);
+	int frameCount=0;
+
 	while (1) {
 		if(!param->m_isPauseVideo)
 		{
@@ -375,6 +382,8 @@ UINT playVideoThread(LPVOID lParam)
 			if (frame == NULL) {
 				break;
 			}				
+
+			frameCount++;
 			
 			if(param->m_isStopVideo)		
 				break;
@@ -403,13 +412,13 @@ UINT playVideoThread(LPVOID lParam)
 						param->m_DetectionParams.m_Head_Params))
 					{										
 						if(param->m_isViewHairDetection)
-							cvRectangle(result, cvPoint(rectHead.x, rectHead.y), cvPoint(rectHead.x + rectHead.width, rectHead.y + rectHead.height), CV_RGB(255,255,0));
+							cvRectangle(result, cvPoint(rectHead.x, rectHead.y), cvPoint(rectHead.x + rectHead.width, rectHead.y + rectHead.height), CV_RGB(255,255,0), 2);
 						contours = contours->h_next;
 						continue;
 					}					
 						
 					if(param->m_isViewHairDetection)
-						cvRectangle(result, cvPoint(rectHead.x, rectHead.y), cvPoint(rectHead.x + rectHead.width, rectHead.y + rectHead.height), CV_RGB(255,255,255));
+						cvRectangle(result, cvPoint(rectHead.x, rectHead.y), cvPoint(rectHead.x + rectHead.width, rectHead.y + rectHead.height), CV_RGB(255,255,0), 2);
 						
 					CvRect detectedRect = hog->detectObject(
 						svm,
@@ -460,10 +469,8 @@ UINT playVideoThread(LPVOID lParam)
 					}
 				}			
 			}
-			
 			if(param->m_isViewSVMDetection)
-				utils.OutputResult(result, vectorRect, CV_RGB(255,0,0));
-						
+				utils.OutputResult(result, vectorRect, CV_RGB(255,0,0));					
 
 			PostMessage(param->m_hWnd,WM_USER_THREAD_UPDATE_PROGRESS,(WPARAM)result,0);
 			// chinh lai cho nay, doi lai bien dem count (thoa ca 2 SVM + shape)
@@ -471,7 +478,9 @@ UINT playVideoThread(LPVOID lParam)
 			//PostMessage(param->m_hWnd,WM_USER_THREAD_UPDATE_INFO,(WPARAM)vectorRect.size(),0);
 		}
 	}
+	end = time(NULL);
 
+	float _fps = ((end - start)*1.0)/frameCount;
 
 	svm->clear();
 	cvReleaseImage(&result);
@@ -479,8 +488,9 @@ UINT playVideoThread(LPVOID lParam)
 	cvReleaseImage(&hair_canny);
 	cvReleaseImage(&subtract);
 	cvReleaseCapture(&capture);
+	
 	cvReleaseMemStorage(&storage);
-	PostMessage(param->m_hWnd,WM_USER_THREAD_FINISHED,0,0);
+	PostMessage(param->m_hWnd,WM_USER_THREAD_FINISHED, _fps, 0);
 }
 void CStudentDetectionDlg::OnBnClickedBtnPlay()
 {
@@ -524,8 +534,14 @@ void CStudentDetectionDlg::OnBnClickedCheckViewShape()
 
 LRESULT CStudentDetectionDlg::OnThreadFinished(WPARAM wParam,LPARAM lParam)
 {
+	Utils utils;
+
+	float fps = (float)wParam;
+
 	m_btnPlay.EnableWindow();
 	m_windowParam->m_isStopVideo = true;
+	
+	m_edit_fps.SetWindowTextW(utils.ConvertToCString(fps));
 
 	Invalidate();
 	
@@ -635,8 +651,8 @@ HBRUSH CStudentDetectionDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
 			break;
 		}
 	}
-
-	if(pWnd->GetDlgCtrlID() == IDC_EDIT_STUDENT_COUNT)
+	int id = pWnd->GetDlgCtrlID();
+	if(id == IDC_EDIT_STUDENT_COUNT || id == IDC_EDIT_FPS)
 	{		
 		pDC->SetBkMode(TRANSPARENT);		  
 		hbr = (HBRUSH)GetStockObject(WHITE_BRUSH);	
